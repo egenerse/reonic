@@ -5,7 +5,13 @@
     "packages/frontend"
   ],
   "scripts": {
-    "build": "npm run build -w=backend",
-    "dev": "npm run dev -w=frontend"
+    "build": "concurrently \"npm run build -w=backend\" \"npm run build -w=frontend\"",
+    "start": "concurrently \"npm run start -w=backend\" \"npm run preview -w=frontend\"",
+    "setup": "docker-compose up -d && echo 'Waiting for database...' && sleep 10 && npm run db:generate -w=backend && npm run db:push -w=backend && npm run db:seed -w=backend",
+    "dev": "concurrently \"npm run dev -w=backend\" \"npm run dev -w=frontend\"",
+    "stop": "docker-compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
   }
 }

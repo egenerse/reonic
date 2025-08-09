@@ -3,7 +3,7 @@ import { GraphQLJSONObject } from "graphql-scalars";
 
 @ObjectType()
 export class SimulationInput {
-  @Field(() => ID)
+  @Field(() => Int)
   id!: number;
 
   @Field(() => Int)
@@ -18,10 +18,10 @@ export class SimulationInput {
   @Field(() => Float)
   chargingPowerKw!: number;
 
-  @Field()
+  @Field(() => Date)
   createdAt!: Date;
 
-  @Field()
+  @Field(() => Date)
   updatedAt!: Date;
 
   @Field(() => [SimulationOutput], { nullable: true })
@@ -30,7 +30,7 @@ export class SimulationInput {
 
 @ObjectType()
 export class SimulationOutput {
-  @Field(() => ID)
+  @Field(() => Int)
   id!: number;
 
   @Field(() => Int)
@@ -57,7 +57,7 @@ export class SimulationOutput {
   @Field(() => Int)
   chargingEventsDay!: number;
 
-  @Field()
+  @Field(() => Date)
   createdAt!: Date;
 
   @Field(() => SimulationInput)

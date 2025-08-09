@@ -27,7 +27,7 @@ export class SimulationResolver {
 
   @Query(() => SimulationInput, { nullable: true })
   async simulationInput(
-    @Arg("id", () => ID) id: number,
+    @Arg("id", () => Int) id: number,
     @Ctx() { prisma }: Context
   ): Promise<SimulationInput | null> {
     return await prisma.simulationInput.findUnique({
@@ -44,7 +44,7 @@ export class SimulationResolver {
 
   @Mutation(() => SimulationInput)
   async createSimulationInput(
-    @Arg("data") data: CreateSimulationInputDto,
+    @Arg("data", () => CreateSimulationInputDto) data: CreateSimulationInputDto,
     @Ctx() { prisma }: Context
   ): Promise<SimulationInput> {
     return await prisma.simulationInput.create({
@@ -61,8 +61,8 @@ export class SimulationResolver {
 
   @Mutation(() => SimulationInput, { nullable: true })
   async updateSimulationInput(
-    @Arg("id", () => ID) id: number,
-    @Arg("data") data: UpdateSimulationInputDto,
+    @Arg("id", () => Int) id: number,
+    @Arg("data", () => UpdateSimulationInputDto) data: UpdateSimulationInputDto,
     @Ctx() { prisma }: Context
   ): Promise<SimulationInput | null> {
     return await prisma.simulationInput.update({
@@ -80,7 +80,7 @@ export class SimulationResolver {
 
   @Mutation(() => Boolean)
   async deleteSimulationInput(
-    @Arg("id", () => ID) id: number,
+    @Arg("id", () => Int) id: number,
     @Ctx() { prisma }: Context
   ): Promise<boolean> {
     try {
@@ -108,7 +108,7 @@ export class SimulationResolver {
 
   @Query(() => SimulationOutput, { nullable: true })
   async simulationOutput(
-    @Arg("id", () => ID) id: number,
+    @Arg("id", () => Int) id: number,
     @Ctx() { prisma }: Context
   ): Promise<SimulationOutput | null> {
     return await prisma.simulationOutput.findUnique({
@@ -121,7 +121,7 @@ export class SimulationResolver {
 
   @Query(() => [SimulationOutput])
   async simulationOutputsByInputId(
-    @Arg("inputId", () => ID) inputId: number,
+    @Arg("inputId", () => Int) inputId: number,
     @Ctx() { prisma }: Context
   ): Promise<SimulationOutput[]> {
     return await prisma.simulationOutput.findMany({
@@ -134,7 +134,7 @@ export class SimulationResolver {
 
   @Mutation(() => Boolean)
   async deleteSimulationOutput(
-    @Arg("id", () => ID) id: number,
+    @Arg("id", () => Int) id: number,
     @Ctx() { prisma }: Context
   ): Promise<boolean> {
     try {
