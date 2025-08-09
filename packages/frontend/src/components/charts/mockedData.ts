@@ -216,3 +216,242 @@ const generateDailyEnergyTrend = () => {
 
 export const energyConsumptionData = generateEnergyData();
 export const dailyEnergyTrend = generateDailyEnergyTrend();
+
+// Mock charging events data generator - simulates realistic charging session patterns
+const generateChargingEvents = () => {
+  // Generate hourly charging events for the last 30 days
+  const hoursData = Array.from({ length: 30 * 24 }, (_, hourIndex) => {
+    const date = new Date();
+    date.setHours(date.getHours() - (30 * 24 - hourIndex));
+
+    const hour = date.getHours();
+    const dayOfWeek = date.getDay();
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+    // Peak hours: 7-9 AM and 5-8 PM on weekdays, more spread out on weekends
+    let baseMultiplier = 0.3; // Base activity level
+    if (!isWeekend) {
+      if ((hour >= 7 && hour <= 9) || (hour >= 17 && hour <= 20)) {
+        baseMultiplier = 1.0; // Peak hours
+      } else if ((hour >= 10 && hour <= 16) || (hour >= 21 && hour <= 23)) {
+        baseMultiplier = 0.6; // Moderate hours
+      }
+    } else {
+      if (hour >= 10 && hour <= 18) {
+        baseMultiplier = 0.7; // Weekend activity
+      }
+    }
+
+    // Add some randomness
+    const randomVariation = 0.7 + Math.random() * 0.6;
+    const finalMultiplier = baseMultiplier * randomVariation;
+
+    // Generate events for each charger category
+    const eventsByCategory = Object.keys(powerCategoryColors).reduce(
+      (acc, powerKey) => {
+        const chargersInCategory = chargerConfig.filter(
+          (c) => `${c.power}kW` === powerKey
+        );
+        const power = parseFloat(powerKey.replace("kW", ""));
+
+        // Higher power chargers tend to have fewer but longer sessions
+        const sessionFrequency = power <= 11 ? 1.2 : 0.8;
+        const categoryEvents = Math.round(
+          chargersInCategory.length *
+            finalMultiplier *
+            sessionFrequency *
+            (0.5 + Math.random() * 0.5)
+        );
+
+        acc[powerKey] = Math.max(0, categoryEvents);
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    const totalEvents = Object.values(eventsByCategory).reduce(
+      (sum, events) => sum + events,
+      0
+    );
+
+    return {
+      timestamp: date.toISOString(),
+      date: date.toISOString().split("T")[0],
+      hour,
+      dayOfWeek: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayOfWeek],
+      isWeekend,
+      totalEvents,
+      ...eventsByCategory,
+    };
+  });
+
+  // Aggregate by different time periods
+  interface DailyEventData {
+    date: string;
+    dayOfWeek: string;
+    isWeekend: boolean;
+    totalEvents: number;
+    [key: string]: string | boolean | number;
+  }
+
+  const dailyData: Record<string, DailyEventData> = {};
+
+  hoursData.forEach((hourData) => {
+    const date = hourData.date;
+    if (!dailyData[date]) {
+      dailyData[date] = {
+        date,
+        dayOfWeek: hourData.dayOfWeek,
+        isWeekend: hourData.isWeekend,
+        totalEvents: 0,
+      };
+      Object.keys(powerCategoryColors).forEach((key) => {
+        dailyData[date][key] = 0;
+      });
+    }
+
+    dailyData[date].totalEvents += hourData.totalEvents;
+    Object.keys(powerCategoryColors).forEach((key) => {
+      const currentValue = (dailyData[date][key] as number) || 0;
+      const hourValue =
+        (hourData as unknown as Record<string, number>)[key] || 0;
+      dailyData[date][key] = currentValue + hourValue;
+    });
+  });
+
+  interface WeeklyEventData {
+    weekStart: string;
+    totalEvents: number;
+    [key: string]: string | number;
+  }
+
+  const weeklyData: Record<string, WeeklyEventData> = {};
+
+  Object.values(dailyData).forEach((dayData) => {
+    const date = new Date(dayData.date as string);
+    const weekStart = new Date(date);
+    weekStart.setDate(date.getDate() - date.getDay()); // Start of week (Sunday)
+    const weekKey = weekStart.toISOString().split("T")[0];
+
+    if (!weeklyData[weekKey]) {
+      weeklyData[weekKey] = {
+        weekStart: weekKey,
+        totalEvents: 0,
+      };
+      Object.keys(powerCategoryColors).forEach((key) => {
+        weeklyData[weekKey][key] = 0;
+      });
+    }
+
+    weeklyData[weekKey].totalEvents += dayData.totalEvents as number;
+    Object.keys(powerCategoryColors).forEach((key) => {
+      const currentValue = (weeklyData[weekKey][key] as number) || 0;
+      const dayValue = (dayData[key] as number) || 0;
+      weeklyData[weekKey][key] = currentValue + dayValue;
+    });
+  });
+
+  // Generate monthly aggregation for the last 12 months
+  const monthlyData = Array.from({ length: 12 }, (_, monthIndex) => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - (11 - monthIndex));
+    date.setDate(1); // First day of month
+
+    const monthName = date.toLocaleString("default", {
+      month: "short",
+      year: "numeric",
+    });
+    const daysInMonth = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      0
+    ).getDate();
+
+    // Estimate monthly events based on daily averages with seasonal variation
+    const seasonalMultiplier = 0.8 + Math.random() * 0.4; // Seasonal variation
+    const baseEventsPerDay = 15; // Average events per day per charger type
+
+    const eventsByCategory = Object.keys(powerCategoryColors).reduce(
+      (acc, powerKey) => {
+        const chargersInCategory = chargerConfig.filter(
+          (c) => `${c.power}kW` === powerKey
+        );
+        const power = parseFloat(powerKey.replace("kW", ""));
+        const sessionFrequency = power <= 11 ? 1.2 : 0.8;
+
+        const monthlyEvents = Math.round(
+          chargersInCategory.length *
+            baseEventsPerDay *
+            daysInMonth *
+            seasonalMultiplier *
+            sessionFrequency
+        );
+
+        acc[powerKey] = monthlyEvents;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    const totalEvents = Object.values(eventsByCategory).reduce(
+      (sum, events) => sum + events,
+      0
+    );
+
+    return {
+      month: monthName,
+      year: date.getFullYear(),
+      monthIndex: date.getMonth(),
+      daysInMonth,
+      totalEvents,
+      avgEventsPerDay: Math.round(totalEvents / daysInMonth),
+      ...eventsByCategory,
+    };
+  });
+
+  // Generate heatmap data (hour vs day of week)
+  const heatmapData = Array.from({ length: 7 }, (_, dayIndex) => {
+    const dayName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayIndex];
+    const isWeekend = dayIndex === 0 || dayIndex === 6;
+
+    const hourlyData = Array.from({ length: 24 }, (_, hour) => {
+      // Calculate average events for this hour-day combination
+      const relevantHours = hoursData.filter(
+        (h) => h.dayOfWeek === dayName && h.hour === hour
+      );
+
+      const avgEvents =
+        relevantHours.length > 0
+          ? relevantHours.reduce((sum, h) => sum + h.totalEvents, 0) /
+            relevantHours.length
+          : 0;
+
+      return {
+        day: dayName,
+        hour,
+        events: Math.round(avgEvents * 10) / 10, // Round to 1 decimal
+        isWeekend,
+      };
+    });
+
+    return {
+      day: dayName,
+      isWeekend,
+      hours: hourlyData,
+    };
+  });
+
+  return {
+    hourly: hoursData,
+    daily: Object.values(dailyData).sort((a, b) =>
+      (a.date as string).localeCompare(b.date as string)
+    ),
+    weekly: Object.values(weeklyData).sort((a, b) =>
+      a.weekStart.localeCompare(b.weekStart)
+    ),
+    monthly: monthlyData,
+    heatmap: heatmapData,
+  };
+};
+
+export const chargingEventsData = generateChargingEvents();

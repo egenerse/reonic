@@ -128,7 +128,7 @@ export const EnergyConsumption = () => {
   ).reduce((sum, cat) => sum + cat.totalHours, 0);
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-md p-4 mt-6">
+    <div className="w-full bg-white rounded-lg shadow-md p-4 ">
       <div className="flex justify-center mb-4">
         <h2 className="text-lg font-semibold">
           Total Energy Consumption Analysis
