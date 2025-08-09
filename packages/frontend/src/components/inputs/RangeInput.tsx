@@ -14,7 +14,7 @@ interface InputFieldProps {
   className?: string;
 }
 
-const RangeInput: React.FC<InputFieldProps> = ({
+export const RangeInput: React.FC<InputFieldProps> = ({
   id,
   name,
   label,
@@ -31,7 +31,7 @@ const RangeInput: React.FC<InputFieldProps> = ({
     <div className={className}>
       <label
         htmlFor={id}
-        className="block text-sm font-medium text-gray-700 mb-2"
+        className="block text-sm font-medium text-gray-700 mb-1"
       >
         {label}
         <br />
@@ -49,7 +49,7 @@ const RangeInput: React.FC<InputFieldProps> = ({
           min={min}
           max={max}
           step={step}
-          className="w-full rounded-md "
+          className="w-full rounded-md h-10"
         />
         <div className="flex justify-between text-xs -mt-1 text-gray-500 ">
           <div>
@@ -65,5 +65,3 @@ const RangeInput: React.FC<InputFieldProps> = ({
     </div>
   );
 };
-
-export default RangeInput;

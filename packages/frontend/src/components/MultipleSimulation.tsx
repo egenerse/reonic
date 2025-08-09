@@ -2,8 +2,8 @@ import { useState } from "react";
 import { runSimulation } from "../utils/simulation";
 import type { SimulationOptions, SimulationResult } from "../utils/types";
 import { ResultsTable } from "./ResultsTable";
-import InputField from "./InputField";
-import RangeInput from "./RangeInput";
+import { InputField } from "./inputs";
+import { RangeInput } from "./inputs";
 import { defaultSimulationOptions } from "../utils/contants";
 
 export const MultipleSimulation = () => {

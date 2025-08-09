@@ -1,7 +1,6 @@
 import React from "react";
 import type { SimulationOptions } from "../utils/types";
-import InputField from "./InputField";
-import RangeInput from "./RangeInput";
+import { InputField, RangeInput, SelectInput } from "./inputs";
 
 interface Props {
   simulationOptions: SimulationOptions;
@@ -20,16 +19,26 @@ export const SingleSimulationForm: React.FC<Props> = ({
     });
   };
 
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setSimulationOptions({
+      ...simulationOptions,
+      [name]: Number(value),
+    });
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3/5  p-4 bg-blue-300  mb-2 rounded-2xl">
-      <InputField
+      <SelectInput
         id="numberOfChargers"
         label="Number of Chargers"
         name="numberOfChargers"
-        onChange={handleOptionsChange}
-        type="number"
-        max={50}
         value={simulationOptions.numberOfChargers}
+        options={Array.from({ length: 30 }, (_, i) => ({
+          value: i + 1,
+          label: `${i + 1} Charger${i + 1 === 1 ? "" : "s"}`,
+        }))}
+        onChange={handleSelectChange}
       />
       <InputField
         type="number"
@@ -40,12 +49,21 @@ export const SingleSimulationForm: React.FC<Props> = ({
         onChange={handleOptionsChange}
         value={simulationOptions.numberOfSimulationDays}
       />
-      <InputField
+      <SelectInput
         id="chargerPowerInkW"
         label="Charger Power (kW)"
         name="chargerPowerInkW"
-        onChange={handleOptionsChange}
         value={simulationOptions.chargerPowerInkW}
+        options={[
+          { value: 2.75, label: "2.75 kW" },
+          { value: 5.5, label: "5.5 kW" },
+          { value: 11, label: "11 kW" },
+          { value: 18, label: "18 kW" },
+          { value: 25, label: "25 kW" },
+          { value: 50, label: "50 kW" },
+          { value: 100, label: "100 kW" },
+        ]}
+        onChange={handleSelectChange}
       />
       <InputField
         id="carNeedskWhPer100kms"
