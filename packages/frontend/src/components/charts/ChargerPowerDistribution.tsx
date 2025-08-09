@@ -128,7 +128,6 @@ export const ChargerPowerDistribution = () => {
     (sum, charger) => sum + charger.power,
     0
   );
-  const averagePower = totalCapacity / totalChargers;
   const powerRange = {
     min: Math.min(...chargerConfig.map((c) => c.power)),
     max: Math.max(...chargerConfig.map((c) => c.power)),
@@ -265,7 +264,7 @@ export const ChargerPowerDistribution = () => {
       </div>
 
       {/* Summary Statistics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 text-center">
         <div className="bg-blue-50 p-3 rounded">
           <div className="text-2xl font-bold text-blue-600">
             {totalChargers}
@@ -278,13 +277,6 @@ export const ChargerPowerDistribution = () => {
             {totalCapacity}
           </div>
           <div className="text-sm text-gray-600">Total Capacity (kW)</div>
-        </div>
-
-        <div className="bg-purple-50 p-3 rounded">
-          <div className="text-2xl font-bold text-purple-600">
-            {averagePower.toFixed(1)}
-          </div>
-          <div className="text-sm text-gray-600">Average Power (kW)</div>
         </div>
 
         <div className="bg-orange-50 p-3 rounded">

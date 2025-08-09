@@ -1,8 +1,9 @@
 import { arrayOfProbabilities } from "../../utils/constants";
 
+export const numberOfCharger = 20;
 // Mock charging station configuration - each charger has a specific power capacity
 const generateChargingStationConfig = () => {
-  return Array.from({ length: 20 }, (_, i) => {
+  return Array.from({ length: numberOfCharger }, (_, i) => {
     const powers = [2.75, 5.5, 11, 18, 25];
 
     const randomIntBetween0and5 = Math.floor(Math.random() * 5);
@@ -73,7 +74,6 @@ const generateChargingData = (): Record<string, number | string>[] => {
   });
 };
 
-export const numberOfCharger = 20;
 export const chargingData = generateChargingData();
 export const powerCategoryColors = {
   "2.75kW": "#ff6b6b",
@@ -82,3 +82,137 @@ export const powerCategoryColors = {
   "18kW": "#45b7d1",
   "25kW": "#96ceb4",
 };
+
+// Mock energy consumption data generator - simulates cumulative energy charged over time
+const generateEnergyData = () => {
+  const timeFrames = [
+    { label: "Last 7 Days", days: 7 },
+    { label: "Last 30 Days", days: 30 },
+    { label: "Last 90 Days", days: 90 },
+    { label: "Last 6 Months", days: 180 },
+    { label: "Last Year", days: 365 },
+  ];
+
+  return timeFrames.map((timeFrame) => {
+    const energyByCharger = chargerConfig.map((charger) => {
+      // Simulate realistic charging patterns with seasonal and usage variations
+      const baseUsageHoursPerDay = 4 + Math.random() * 6; // 4-10 hours per day average
+      const seasonalMultiplier = 0.8 + Math.random() * 0.4; // 0.8-1.2x seasonal variation
+      const chargerEfficiency = 0.85 + Math.random() * 0.1; // 85-95% charging efficiency
+
+      // Higher power chargers tend to be used more intensively but for shorter durations
+      const powerFactor = charger.power <= 11 ? 1.2 : 0.8; // Lower power = more frequent use
+
+      const totalHours =
+        baseUsageHoursPerDay *
+        timeFrame.days *
+        seasonalMultiplier *
+        powerFactor;
+      const energyCharged = totalHours * charger.power * chargerEfficiency;
+
+      return {
+        chargerId: charger.id,
+        power: charger.power,
+        powerCategory: `${charger.power}kW`,
+        energyCharged: Math.round(energyCharged * 100) / 100, // Round to 2 decimal places
+        totalHours: Math.round(totalHours * 100) / 100,
+        avgDailyUsage: Math.round((totalHours / timeFrame.days) * 100) / 100,
+      };
+    });
+
+    // Aggregate by power category
+    const energyByCategory = energyByCharger.reduce(
+      (acc, charger) => {
+        const category = charger.powerCategory;
+        if (!acc[category]) {
+          acc[category] = {
+            totalEnergy: 0,
+            chargerCount: 0,
+            totalHours: 0,
+            chargerIds: [],
+          };
+        }
+        acc[category].totalEnergy += charger.energyCharged;
+        acc[category].chargerCount += 1;
+        acc[category].totalHours += charger.totalHours;
+        acc[category].chargerIds.push(charger.chargerId);
+        return acc;
+      },
+      {} as Record<
+        string,
+        {
+          totalEnergy: number;
+          chargerCount: number;
+          totalHours: number;
+          chargerIds: number[];
+        }
+      >
+    );
+
+    const totalEnergy = Object.values(energyByCategory).reduce(
+      (sum, cat) => sum + cat.totalEnergy,
+      0
+    );
+
+    return {
+      timeFrame: timeFrame.label,
+      days: timeFrame.days,
+      energyByCharger,
+      energyByCategory,
+      totalEnergy: Math.round(totalEnergy * 100) / 100,
+      avgDailyEnergy: Math.round((totalEnergy / timeFrame.days) * 100) / 100,
+    };
+  });
+};
+
+// Generate daily energy data for trend analysis (last 30 days)
+const generateDailyEnergyTrend = () => {
+  return Array.from({ length: 30 }, (_, dayIndex) => {
+    const date = new Date();
+    date.setDate(date.getDate() - (29 - dayIndex)); // Last 30 days
+
+    const dayOfWeek = date.getDay(); // 0 = Sunday, 6 = Saturday
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+    // Weekend usage typically lower, but with some variation
+    const weekendMultiplier = isWeekend
+      ? 0.6 + Math.random() * 0.3
+      : 0.9 + Math.random() * 0.2;
+
+    // Seasonal day-to-day variation
+    const randomDailyVariation = 0.8 + Math.random() * 0.4;
+
+    const energyByCategory = Object.keys(powerCategoryColors).reduce(
+      (acc, powerKey) => {
+        const chargersInCategory = chargerConfig.filter(
+          (c) => `${c.power}kW` === powerKey
+        );
+        const categoryEnergy = chargersInCategory.reduce((sum, charger) => {
+          const baseDaily =
+            charger.power * 5 * weekendMultiplier * randomDailyVariation; // ~5 hours base usage
+          return sum + baseDaily;
+        }, 0);
+
+        acc[powerKey] = Math.round(categoryEnergy * 100) / 100;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
+
+    const totalDailyEnergy = Object.values(energyByCategory).reduce(
+      (sum, energy) => sum + energy,
+      0
+    );
+
+    return {
+      date: date.toISOString().split("T")[0], // YYYY-MM-DD format
+      dayOfWeek: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayOfWeek],
+      isWeekend,
+      totalEnergy: Math.round(totalDailyEnergy * 100) / 100,
+      ...energyByCategory,
+    };
+  });
+};
+
+export const energyConsumptionData = generateEnergyData();
+export const dailyEnergyTrend = generateDailyEnergyTrend();

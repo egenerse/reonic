@@ -4,7 +4,11 @@ import { SingleSimulationForm } from "./SingleSimulationForm";
 import { runSimulation } from "../utils/simulation";
 import { SingleResult } from "./SingleResult";
 import { defaultSimulationOptions } from "../utils/contants";
-import { DaySummary, ChargerPowerDistribution } from "./charts";
+import {
+  DaySummary,
+  ChargerPowerDistribution,
+  EnergyConsumption,
+} from "./charts";
 
 export const SingleSimulation = () => {
   const [simulationOptions, setSimulationOptions] = useState<SimulationOptions>(
@@ -49,6 +53,7 @@ export const SingleSimulation = () => {
 
       <ChargerPowerDistribution />
       <DaySummary />
+      <EnergyConsumption />
     </div>
   );
 };
