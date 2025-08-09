@@ -1,3 +1,4 @@
+import { Fragment } from "react/jsx-runtime";
 import type { SimulationResult } from "../utils/types";
 
 interface Props {
@@ -5,24 +6,42 @@ interface Props {
 }
 
 export const SingleResult: React.FC<Props> = ({ result }) => {
+  const totalChargers = result.chargerConfigurations.reduce(
+    (total, config) => total + config.quantity,
+    0
+  );
+
   return (
     <div className="p-6 bg-white rounded-2xl shadow-lg max-w-2xl mx-auto">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">
         Simulation Result
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr]  bg-gray-50 rounded-xl overflow-hidden ">
+
+      <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr] bg-gray-50 rounded-xl overflow-hidden">
         <div className="bg-slate-800 text-white font-medium py-3 px-4">
-          Charging Points
+          Total Charger
         </div>
         <div className="bg-blue-600 text-white text-center py-3 px-4">
-          {result.numberOfChargers}
+          {totalChargers}{" "}
+          <span className="text-sm">
+            {totalChargers === 1 ? "Charger" : "Chargers"}
+          </span>
         </div>
-        <div className="bg-slate-800 text-white font-medium py-3 px-4">
-          One Charger Power
-        </div>
-        <div className="bg-blue-600 text-white text-center py-3 px-4">
-          {result.chargerPowerInkW} kW
-        </div>
+
+        {result.chargerConfigurations.map((config) => (
+          <Fragment key={config.id}>
+            <div className="bg-slate-800 text-white font-medium py-3 px-4">
+              Number of {config.name}
+            </div>
+            <div className="bg-blue-600 text-white text-center py-3 px-4">
+              {config.quantity}{" "}
+              <span className="text-sm">
+                {config.quantity === 1 ? "Charger" : "Chargers"}
+              </span>
+            </div>
+          </Fragment>
+        ))}
+
         <div className="bg-slate-800 text-white font-medium py-3 px-4">
           Total Energy Consumed
         </div>
@@ -51,7 +70,7 @@ export const SingleResult: React.FC<Props> = ({ result }) => {
           {result.ratioOfActualToMaximumPowerDemand.toFixed(3)}
         </div>
 
-        <div className="bg-slate-800 text-white font-medium py-3 px-4  ">
+        <div className="bg-slate-800 text-white font-medium py-3 px-4">
           Total Charging Events
         </div>
         <div className="bg-blue-600 text-white text-center py-3 px-4">

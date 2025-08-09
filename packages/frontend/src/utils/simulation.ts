@@ -21,8 +21,7 @@ const getNeededKmForCar = (percentage: number) => {
 };
 
 export const runSimulation = ({
-  numberOfChargers,
-  chargerPowerInkW,
+  chargerConfigurations,
   numberOfSimulationDays,
   carNeedskWhPer100kms,
   carArrivalProbabilityMultiplier,
@@ -34,17 +33,21 @@ export const runSimulation = ({
 
   const totalTicks = numberOfSimulationDays * 24 * 4;
 
-  const chargingStations: ChargingStation[] = Array.from(
-    { length: numberOfChargers },
-    () =>
-      new ChargingStation({
-        powerInkW: chargerPowerInkW,
-        occupiedNumberOfTicks: 0,
-        lockedToChargeTotalkWh: 0,
-        sessionRemainingChargeInkWh: 0,
-        sessionAlreadyChargedInkWh: 0,
-      })
-  );
+  // Create charging stations based on configurations
+  const chargingStations: ChargingStation[] = [];
+  chargerConfigurations.forEach((config) => {
+    for (let i = 0; i < config.quantity; i++) {
+      chargingStations.push(
+        new ChargingStation({
+          powerInkW: config.powerInkW,
+          occupiedNumberOfTicks: 0,
+          lockedToChargeTotalkWh: 0,
+          sessionRemainingChargeInkWh: 0,
+          sessionAlreadyChargedInkWh: 0,
+        })
+      );
+    }
+  });
 
   const chargingEvents: ChargingEvent[] = [];
 
@@ -161,13 +164,12 @@ export const runSimulation = ({
   const totalChargingEvents = chargingEvents.length;
 
   return {
-    numberOfChargers,
+    chargerConfigurations,
     totalEnergyConsumedInkWh,
     theoreticalMaxPowerDemand,
     actualMaximumPowerDemandInkW,
     ratioOfActualToMaximumPowerDemand,
     totalChargingEvents,
     carArrivalProbabilityMultiplier,
-    chargerPowerInkW,
   };
 };

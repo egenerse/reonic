@@ -7,23 +7,28 @@ export type ChargingStationState = {
   sessionAlreadyChargedInkWh: number;
 };
 
+export type ChargerConfiguration = {
+  id: string;
+  powerInkW: number;
+  quantity: number;
+  name: string;
+};
+
 export type SimulationOptions = {
-  numberOfChargers: number;
-  chargerPowerInkW: number;
+  chargerConfigurations: ChargerConfiguration[];
   numberOfSimulationDays: number;
   carNeedskWhPer100kms: number;
   carArrivalProbabilityMultiplier: number;
 };
 
 export type SimulationResult = {
-  numberOfChargers: number;
+  chargerConfigurations: ChargerConfiguration[];
   totalEnergyConsumedInkWh: number;
   theoreticalMaxPowerDemand: number;
   actualMaximumPowerDemandInkW: number;
   ratioOfActualToMaximumPowerDemand: number;
   totalChargingEvents: number;
   carArrivalProbabilityMultiplier: number;
-  chargerPowerInkW: number;
 };
 
 export type ChargingEvent = {
