@@ -3,20 +3,20 @@ import type { SimulationOptions, SimulationResult } from "../utils/types";
 import { SingleSimulationForm } from "./SingleSimulationForm";
 import { runSimulation } from "../utils/simulation";
 import { SingleResult } from "./SingleResult";
+import { defaultSimulationOptions } from "../utils/contants";
 
 export const SingleSimulation = () => {
   const [simulationOptions, setSimulationOptions] = useState<SimulationOptions>(
-    {
-      chargerPowerInkW: 11,
-      numberOfChargers: 20,
-      numberOfSimulationDays: 365,
-      carNeedskWhPer100kms: 18,
-    }
+    defaultSimulationOptions
   );
   const [simulationResult, setSimulationResult] = useState<SimulationResult>();
 
   const onRunSimulation = () => {
     setSimulationResult(runSimulation(simulationOptions));
+  };
+
+  const onResetOptions = () => {
+    setSimulationOptions(defaultSimulationOptions);
   };
 
   return (
@@ -25,12 +25,20 @@ export const SingleSimulation = () => {
         simulationOptions={simulationOptions}
         setSimulationOptions={setSimulationOptions}
       />
-      <button
-        className=" px-6 py-3 text-white font-semibold rounded-md bg-blue-400"
-        onClick={onRunSimulation}
-      >
-        Run Simulation
-      </button>
+      <div className="flex space-x-4">
+        <button
+          className=" px-6 py-3 text-white font-semibold rounded-md bg-blue-400"
+          onClick={onRunSimulation}
+        >
+          Run Simulation
+        </button>
+        <button
+          className=" px-6 py-3 text-white font-semibold rounded-md bg-red-400"
+          onClick={onResetOptions}
+        >
+          Reset Options
+        </button>
+      </div>
 
       {simulationResult && (
         <div className="my-4">

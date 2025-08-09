@@ -2,16 +2,24 @@ import { useState } from "react";
 import { runSimulation } from "../utils/simulation";
 import type { SimulationOptions, SimulationResult } from "../utils/types";
 import { ResultsTable } from "./ResultsTable";
+import InputField from "./InputField";
+import RangeInput from "./RangeInput";
+import { defaultSimulationOptions } from "../utils/contants";
 
 export const MultipleSimulation = () => {
-  const [simulatorOptions, setSimulatorOptions] = useState<SimulationOptions>({
-    chargerPowerInkW: 11,
-    numberOfChargers: 20,
-    numberOfSimulationDays: 365,
-    carNeedskWhPer100kms: 18,
-  });
+  const [simulationOptions, setSimulationOptions] = useState<SimulationOptions>(
+    defaultSimulationOptions
+  );
 
   const [results, setResults] = useState<SimulationResult[]>([]);
+
+  const handleOptionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSimulationOptions({
+      ...simulationOptions,
+      [name]: Number(value),
+    });
+  };
 
   const [isRunning, setIsRunning] = useState(false);
 
@@ -24,7 +32,7 @@ export const MultipleSimulation = () => {
     // Run simulations for 1 to 30 charging points
     for (let i = 1; i <= 30; i++) {
       const options: SimulationOptions = {
-        ...simulatorOptions,
+        ...simulationOptions,
         numberOfChargers: i,
       };
 
@@ -52,66 +60,51 @@ export const MultipleSimulation = () => {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Charger Power (kW)
-              </label>
-              <input
-                name="chargerPowerInkW"
-                type="number"
-                min={1}
-                step={0.1}
-                value={simulatorOptions.chargerPowerInkW}
-                onChange={(e) =>
-                  setSimulatorOptions((old) => ({
-                    ...old,
-                    chargerPowerInkW: Number(e.target.value),
-                  }))
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+            <InputField
+              id="chargerPowerInkW"
+              name="chargerPowerInkW"
+              label="Charger Power (kW)"
+              type="number"
+              min={1}
+              step={0.1}
+              value={simulationOptions.chargerPowerInkW}
+              onChange={handleOptionsChange}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Simulation Days
-              </label>
-              <input
-                name="numberOfSimulationDays"
-                type="number"
-                min={1}
-                value={simulatorOptions.numberOfSimulationDays}
-                onChange={(e) =>
-                  setSimulatorOptions((old) => ({
-                    ...old,
-                    numberOfSimulationDays: Number(e.target.value),
-                  }))
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+            <InputField
+              id="carNeedskWhPer100kms"
+              name="carNeedskWhPer100kms"
+              label="Car Efficiency (kWh/100km)"
+              type="number"
+              min={1}
+              step={0.1}
+              value={simulationOptions.carNeedskWhPer100kms}
+              onChange={handleOptionsChange}
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Car Efficiency (kWh/100km)
-              </label>
-              <input
-                name="carNeedskWhPer100kms"
-                type="number"
-                min={1}
-                step={0.1}
-                value={simulatorOptions.carNeedskWhPer100kms}
-                onChange={(e) =>
-                  setSimulatorOptions((old) => ({
-                    ...old,
-                    carNeedskWhPer100kms: Number(e.target.value),
-                  }))
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+            <InputField
+              id="numberOfSimulationDays"
+              name="numberOfSimulationDays"
+              label="Simulation Days"
+              type="number"
+              min={1}
+              value={simulationOptions.numberOfSimulationDays}
+              onChange={handleOptionsChange}
+            />
 
-            <div className="flex items-end">
+            <RangeInput
+              id="carArrivalProbabilityMultiplier"
+              name="carArrivalProbabilityMultiplier"
+              label="Car Arrival Probability Multiplier"
+              min={20}
+              max={220}
+              step={10}
+              value={simulationOptions.carArrivalProbabilityMultiplier}
+              onChange={handleOptionsChange}
+              percentage
+            />
+
+            <div className="flex items-end lg:col-start-2 lg:col-span-2">
               <button
                 onClick={runAllSimulations}
                 disabled={isRunning}

@@ -12,6 +12,7 @@ export type SimulationOptions = {
   chargerPowerInkW: number;
   numberOfSimulationDays: number;
   carNeedskWhPer100kms: number;
+  carArrivalProbabilityMultiplier: number;
 };
 
 export type SimulationResult = {
@@ -21,6 +22,7 @@ export type SimulationResult = {
   actualMaximumPowerDemandInkW: number;
   ratioOfActualToMaximumPowerDemand: number;
   totalChargingEvents: number;
+  carArrivalProbabilityMultiplier: number;
 };
 
 export type ChargingEvent = {

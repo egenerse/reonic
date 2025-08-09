@@ -4,7 +4,7 @@ interface InputFieldProps {
   id: string;
   name: string;
   label: string;
-  type?: "text" | "number" | "email";
+  type?: "text" | "number";
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   min?: number;
@@ -12,6 +12,7 @@ interface InputFieldProps {
   placeholder?: string;
   required?: boolean;
   className?: string;
+  step?: number;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -26,6 +27,7 @@ const InputField: React.FC<InputFieldProps> = ({
   placeholder,
   required = false,
   className = "",
+  step,
 }) => {
   return (
     <div className={`mb-4 ${className}`}>
@@ -46,6 +48,7 @@ const InputField: React.FC<InputFieldProps> = ({
         max={max}
         placeholder={placeholder}
         required={required}
+        step={step}
         className="w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
       />
     </div>

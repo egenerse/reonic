@@ -1,6 +1,7 @@
 import React from "react";
 import type { SimulationOptions } from "../utils/types";
 import InputField from "./InputField";
+import RangeInput from "./RangeInput";
 
 interface Props {
   simulationOptions: SimulationOptions;
@@ -11,7 +12,7 @@ export const SingleSimulationForm: React.FC<Props> = ({
   simulationOptions,
   setSimulationOptions,
 }) => {
-  const handleSimChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOptionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSimulationOptions({
       ...simulationOptions,
@@ -25,29 +26,45 @@ export const SingleSimulationForm: React.FC<Props> = ({
         id="numberOfChargers"
         label="Number of Chargers"
         name="numberOfChargers"
-        onChange={handleSimChange}
+        onChange={handleOptionsChange}
+        type="number"
+        max={50}
         value={simulationOptions.numberOfChargers}
       />
       <InputField
+        type="number"
+        max={365}
         id="numberOfSimulationDays"
         label="Number of Simulation Days"
         name="numberOfSimulationDays"
-        onChange={handleSimChange}
+        onChange={handleOptionsChange}
         value={simulationOptions.numberOfSimulationDays}
       />
       <InputField
         id="chargerPowerInkW"
         label="Charger Power (kW)"
         name="chargerPowerInkW"
-        onChange={handleSimChange}
+        onChange={handleOptionsChange}
         value={simulationOptions.chargerPowerInkW}
       />
       <InputField
         id="carNeedskWhPer100kms"
         label="Car Needs (kWh/100km)"
         name="carNeedskWhPer100kms"
-        onChange={handleSimChange}
+        onChange={handleOptionsChange}
         value={simulationOptions.carNeedskWhPer100kms}
+      />
+
+      <RangeInput
+        id="carArrivalProbabilityMultiplier"
+        label="Car Arrival Probability Multiplier"
+        name="carArrivalProbabilityMultiplier"
+        min={20}
+        max={220}
+        step={10}
+        value={simulationOptions.carArrivalProbabilityMultiplier}
+        onChange={handleOptionsChange}
+        percentage
       />
     </div>
   );

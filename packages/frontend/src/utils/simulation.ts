@@ -25,8 +25,13 @@ export const runSimulation = ({
   chargerPowerInkW,
   numberOfSimulationDays,
   carNeedskWhPer100kms,
+  carArrivalProbabilityMultiplier,
 }: SimulationOptions): SimulationResult => {
   // divide the days into 24 hours and calculate 15 mins intervals/ticks
+  const adjustedCarArrivalProbability = arrayOfProbabilities.map(
+    (p) => p * (carArrivalProbabilityMultiplier / 100)
+  );
+
   const totalTicks = numberOfSimulationDays * 24 * 4;
 
   const chargingStations: ChargingStation[] = Array.from(
@@ -52,7 +57,8 @@ export const runSimulation = ({
     // Try to place a car in a charging station
 
     const timeSlot = Math.floor((tick % oneDayTickNumber) / 4);
-    const probablityOfGettingCarInCharging = arrayOfProbabilities[timeSlot];
+    const probablityOfGettingCarInCharging =
+      adjustedCarArrivalProbability[timeSlot];
 
     for (const chargingStation of chargingStations) {
       // Charhing station is in use
@@ -161,5 +167,6 @@ export const runSimulation = ({
     actualMaximumPowerDemandInkW,
     ratioOfActualToMaximumPowerDemand,
     totalChargingEvents,
+    carArrivalProbabilityMultiplier,
   };
 };
