@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SimulationInput {
+  id                       Int      @id @default(autoincrement())
+  chargePoints             Int
+  arrivalMultiplier        Float    @default(1.0)  // e.g., 1.0 for 100%
+  carConsumptionKwh        Float    @default(18.0)
+  chargingPowerKw          Float    @default(11.0)
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+  simulationOutputs        SimulationOutput[]
+}
+
+model SimulationOutput {
+  id                       Int      @id @default(autoincrement())
+  inputId                  Int
+  chargingValues           Json     // Store array of {chargepointId: value} or aggregates
+  exemplaryDay             Json     // e.g., time-series data for a day
+  totalEnergyChargedKwh    Float
+  chargingEventsYear       Int
+  chargingEventsMonth      Int
+  chargingEventsWeek       Int
+  chargingEventsDay        Int
+  createdAt                DateTime @default(now())
+  input                    SimulationInput @relation(fields: [inputId], references: [id])
+}
