@@ -1,0 +1,11 @@
+{
+  "name": "reonic-challange-monorepo",
+  "workspaces": [
+    "packages/backend",
+    "packages/frontend"
+  ],
+  "scripts": {
+    "build": "npm run build -w=backend",
+    "dev": "npm run dev -w=frontend"
+  }
+}
