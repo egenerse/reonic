@@ -23,6 +23,7 @@ export type SimulationResult = {
   ratioOfActualToMaximumPowerDemand: number;
   totalChargingEvents: number;
   carArrivalProbabilityMultiplier: number;
+  chargerPowerInkW: number;
 };
 
 export type ChargingEvent = {

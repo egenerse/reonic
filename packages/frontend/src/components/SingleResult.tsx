@@ -17,26 +17,31 @@ export const SingleResult: React.FC<Props> = ({ result }) => {
         <div className="bg-blue-600 text-white text-center py-3 px-4">
           {result.numberOfChargers}
         </div>
-
         <div className="bg-slate-800 text-white font-medium py-3 px-4">
-          Total Energy Consumed (kWh)
+          One Charger Power
         </div>
         <div className="bg-blue-600 text-white text-center py-3 px-4">
-          {result.totalEnergyConsumedInkWh.toFixed(1)}
+          {result.chargerPowerInkW} kW
+        </div>
+        <div className="bg-slate-800 text-white font-medium py-3 px-4">
+          Total Energy Consumed
+        </div>
+        <div className="bg-blue-600 text-white text-center py-3 px-4">
+          {result.totalEnergyConsumedInkWh.toFixed(1)} kWh
         </div>
 
         <div className="bg-slate-800 text-white font-medium py-3 px-4">
-          Theoretical Max Power Demand (kW)
+          Theoretical Max Power Demand
         </div>
         <div className="bg-blue-600 text-white text-center py-3 px-4">
-          {result.theoreticalMaxPowerDemand.toFixed(1)}
+          {result.theoreticalMaxPowerDemand.toFixed(1)} kW
         </div>
 
         <div className="bg-slate-800 text-white font-medium py-3 px-4">
-          Actual Maximum Power Demand (kW)
+          Actual Maximum Power Demand
         </div>
         <div className="bg-blue-600 text-white text-center py-3 px-4">
-          {result.actualMaximumPowerDemandInkW.toFixed(1)}
+          {result.actualMaximumPowerDemandInkW.toFixed(1)} kW
         </div>
 
         <div className="bg-slate-800 text-white font-medium py-3 px-4">

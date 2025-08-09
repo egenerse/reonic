@@ -168,5 +168,6 @@ export const runSimulation = ({
     ratioOfActualToMaximumPowerDemand,
     totalChargingEvents,
     carArrivalProbabilityMultiplier,
+    chargerPowerInkW,
   };
 };
