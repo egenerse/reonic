@@ -1,3 +1,4 @@
+import { calculateNumberOfChargers } from "../utils/chargingMath";
 import type { SimulationResult } from "../utils/types";
 
 interface SimulationRowProps {
@@ -5,10 +6,13 @@ interface SimulationRowProps {
 }
 
 export const SimulationRow: React.FC<SimulationRowProps> = ({ result }) => {
+  const numberOfChargers = calculateNumberOfChargers(
+    result.chargerConfigurations
+  );
   return (
     <div className="grid grid-cols-6 gap-2 py-2 px-3 hover:bg-gray-50 rounded-md transition-colors duration-150 text-sm">
       <div className="font-semibold text-gray-900 text-center">
-        {result.numberOfChargers}
+        {numberOfChargers}
       </div>
       <div className="text-gray-700 text-center">
         {result.actualMaximumPowerDemandInkW.toFixed(1)}

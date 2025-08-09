@@ -1,3 +1,4 @@
+import { calculateNumberOfChargers } from "./chargingMath";
 import type { SimulationOptions } from "./types";
 
 export const validateSimulationOptions = (options: SimulationOptions) => {
@@ -33,9 +34,8 @@ export const validateSimulationOptions = (options: SimulationOptions) => {
     errors.push("Number of simulation days must not exceed 365.");
   }
 
-  const totalChargers = options.chargerConfigurations.reduce(
-    (total, config) => total + config.quantity,
-    0
+  const totalChargers = calculateNumberOfChargers(
+    options.chargerConfigurations
   );
 
   if (totalChargers > 30) {

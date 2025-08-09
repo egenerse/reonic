@@ -1,15 +1,13 @@
 import { Fragment } from "react/jsx-runtime";
 import type { SimulationResult } from "../utils/types";
+import { calculateNumberOfChargers } from "../utils/chargingMath";
 
 interface Props {
   result: SimulationResult;
 }
 
 export const SingleResult: React.FC<Props> = ({ result }) => {
-  const totalChargers = result.chargerConfigurations.reduce(
-    (total, config) => total + config.quantity,
-    0
-  );
+  const totalChargers = calculateNumberOfChargers(result.chargerConfigurations);
 
   return (
     <div className="p-6 bg-white rounded-2xl shadow-lg max-w-2xl mx-auto">

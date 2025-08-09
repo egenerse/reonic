@@ -1,6 +1,7 @@
 import React from "react";
 import type { ChargerConfiguration } from "../utils/types";
-import { SelectInput, InputField } from "./inputs";
+import { SelectInput } from "./inputs";
+import { calculateNumberOfChargers } from "../utils/chargingMath";
 
 interface Props {
   chargerConfigurations: ChargerConfiguration[];
@@ -67,12 +68,7 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
     onChargerConfigurationsChange(updatedConfigurations);
   };
 
-  const getTotalChargers = () => {
-    return chargerConfigurations.reduce(
-      (total, config) => total + config.quantity,
-      0
-    );
-  };
+  const totalChargers = calculateNumberOfChargers(chargerConfigurations);
 
   return (
     <div className="space-y-4">
@@ -81,7 +77,7 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
           <h3 className="text-lg font-medium text-gray-800">
             Charger Configurations
           </h3>
-          <h2>({getTotalChargers()} total chargers)</h2>
+          <h2>({totalChargers} total chargers)</h2>
         </div>
         <button
           disabled={chargerConfigurations.length >= POWER_OPTIONS.length}

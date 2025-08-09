@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { runSimulation } from "../utils/simulation";
-import type { SimulationOptions, SimulationResult } from "../utils/types";
+import type {
+  ChargerConfiguration,
+  SimulationOptions,
+  SimulationResult,
+} from "../utils/types";
 import { ResultsTable } from "./ResultsTable";
-import { InputField, SelectInput } from "./inputs";
+import { InputField } from "./inputs";
 import { RangeInput } from "./inputs";
 import { defaultSimulationOptions } from "../utils/contants";
+import { ChargerConfigurationForm } from "./ChargerConfiguration";
 
 export const MultipleSimulation = () => {
   const [simulationOptions, setSimulationOptions] = useState<SimulationOptions>(
@@ -35,7 +40,12 @@ export const MultipleSimulation = () => {
     for (let i = 1; i <= 30; i++) {
       const options: SimulationOptions = {
         ...simulationOptions,
-        numberOfChargers: i,
+        chargerConfigurations: simulationOptions.chargerConfigurations.map(
+          (config) => ({
+            ...config,
+            quantity: i,
+          })
+        ),
       };
 
       const result = runSimulation(options);
@@ -48,6 +58,14 @@ export const MultipleSimulation = () => {
 
     setIsRunning(false);
   };
+  const handleChargerConfigurationsChange = (
+    configurations: ChargerConfiguration[]
+  ) => {
+    setSimulationOptions({
+      ...simulationOptions,
+      chargerConfigurations: configurations,
+    });
+  };
 
   return (
     <div className=" p-4">
@@ -57,41 +75,21 @@ export const MultipleSimulation = () => {
         </h1>
 
         <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
             Simulation Parameters
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            <SelectInput
-              id="numberOfChargers"
-              label="Number of Chargers"
-              name="numberOfChargers"
-              value={simulationOptions.numberOfChargers}
-              options={Array.from({ length: 30 }, (_, i) => ({
-                value: i + 1,
-                label: `${i + 1} Charger${i + 1 === 1 ? "" : "s"}`,
-              }))}
-              onChange={handleOptionsChange}
-            />
-
-            <SelectInput
-              id="chargerPowerInkW"
-              label="Charger Power (kW)"
-              name="chargerPowerInkW"
-              value={simulationOptions.chargerPowerInkW}
-              options={[
-                { value: 2.75, label: "2.75 kW" },
-                { value: 5.5, label: "5.5 kW" },
-                { value: 11, label: "11 kW" },
-                { value: 18, label: "18 kW" },
-                { value: 25, label: "25 kW" },
-                { value: 50, label: "50 kW" },
-                { value: 100, label: "100 kW" },
-              ]}
-              onChange={handleOptionsChange}
-            />
-
+            <div className="col-span-3 col-start-2 col-end-5">
+              <ChargerConfigurationForm
+                chargerConfigurations={simulationOptions.chargerConfigurations}
+                onChargerConfigurationsChange={
+                  handleChargerConfigurationsChange
+                }
+              />
+            </div>
             <InputField
+              className="row-start-2 col-start-2"
               id="carNeedskWhPer100kms"
               name="carNeedskWhPer100kms"
               label="Car Efficiency (kWh/100km)"
@@ -103,6 +101,7 @@ export const MultipleSimulation = () => {
             />
 
             <InputField
+              className="row-start-2 col-start-3"
               id="numberOfSimulationDays"
               name="numberOfSimulationDays"
               label="Simulation Days"
@@ -113,6 +112,7 @@ export const MultipleSimulation = () => {
             />
 
             <RangeInput
+              className="row-start-2 col-start-4"
               id="carArrivalProbabilityMultiplier"
               name="carArrivalProbabilityMultiplier"
               label="Car Arrival Probability Multiplier"
