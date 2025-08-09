@@ -3,7 +3,6 @@ import { arrayOfProbabilities } from "../../utils/constants";
 // Mock charging station configuration - each charger has a specific power capacity
 const generateChargingStationConfig = () => {
   return Array.from({ length: 20 }, (_, i) => {
-    // Realistic distribution using your power options
     const powers = [2.75, 5.5, 11, 18, 25];
 
     const randomIntBetween0and5 = Math.floor(Math.random() * 5);
