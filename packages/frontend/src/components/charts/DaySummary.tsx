@@ -8,101 +8,12 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { arrayOfProbabilities } from "../../utils/constants";
-
-// Mock charging station configuration - each charger has a specific power capacity
-const generateChargingStationConfig = () => {
-  return Array.from({ length: 20 }, (_, i) => {
-    // Realistic distribution using your power options
-    const powers = [2.75, 5.5, 11, 18, 25];
-
-    const randomIntBetween0and5 = Math.floor(Math.random() * 5);
-    return { id: i + 1, power: powers[randomIntBetween0and5] };
-  });
-};
-
-const chargerConfig = generateChargingStationConfig();
-console.log("Charger Configuration:", chargerConfig);
-// Mock charging data generator - simulates realistic charging patterns with 15-min intervals
-const generateChargingData = (): Record<string, number | string>[] => {
-  const intervalsPer24Hours = 24 * 4;
-
-  return Array.from({ length: intervalsPer24Hours }, (_, interval) => {
-    // Convert interval to time
-    const totalMinutes = interval * 15;
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    const timeLabel = `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}`;
-
-    const dataPoint: Record<string, number | string> = {
-      time: timeLabel,
-      interval,
-      hour: hours,
-      minute: minutes,
-    };
-
-    const adjustedMultiplier = 2 * arrayOfProbabilities[hours];
-
-    // Initialize power category totals
-    const powerCategories = {
-      "2.75kW": 0,
-      "5.5kW": 0,
-      "11kW": 0,
-      "18kW": 0,
-      "25kW": 0,
-    };
-
-    // Track active chargers for statistics
-    let activeChargers = 0;
-
-    // Generate power values for each charging point and group by power category
-    chargerConfig.forEach((charger) => {
-      const isActive = Math.random() * 100 < adjustedMultiplier;
-
-      if (isActive) {
-        const powerKey = `${charger.power}kW` as keyof typeof powerCategories;
-        powerCategories[powerKey] += charger.power;
-        activeChargers++;
-      }
-    });
-
-    // Add power category totals to dataPoint (this is what the chart uses)
-    Object.entries(powerCategories).forEach(([category, total]) => {
-      dataPoint[category] = total;
-    });
-
-    // Add summary data for statistics
-    dataPoint.totalPower = Object.values(powerCategories).reduce(
-      (sum, power) => sum + power,
-      0
-    );
-    dataPoint.activeChargers = activeChargers;
-
-    return dataPoint;
-  });
-};
-
-const numberOfCharger = 20;
-const chargingData = generateChargingData();
-const powerCategoryColors = {
-  "2.75kW": "#ff6b6b",
-  "5.5kW": "#ffa500",
-  "11kW": "#4ecdc4",
-  "18kW": "#45b7d1",
-  "25kW": "#96ceb4",
-};
-
-// Calculate some statistics for verification
-const maxActualPower = Math.max(
-  ...chargingData.map((interval) => Number(interval.totalPower))
-);
-const avgActualPower =
-  chargingData.reduce((sum, interval) => sum + Number(interval.totalPower), 0) /
-  chargingData.length;
-console.log("Max actual power:", maxActualPower);
-console.log("Average actual power:", avgActualPower);
+import {
+  chargerConfig,
+  chargingData,
+  numberOfCharger,
+  powerCategoryColors,
+} from "./mockedData";
 
 interface TooltipPayload {
   value: number;
@@ -192,7 +103,6 @@ export const DaySummary = () => {
   };
 
   const getIntervalTotal = (interval: Record<string, number | string>) => {
-    // Use the pre-calculated totalPower for accuracy
     return Number(interval.totalPower) || 0;
   };
 
@@ -306,7 +216,7 @@ export const DaySummary = () => {
                 const intervalTotal = getIntervalTotal(interval);
                 return Math.max(max, intervalTotal);
               }, 0)
-              .toFixed(1)}
+              .toFixed(2)}
           </div>
           <div className="text-sm text-gray-600">Peak Actual Power (kW)</div>
           <div className="text-xs text-gray-500">
