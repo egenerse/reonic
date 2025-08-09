@@ -25,7 +25,7 @@ export const SingleSimulation = () => {
         simulationOptions={simulationOptions}
         setSimulationOptions={setSimulationOptions}
       />
-      <div className="flex space-x-4">
+      <div className="flex gap-2 flex-col items-center justify-center md:flex-row">
         <button
           className=" px-6 py-3 text-white font-semibold rounded-md bg-blue-400"
           onClick={onRunSimulation}

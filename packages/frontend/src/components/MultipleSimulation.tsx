@@ -2,7 +2,7 @@ import { useState } from "react";
 import { runSimulation } from "../utils/simulation";
 import type { SimulationOptions, SimulationResult } from "../utils/types";
 import { ResultsTable } from "./ResultsTable";
-import { InputField } from "./inputs";
+import { InputField, SelectInput } from "./inputs";
 import { RangeInput } from "./inputs";
 import { defaultSimulationOptions } from "../utils/contants";
 
@@ -13,7 +13,9 @@ export const MultipleSimulation = () => {
 
   const [results, setResults] = useState<SimulationResult[]>([]);
 
-  const handleOptionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOptionsChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setSimulationOptions({
       ...simulationOptions,
@@ -59,15 +61,33 @@ export const MultipleSimulation = () => {
             Simulation Parameters
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <InputField
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            <SelectInput
+              id="numberOfChargers"
+              label="Number of Chargers"
+              name="numberOfChargers"
+              value={simulationOptions.numberOfChargers}
+              options={Array.from({ length: 30 }, (_, i) => ({
+                value: i + 1,
+                label: `${i + 1} Charger${i + 1 === 1 ? "" : "s"}`,
+              }))}
+              onChange={handleOptionsChange}
+            />
+
+            <SelectInput
               id="chargerPowerInkW"
-              name="chargerPowerInkW"
               label="Charger Power (kW)"
-              type="number"
-              min={1}
-              step={0.1}
+              name="chargerPowerInkW"
               value={simulationOptions.chargerPowerInkW}
+              options={[
+                { value: 2.75, label: "2.75 kW" },
+                { value: 5.5, label: "5.5 kW" },
+                { value: 11, label: "11 kW" },
+                { value: 18, label: "18 kW" },
+                { value: 25, label: "25 kW" },
+                { value: 50, label: "50 kW" },
+                { value: 100, label: "100 kW" },
+              ]}
               onChange={handleOptionsChange}
             />
 
@@ -104,7 +124,7 @@ export const MultipleSimulation = () => {
               percentage
             />
 
-            <div className="flex items-end lg:col-start-2 lg:col-span-2">
+            <div className="flex items-end lg:col-start-2 lg:col-span-3">
               <button
                 onClick={runAllSimulations}
                 disabled={isRunning}

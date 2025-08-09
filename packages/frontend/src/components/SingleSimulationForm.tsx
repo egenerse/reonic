@@ -11,15 +11,9 @@ export const SingleSimulationForm: React.FC<Props> = ({
   simulationOptions,
   setSimulationOptions,
 }) => {
-  const handleOptionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setSimulationOptions({
-      ...simulationOptions,
-      [name]: Number(value),
-    });
-  };
-
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleOptionsChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setSimulationOptions({
       ...simulationOptions,
@@ -38,7 +32,7 @@ export const SingleSimulationForm: React.FC<Props> = ({
           value: i + 1,
           label: `${i + 1} Charger${i + 1 === 1 ? "" : "s"}`,
         }))}
-        onChange={handleSelectChange}
+        onChange={handleOptionsChange}
       />
       <InputField
         type="number"
@@ -63,7 +57,7 @@ export const SingleSimulationForm: React.FC<Props> = ({
           { value: 50, label: "50 kW" },
           { value: 100, label: "100 kW" },
         ]}
-        onChange={handleSelectChange}
+        onChange={handleOptionsChange}
       />
       <InputField
         id="carNeedskWhPer100kms"
