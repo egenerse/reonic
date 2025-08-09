@@ -136,7 +136,7 @@ export const ChargerPowerDistribution = () => {
   return (
     <div className="w-full bg-white rounded-lg shadow-md p-4 ">
       <div className="flex justify-center mb-4">
-        <h2 className="text-lg font-semibold">
+        <h2 className="text-3xl font-semibold">
           Charging Station Power Configuration Distribution
         </h2>
       </div>

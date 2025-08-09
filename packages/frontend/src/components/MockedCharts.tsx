@@ -27,7 +27,7 @@ export const MockedCharts = () => {
       <h3 className="text-2xl font-semibold text-gray-500 ">
         Toggled charts are added to the end of other charts.
       </h3>
-      <div className="flex flex-1 flex-col items-center gap-8 mt-8 w-full">
+      <div className="flex flex-1 flex-col items-center gap-10 mt-8 w-full">
         {/* Toggle Buttons */}
         <div className="flex flex-wrap gap-4 justify-center">
           <button
@@ -75,33 +75,13 @@ export const MockedCharts = () => {
           </button>
         </div>
 
-        {shownCharts.chargingEvents && (
-          <>
-            <ChargingEvents />
-            <hr className="w-full" />
-          </>
-        )}
+        {shownCharts.chargingEvents && <ChargingEvents />}
 
-        {shownCharts.chargerPowerDistribution && (
-          <>
-            <ChargerPowerDistribution />
-            <hr className="w-full" />
-          </>
-        )}
+        {shownCharts.chargerPowerDistribution && <ChargerPowerDistribution />}
 
-        {shownCharts.daySummary && (
-          <>
-            <DaySummary />
-            <hr className="w-full" />
-          </>
-        )}
+        {shownCharts.daySummary && <DaySummary />}
 
-        {shownCharts.energyConsumption && (
-          <>
-            <EnergyConsumption />
-            <hr className="w-full" />
-          </>
-        )}
+        {shownCharts.energyConsumption && <EnergyConsumption />}
       </div>
     </div>
   );

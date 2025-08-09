@@ -54,10 +54,16 @@ export const EnergyConsumption = () => {
         return (
           <div className="bg-white p-3 border border-gray-300 rounded shadow-lg max-w-xs">
             <p className="font-semibold">{`${label} Chargers`}</p>
-            <p className="text-green-600 font-medium">{`Total Energy: ${data.totalEnergy} kWh`}</p>
+            <p className="text-green-600 font-medium">{`Total Energy: ${data.totalEnergy.toFixed(
+              2
+            )} kWh`}</p>
             <p className="text-blue-600">{`${data.chargerCount} chargers`}</p>
-            <p className="text-gray-600 text-sm">{`Avg per charger: ${data.avgEnergyPerCharger} kWh`}</p>
-            <p className="text-gray-600 text-sm">{`Total operating hours: ${data.totalHours}h`}</p>
+            <p className="text-gray-600 text-sm">{`Avg per charger: ${data.avgEnergyPerCharger.toFixed(
+              2
+            )} kWh`}</p>
+            <p className="text-gray-600 text-sm">{`Total operating hours: ${data.totalHours.toFixed(
+              2
+            )}h`}</p>
           </div>
         );
       }
@@ -130,7 +136,7 @@ export const EnergyConsumption = () => {
   return (
     <div className="w-full bg-white rounded-lg shadow-md p-4 ">
       <div className="flex justify-center mb-4">
-        <h2 className="text-lg font-semibold">
+        <h2 className="text-3xl font-semibold">
           Total Energy Consumption Analysis
         </h2>
       </div>

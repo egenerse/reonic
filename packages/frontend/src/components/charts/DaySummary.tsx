@@ -109,7 +109,7 @@ export const DaySummary = () => {
   return (
     <div className="w-full bg-white rounded-lg shadow-md p-4 ">
       <div className="flex justify-center">
-        <h2 className="text-lg font-semibold my-2">
+        <h2 className="text-3xl font-semibold my-2">
           Daily Charging Power Profile by Station Category - {numberOfCharger}{" "}
           Charge Points (15-min intervals)
         </h2>

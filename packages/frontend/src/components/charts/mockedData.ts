@@ -1,4 +1,7 @@
 import { arrayOfProbabilities } from "../../utils/constants";
+import seedrandom from "seedrandom";
+
+const seededRandom = seedrandom("charging-data");
 
 export const numberOfCharger = 20;
 // Mock charging station configuration - each charger has a specific power capacity
@@ -6,7 +9,7 @@ const generateChargingStationConfig = () => {
   return Array.from({ length: numberOfCharger }, (_, i) => {
     const powers = [2.75, 5.5, 11, 18, 25];
 
-    const randomIntBetween0and5 = Math.floor(Math.random() * 5);
+    const randomIntBetween0and5 = Math.floor(seededRandom() * 5);
     return { id: i + 1, power: powers[randomIntBetween0and5] };
   });
 };
@@ -49,7 +52,7 @@ const generateChargingData = (): Record<string, number | string>[] => {
 
     // Generate power values for each charging point and group by power category
     chargerConfig.forEach((charger) => {
-      const isActive = Math.random() * 100 < adjustedMultiplier;
+      const isActive = seededRandom() * 100 < adjustedMultiplier;
 
       if (isActive) {
         const powerKey = `${charger.power}kW` as keyof typeof powerCategories;
@@ -96,9 +99,9 @@ const generateEnergyData = () => {
   return timeFrames.map((timeFrame) => {
     const energyByCharger = chargerConfig.map((charger) => {
       // Simulate realistic charging patterns with seasonal and usage variations
-      const baseUsageHoursPerDay = 4 + Math.random() * 6; // 4-10 hours per day average
-      const seasonalMultiplier = 0.8 + Math.random() * 0.4; // 0.8-1.2x seasonal variation
-      const chargerEfficiency = 0.85 + Math.random() * 0.1; // 85-95% charging efficiency
+      const baseUsageHoursPerDay = 4 + seededRandom() * 6; // 4-10 hours per day average
+      const seasonalMultiplier = 0.8 + seededRandom() * 0.4; // 0.8-1.2x seasonal variation
+      const chargerEfficiency = 0.85 + seededRandom() * 0.1; // 85-95% charging efficiency
 
       // Higher power chargers tend to be used more intensively but for shorter durations
       const powerFactor = charger.power <= 11 ? 1.2 : 0.8; // Lower power = more frequent use
@@ -176,11 +179,11 @@ const generateDailyEnergyTrend = () => {
 
     // Weekend usage typically lower, but with some variation
     const weekendMultiplier = isWeekend
-      ? 0.6 + Math.random() * 0.3
-      : 0.9 + Math.random() * 0.2;
+      ? 0.6 + seededRandom() * 0.3
+      : 0.9 + seededRandom() * 0.2;
 
     // Seasonal day-to-day variation
-    const randomDailyVariation = 0.8 + Math.random() * 0.4;
+    const randomDailyVariation = 0.8 + seededRandom() * 0.4;
 
     const energyByCategory = Object.keys(powerCategoryColors).reduce(
       (acc, powerKey) => {
@@ -243,7 +246,7 @@ const generateChargingEvents = () => {
     }
 
     // Add some randomness
-    const randomVariation = 0.7 + Math.random() * 0.6;
+    const randomVariation = 0.7 + seededRandom() * 0.6;
     const finalMultiplier = baseMultiplier * randomVariation;
 
     // Generate events for each charger category
@@ -260,7 +263,7 @@ const generateChargingEvents = () => {
           chargersInCategory.length *
             finalMultiplier *
             sessionFrequency *
-            (0.5 + Math.random() * 0.5)
+            (0.5 + seededRandom() * 0.5)
         );
 
         acc[powerKey] = Math.max(0, categoryEvents);
@@ -368,7 +371,7 @@ const generateChargingEvents = () => {
     ).getDate();
 
     // Estimate monthly events based on daily averages with seasonal variation
-    const seasonalMultiplier = 0.8 + Math.random() * 0.4; // Seasonal variation
+    const seasonalMultiplier = 0.8 + seededRandom() * 0.4; // Seasonal variation
     const baseEventsPerDay = 15; // Average events per day per charger type
 
     const eventsByCategory = Object.keys(powerCategoryColors).reduce(
