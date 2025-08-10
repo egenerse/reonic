@@ -1,12 +1,12 @@
 import { calculateNumberOfChargers } from "../utils/charger";
 import type { SimulationOptions, SimulationResult } from "../utils/types";
 
-interface SimulationRowProps {
+interface Props {
   result: SimulationResult;
   simulationOptions: SimulationOptions;
 }
 
-export const SimulationRow: React.FC<SimulationRowProps> = ({
+export const SimulationRow: React.FC<Props> = ({
   result,
   simulationOptions,
 }) => {

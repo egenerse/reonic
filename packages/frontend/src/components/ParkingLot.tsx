@@ -1,6 +1,6 @@
 import React from "react";
 
-interface ParkingLotProps {
+interface Props {
   id: number;
   chargerPowerInKw?: number;
   showEdit: boolean;
@@ -8,7 +8,7 @@ interface ParkingLotProps {
   setParkingLotPower: (id: number) => void;
 }
 
-export const ParkingLot: React.FC<ParkingLotProps> = ({
+export const ParkingLot: React.FC<Props> = ({
   id,
   chargerPowerInKw,
   showEdit,

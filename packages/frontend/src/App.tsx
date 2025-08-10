@@ -1,7 +1,7 @@
-// import { MockedCharts } from "./components/MockedCharts";
-// import { MultipleSimulation } from "./components/MultipleSimulation";
-import { SingleSimulation } from "./components/SingleSimulation";
 import { WelcomeScreen } from "./components/WelcomeScreen";
+import { SingleSimulation } from "./components/SingleSimulation";
+import { MockedCharts } from "./components/MockedCharts";
+import { MultipleSimulation } from "./components/MultipleSimulation";
 
 function App() {
   return (
@@ -9,11 +9,11 @@ function App() {
       <WelcomeScreen />
 
       <SingleSimulation />
-      {/* 
+
       <MultipleSimulation />
       <hr />
       <MockedCharts />
-      <hr /> */}
+      <hr />
     </div>
   );
 }

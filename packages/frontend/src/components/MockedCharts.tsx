@@ -25,7 +25,7 @@ export const MockedCharts = () => {
     <div className="min-h-screen flex flex-1 flex-col items-center my-8 gap-2">
       <h1 className="text-4xl font-bold text-gray-900  ">Mocked Charts</h1>
       <h3 className="text-2xl font-semibold text-gray-500 ">
-        Toggled charts are added to the end of other charts.
+        Select charts to display.
       </h3>
       <div className="flex flex-1 flex-col items-center gap-10 mt-8 w-full">
         {/* Toggle Buttons */}

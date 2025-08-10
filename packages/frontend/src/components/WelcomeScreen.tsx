@@ -14,8 +14,9 @@ export const WelcomeScreen = () => {
           explore results in a virtual diagram.
         </p>
       </div>
+
       <button
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="bg-blue-600 text-white px-4 py-2 rounded min-w-40"
         onClick={onGetStarted}
       >
         Get Started
