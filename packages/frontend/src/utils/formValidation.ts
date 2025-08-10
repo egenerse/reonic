@@ -1,4 +1,4 @@
-import { calculateNumberOfChargers } from "./chargingMath";
+import { calculateNumberOfChargers } from "./charger";
 import type { SimulationOptions } from "./types";
 
 export const validateSimulationOptions = (options: SimulationOptions) => {

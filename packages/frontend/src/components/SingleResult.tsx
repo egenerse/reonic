@@ -1,6 +1,6 @@
 import { Fragment } from "react/jsx-runtime";
 import type { SimulationOptions, SimulationResult } from "../utils/types";
-import { calculateNumberOfChargers } from "../utils/chargingMath";
+import { calculateNumberOfChargers } from "../utils/charger";
 
 interface Props {
   result: SimulationResult;
@@ -57,7 +57,7 @@ export const SingleResult: React.FC<Props> = ({
           Theoretical Max Power Demand
         </div>
         <div className="bg-blue-600 text-white text-center py-3 px-4">
-          {result.theoreticalMaxPowerDemand.toFixed(1)} kW
+          {result.theoreticalMaxPowerDemand.toFixed(2)} kW
         </div>
 
         <div className="bg-slate-800 text-white font-medium py-3 px-4">

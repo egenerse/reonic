@@ -1,7 +1,8 @@
 import React from "react";
 import type { ChargerConfiguration } from "../utils/types";
 import { SelectInput } from "./inputs";
-import { calculateNumberOfChargers } from "../utils/chargingMath";
+import { calculateNumberOfChargers } from "../utils/charger";
+import { AVAILABLE_CHARGER_POWER_OPTIONS } from "../utils/constants";
 
 interface Props {
   chargerConfigurations: ChargerConfiguration[];
@@ -10,22 +11,12 @@ interface Props {
   ) => void;
 }
 
-const POWER_OPTIONS = [
-  { value: 2.75, label: "2.75 kW" },
-  { value: 5.5, label: "5.5 kW" },
-  { value: 11, label: "11 kW" },
-  { value: 18, label: "18 kW" },
-  { value: 25, label: "25 kW" },
-  { value: 50, label: "50 kW" },
-  { value: 100, label: "100 kW" },
-];
-
 export const ChargerConfigurationForm: React.FC<Props> = ({
   chargerConfigurations,
   onChargerConfigurationsChange,
 }) => {
   const addChargerConfiguration = () => {
-    const missingPowerInKw = POWER_OPTIONS.find(
+    const missingPowerInKw = AVAILABLE_CHARGER_POWER_OPTIONS.find(
       (option) =>
         !chargerConfigurations.some(
           (config) => config.powerInkW === option.value
@@ -80,7 +71,10 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
           <h2 className="font-semibold">( {totalChargers} total chargers)</h2>
         </div>
         <button
-          disabled={chargerConfigurations.length >= POWER_OPTIONS.length}
+          disabled={
+            chargerConfigurations.length >=
+            AVAILABLE_CHARGER_POWER_OPTIONS.length
+          }
           type="button"
           onClick={addChargerConfiguration}
           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
@@ -108,7 +102,7 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
                 label="Charger Power (kW)"
                 name={`power-${config.id}`}
                 value={config.powerInkW}
-                options={POWER_OPTIONS}
+                options={AVAILABLE_CHARGER_POWER_OPTIONS}
                 onChange={(e) =>
                   updateChargerConfiguration(
                     config.id,

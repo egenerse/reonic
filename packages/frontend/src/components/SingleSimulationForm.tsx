@@ -32,15 +32,14 @@ export const SingleSimulationForm: React.FC<Props> = ({
   };
 
   return (
-    <div className="space-y-6 max-w-4xl p-6 bg-blue-300 mb-4 rounded-2xl min-w-2/5">
+    <div className="max-w-4xl p-6 bg-blue-300 mb-4 rounded-2xl min-w-2/5">
       {/* Charger Configuration Section */}
       <ChargerConfigurationForm
         chargerConfigurations={simulationOptions.chargerConfigurations}
         onChargerConfigurationsChange={handleChargerConfigurationsChange}
       />
 
-      {/* Other Simulation Options */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-blue-400">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4  border-blue-400">
         <InputField
           type="number"
           max={365}

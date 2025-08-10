@@ -1,4 +1,4 @@
-import { calculateNumberOfChargers } from "../utils/chargingMath";
+import { calculateNumberOfChargers } from "../utils/charger";
 import type { SimulationOptions, SimulationResult } from "../utils/types";
 
 interface SimulationRowProps {

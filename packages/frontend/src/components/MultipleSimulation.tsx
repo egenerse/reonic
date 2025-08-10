@@ -8,7 +8,7 @@ import type {
 import { ResultsTable } from "./ResultsTable";
 import { InputField } from "./inputs";
 import { RangeInput } from "./inputs";
-import { defaultSimulationOptions } from "../utils/contants";
+import { defaultSimulationOptions } from "../utils/constants";
 import { ChargerConfigurationForm } from "./ChargerConfiguration";
 
 export const MultipleSimulation = () => {

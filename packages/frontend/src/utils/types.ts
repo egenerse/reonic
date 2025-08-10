@@ -34,3 +34,8 @@ export type ChargingEvent = {
   energyUsedFromTheGridInkWh: number;
   chargingStationData: ChargingStationState;
 };
+
+export type ParkingData = {
+  chargerPowerInKw?: number;
+  id: number;
+};
