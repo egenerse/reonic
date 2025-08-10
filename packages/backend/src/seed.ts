@@ -5,8 +5,8 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Starting database seed...");
 
-  // Create some sample simulation inputs
-  const simulation1 = await prisma.simulationInput.create({
+  // Create some sample simulation results
+  const simulation1 = await prisma.simulationResult.create({
     data: {
       chargePoints: 4,
       arrivalMultiplier: 1.0,
@@ -15,7 +15,7 @@ async function main() {
     },
   });
 
-  const simulation2 = await prisma.simulationInput.create({
+  const simulation2 = await prisma.simulationResult.create({
     data: {
       chargePoints: 8,
       arrivalMultiplier: 1.5,
@@ -24,7 +24,7 @@ async function main() {
     },
   });
 
-  const simulation3 = await prisma.simulationInput.create({
+  const simulation3 = await prisma.simulationResult.create({
     data: {
       chargePoints: 6,
       arrivalMultiplier: 0.8,
@@ -33,7 +33,7 @@ async function main() {
     },
   });
 
-  console.log("✅ Created simulation inputs:", {
+  console.log("✅ Created simulation results:", {
     simulation1: simulation1.id,
     simulation2: simulation2.id,
     simulation3: simulation3.id,

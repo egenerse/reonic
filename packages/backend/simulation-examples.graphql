@@ -1,0 +1,195 @@
+# GraphQL Mutations and Queries for Simulation
+
+## Smart Query - Get Simulation by Parameters (Recommended)
+# This query checks if simulation exists for given parameters
+# If exists, returns cached result. If not, creates and runs simulation automatically
+# GraphQL Mutations and Queries for Simulation
+
+## Smart Query - Get Simulation by Parameters (Recommended)
+# This query checks if simulation exists for given parameters
+# If exists, returns cached result. If not, creates and runs simulation automatically
+query GetSimulation {
+  getSimulation(
+    params: {
+      chargePoints: 10
+      arrivalMultiplier: 1.2
+      carConsumptionKwh: 18.0
+      chargingPowerKw: 11.0
+    }
+  ) {
+    id
+    chargePoints
+    arrivalMultiplier
+    carConsumptionKwh
+    chargingPowerKw
+    createdAt
+    simulationOutputs {
+      id
+      totalEnergyChargedKwh
+      chargingEventsYear
+      chargingEventsMonth
+      chargingEventsWeek
+      chargingEventsDay
+      chargingValues
+      exemplaryDay
+      createdAt
+    }
+  }
+}
+
+## Create New Simulation (Force new calculation)
+# This mutation always creates a new simulation, even if parameters already exist
+mutation CreateSimulation {
+  createSimulation(
+    data: {
+      chargePoints: 5
+      arrivalMultiplier: 1.0
+      carConsumptionKwh: 20.0
+      chargingPowerKw: 22.0
+    }
+  ) {
+    id
+    chargePoints
+    arrivalMultiplier
+    carConsumptionKwh
+    chargingPowerKw
+    createdAt
+    simulationOutputs {
+      id
+      totalEnergyChargedKwh
+      chargingEventsYear
+      chargingEventsMonth
+      chargingEventsWeek
+      chargingEventsDay
+      chargingValues
+      exemplaryDay
+      createdAt
+    }
+  }
+}
+
+## Create New Simulation (Force new calculation)
+# This mutation always creates a new simulation, even if parameters already exist
+mutation CreateSimulation {
+  createSimulation(
+    data: {
+      chargePoints: 5
+      arrivalMultiplier: 1.0
+      carConsumptionKwh: 20.0
+      chargingPowerKw: 22.0
+    }
+  ) {
+    id
+    chargePoints
+    arrivalMultiplier
+    carConsumptionKwh
+    chargingPowerKw
+    createdAt
+    simulationOutputs {
+      id
+      totalEnergyChargedKwh
+      chargingEventsYear
+      chargingEventsMonth
+      chargingEventsWeek
+      chargingEventsDay
+      chargingValues
+      exemplaryDay
+      createdAt
+    }
+  }
+}
+
+## Get All Simulation Results
+query GetAllSimulationResults {
+  simulationResults {
+    id
+    chargePoints
+    arrivalMultiplier
+    carConsumptionKwh
+    chargingPowerKw
+    createdAt
+    simulationOutputs {
+      id
+      totalEnergyChargedKwh
+      chargingEventsYear
+      chargingEventsMonth
+      chargingEventsWeek
+      chargingEventsDay
+      chargingValues
+      exemplaryDay
+      createdAt
+    }
+  }
+}
+
+## Get Specific Simulation Result
+query GetSpecificSimulationResult {
+  simulationResult(id: 1) {
+    id
+    chargePoints
+    arrivalMultiplier
+    carConsumptionKwh
+    chargingPowerKw
+    createdAt
+    simulationOutputs {
+      id
+      totalEnergyChargedKwh
+      chargingEventsYear
+      chargingEventsMonth
+      chargingEventsWeek
+      chargingEventsDay
+      chargingValues
+      exemplaryDay
+      createdAt
+    }
+  }
+}
+
+## Get Simulation Outputs by Input ID
+query GetSimulationOutputsByInputId {
+  simulationOutputsByInputId(inputId: 1) {
+    id
+    totalEnergyChargedKwh
+    chargingEventsYear
+    chargingEventsMonth
+    chargingEventsWeek
+    chargingEventsDay
+    chargingValues
+    exemplaryDay
+    createdAt
+    input {
+      id
+      chargePoints
+      arrivalMultiplier
+      carConsumptionKwh
+      chargingPowerKw
+    }
+  }
+}
+
+## Update Simulation Result
+mutation UpdateSimulationResult {
+  updateSimulation(id: 1, data: { chargePoints: 15, arrivalMultiplier: 1.5 }) {
+    id
+    chargePoints
+    arrivalMultiplier
+    carConsumptionKwh
+    chargingPowerKw
+    updatedAt
+    simulationOutputs {
+      id
+      totalEnergyChargedKwh
+      chargingEventsYear
+    }
+  }
+}
+
+## Delete Simulation Result
+mutation DeleteSimulationResult {
+  deleteSimulation(id: 1)
+}
+
+## Delete Simulation Output
+mutation DeleteSimulationOutput {
+  deleteSimulationOutput(id: 1)
+}

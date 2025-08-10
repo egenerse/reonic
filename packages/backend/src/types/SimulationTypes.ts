@@ -2,7 +2,7 @@ import { ObjectType, Field, Int, Float, ID } from "type-graphql";
 import { GraphQLJSONObject } from "graphql-scalars";
 
 @ObjectType()
-export class SimulationInput {
+export class SimulationResult {
   @Field(() => Int)
   id!: number;
 
@@ -24,8 +24,8 @@ export class SimulationInput {
   @Field(() => Date)
   updatedAt!: Date;
 
-  @Field(() => [SimulationOutput], { nullable: true })
-  simulationOutputs?: SimulationOutput[];
+  @Field(() => [SimulationOutput], { nullable: false })
+  simulationOutputs!: SimulationOutput[];
 }
 
 @ObjectType()
@@ -60,6 +60,6 @@ export class SimulationOutput {
   @Field(() => Date)
   createdAt!: Date;
 
-  @Field(() => SimulationInput)
-  input!: SimulationInput;
+  @Field(() => SimulationResult)
+  input!: SimulationResult;
 }

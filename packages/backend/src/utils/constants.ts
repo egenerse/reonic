@@ -1,0 +1,28 @@
+export const arrivalProbabilitiesTableT1 = {
+  0: 0.94,
+  1: 0.94,
+  2: 0.94,
+  3: 0.94,
+  4: 0.94,
+  5: 0.94,
+  6: 0.94,
+  7: 0.94,
+  8: 2.83,
+  9: 2.83,
+  10: 5.66,
+  11: 5.66,
+  12: 5.66,
+  13: 7.55,
+  14: 7.55,
+  15: 7.55,
+  16: 10.38,
+  17: 10.38,
+  18: 10.38,
+  19: 4.72,
+  20: 4.72,
+  21: 4.72,
+  22: 0.94,
+  23: 0.94,
+};
+
+export const arrayOfProbabilities = Object.values(arrivalProbabilitiesTableT1);

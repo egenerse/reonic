@@ -70,17 +70,17 @@ The server will be running at:
 
 ### GraphQL Queries
 
-- `simulationInputs` - Get all simulation inputs
-- `simulationInput(id)` - Get a specific simulation input
+- `simulationResults` - Get all simulation results
+- `simulationResult(id)` - Get a specific simulation result
 - `simulationOutputs` - Get all simulation outputs
 - `simulationOutput(id)` - Get a specific simulation output
 - `simulationOutputsByInputId(inputId)` - Get outputs for a specific input
 
 ### GraphQL Mutations
 
-- `createSimulationInput(data)` - Create a new simulation input
-- `updateSimulationInput(id, data)` - Update a simulation input
-- `deleteSimulationInput(id)` - Delete a simulation input
+- `createSimulation(data)` - Create a new simulation result
+- `updateSimulation(id, data)` - Update a simulation result
+- `deleteSimulation(id)` - Delete a simulation result
 - `deleteSimulationOutput(id)` - Delete a simulation output
 
 ## Project Structure
@@ -92,7 +92,7 @@ src/
 │   └── SimulationResolver.ts
 ├── types/                # GraphQL types and DTOs
 │   ├── SimulationTypes.ts
-│   └── SimulationInputs.ts
+│   └── SimulationResults.ts
 ├── services/             # Business logic
 │   └── SimulationService.ts
 ├── utils/                # Utilities

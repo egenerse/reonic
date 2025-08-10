@@ -6,9 +6,10 @@ import { expressMiddleware } from "@as-integrations/express5";
 import { buildSchema } from "type-graphql";
 import { PrismaClient } from "@prisma/client";
 import { SimulationResolver } from "./resolvers/SimulationResolver";
+import { SimulationService } from "./services/SimulationService";
 
 export interface Context {
-  prisma: PrismaClient;
+  simulationService: SimulationService;
 }
 
 async function main() {
@@ -17,6 +18,9 @@ async function main() {
 
   // Initialize Prisma
   const prisma = new PrismaClient();
+
+  // Initialize Services
+  const simulationService = new SimulationService(prisma);
 
   // Build GraphQL schema
   const schema = await buildSchema({
@@ -43,7 +47,7 @@ async function main() {
     }),
     express.json(),
     expressMiddleware(server, {
-      context: async (): Promise<Context> => ({ prisma }),
+      context: async (): Promise<Context> => ({ simulationService }),
     })
   );
 
