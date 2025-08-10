@@ -22,13 +22,11 @@ export type SimulationOptions = {
 };
 
 export type SimulationResult = {
-  chargerConfigurations: ChargerConfiguration[];
   totalEnergyConsumedInkWh: number;
   theoreticalMaxPowerDemand: number;
   actualMaximumPowerDemandInkW: number;
   ratioOfActualToMaximumPowerDemand: number;
   totalChargingEvents: number;
-  carArrivalProbabilityMultiplier: number;
 };
 
 export type ChargingEvent = {

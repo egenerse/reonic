@@ -1,11 +1,15 @@
-import type { SimulationResult } from "../utils/types";
+import type { SimulationOptions, SimulationResult } from "../utils/types";
 import { SimulationRow } from "./SimulationRow";
 
 interface Props {
   simulationResults: SimulationResult[];
+  simulationOptions: SimulationOptions;
 }
 
-export const ResultsTable: React.FC<Props> = ({ simulationResults }) => {
+export const ResultsTable: React.FC<Props> = ({
+  simulationResults,
+  simulationOptions,
+}) => {
   return (
     <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
       {/* Header */}
@@ -27,7 +31,11 @@ export const ResultsTable: React.FC<Props> = ({ simulationResults }) => {
       <div className="max-h-96 overflow-y-auto">
         <div className="p-2">
           {simulationResults.map((result, index) => (
-            <SimulationRow key={index} result={result} />
+            <SimulationRow
+              key={index}
+              result={result}
+              simulationOptions={simulationOptions}
+            />
           ))}
         </div>
       </div>
@@ -46,11 +54,11 @@ export const ResultsTable: React.FC<Props> = ({ simulationResults }) => {
             <p className="text-lg font-semibold text-gray-900">
               {Math.min(
                 ...simulationResults.map((r) => r.actualMaximumPowerDemandInkW)
-              ).toFixed(1)}{" "}
+              ).toFixed(2)}{" "}
               -{" "}
               {Math.max(
                 ...simulationResults.map((r) => r.actualMaximumPowerDemandInkW)
-              ).toFixed(1)}{" "}
+              ).toFixed(2)}{" "}
               kW
             </p>
           </div>

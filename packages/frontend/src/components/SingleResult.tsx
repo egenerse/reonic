@@ -1,13 +1,19 @@
 import { Fragment } from "react/jsx-runtime";
-import type { SimulationResult } from "../utils/types";
+import type { SimulationOptions, SimulationResult } from "../utils/types";
 import { calculateNumberOfChargers } from "../utils/chargingMath";
 
 interface Props {
   result: SimulationResult;
+  simulationOptions: SimulationOptions;
 }
 
-export const SingleResult: React.FC<Props> = ({ result }) => {
-  const totalChargers = calculateNumberOfChargers(result.chargerConfigurations);
+export const SingleResult: React.FC<Props> = ({
+  result,
+  simulationOptions,
+}) => {
+  const totalChargers = calculateNumberOfChargers(
+    simulationOptions.chargerConfigurations
+  );
 
   return (
     <div className="p-6 bg-white rounded-2xl shadow-lg max-w-2xl mx-auto">
@@ -26,7 +32,7 @@ export const SingleResult: React.FC<Props> = ({ result }) => {
           </span>
         </div>
 
-        {result.chargerConfigurations.map((config) => (
+        {simulationOptions.chargerConfigurations.map((config) => (
           <Fragment key={config.id}>
             <div className="bg-slate-800 text-white font-medium py-3 px-4">
               Number of {config.name}
@@ -58,7 +64,7 @@ export const SingleResult: React.FC<Props> = ({ result }) => {
           Actual Maximum Power Demand
         </div>
         <div className="bg-blue-600 text-white text-center py-3 px-4">
-          {result.actualMaximumPowerDemandInkW.toFixed(1)} kW
+          {result.actualMaximumPowerDemandInkW.toFixed(2)} kW
         </div>
 
         <div className="bg-slate-800 text-white font-medium py-3 px-4">

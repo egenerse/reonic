@@ -77,13 +77,13 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
           <h3 className="text-lg font-medium text-gray-800">
             Charger Configurations
           </h3>
-          <h2>({totalChargers} total chargers)</h2>
+          <h2 className="font-semibold">( {totalChargers} total chargers)</h2>
         </div>
         <button
           disabled={chargerConfigurations.length >= POWER_OPTIONS.length}
           type="button"
           onClick={addChargerConfiguration}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
         >
           Add Charger Type
         </button>
@@ -96,7 +96,7 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
         </div>
       )}
 
-      <div className="space-y-4">
+      <div className=" grid grid-cols-1 md:grid-cols-2  gap-1">
         {chargerConfigurations.map((config) => (
           <div
             key={config.id}

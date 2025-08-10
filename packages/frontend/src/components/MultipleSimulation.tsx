@@ -15,8 +15,9 @@ export const MultipleSimulation = () => {
   const [simulationOptions, setSimulationOptions] = useState<SimulationOptions>(
     defaultSimulationOptions
   );
-
   const [results, setResults] = useState<SimulationResult[]>([]);
+  const [resultSimulationOptions, setResultSimulationOptions] =
+    useState<SimulationOptions>(defaultSimulationOptions);
 
   const handleOptionsChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -33,6 +34,7 @@ export const MultipleSimulation = () => {
   const runAllSimulations = async () => {
     setIsRunning(true);
     setResults([]);
+    setResultSimulationOptions(defaultSimulationOptions);
 
     const allResults: SimulationResult[] = [];
 
@@ -147,7 +149,10 @@ export const MultipleSimulation = () => {
             <h2 className="text-3xl font-bold text-gray-900 mb-6">
               Charging Station Analysis
             </h2>
-            <ResultsTable simulationResults={results} />
+            <ResultsTable
+              simulationResults={results}
+              simulationOptions={resultSimulationOptions}
+            />
           </div>
         )}
       </div>

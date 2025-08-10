@@ -12,6 +12,8 @@ export const SingleSimulation = () => {
   );
   const [errors, setErrors] = useState<string[]>([]);
   const [simulationResult, setSimulationResult] = useState<SimulationResult>();
+  const [resultSimulationOptions, setResultSimulationOptions] =
+    useState<SimulationOptions>(defaultSimulationOptions);
 
   const onRunSimulation = () => {
     const errors = validateSimulationOptions(simulationOptions);
@@ -21,6 +23,7 @@ export const SingleSimulation = () => {
     }
     setErrors([]);
     setSimulationResult(runSimulation(simulationOptions));
+    setResultSimulationOptions(simulationOptions);
   };
 
   const onResetOptions = () => {
@@ -63,7 +66,10 @@ export const SingleSimulation = () => {
 
       {simulationResult && (
         <div className="my-4">
-          <SingleResult result={simulationResult} />
+          <SingleResult
+            result={simulationResult}
+            simulationOptions={resultSimulationOptions}
+          />
         </div>
       )}
     </div>
