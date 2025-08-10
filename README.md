@@ -1,6 +1,7 @@
 # Reonic Challenge
 
 A monorepo with GraphQL backend and React frontend for simulation management.
+Frontend deployed to : https://reonic-frontend.vercel.app/
 
 ## 🚀 Quick Start
 
