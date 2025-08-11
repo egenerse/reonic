@@ -1,64 +1,65 @@
 import { Resolver, Query, Mutation, Arg, Ctx, Int, ID } from "type-graphql";
-import { SimulationResult, SimulationOutput } from "../types/SimulationTypes";
+import { SimulationInput, SimulationOutput } from "../types/SimulationTypes";
 import {
-  CreateSimulationResultDto,
-  UpdateSimulationResultDto,
-} from "../types/SimulationResults";
+  CreateSimulationInputDto,
+  UpdateSimulationInputDto,
+} from "../types/SimulationDtos";
 import { Context } from "../index";
 
 @Resolver()
+@Resolver()
 export class SimulationResolver {
   // Main query - gets simulation by parameters, creates if doesn't exist
-  @Query(() => SimulationResult)
+  @Query(() => SimulationInput)
   async getSimulation(
-    @Arg("params", () => CreateSimulationResultDto)
-    params: CreateSimulationResultDto,
+    @Arg("params", () => CreateSimulationInputDto)
+    params: CreateSimulationInputDto,
     @Ctx() { simulationService }: Context
-  ): Promise<SimulationResult> {
+  ): Promise<SimulationInput> {
     return (await simulationService.getSimulationByParameters(
       params
-    )) as SimulationResult;
+    )) as SimulationInput;
   }
 
-  @Query(() => [SimulationResult])
+  @Query(() => [SimulationInput])
   async simulationResults(
     @Ctx() { simulationService }: Context
-  ): Promise<SimulationResult[]> {
-    return (await simulationService.getAllSimulations()) as SimulationResult[];
+  ): Promise<SimulationInput[]> {
+    return (await simulationService.getAllSimulations()) as SimulationInput[];
   }
 
-  @Query(() => SimulationResult, { nullable: true })
+  @Query(() => SimulationInput, { nullable: true })
   async simulationResult(
     @Arg("id", () => Int) id: number,
     @Ctx() { simulationService }: Context
-  ): Promise<SimulationResult | null> {
+  ): Promise<SimulationInput | null> {
     return (await simulationService.getSimulationById(
       id
-    )) as SimulationResult | null;
+    )) as SimulationInput | null;
   }
 
-  @Mutation(() => SimulationResult)
+  @Mutation(() => SimulationInput)
   async createSimulation(
-    @Arg("data", () => CreateSimulationResultDto)
-    data: CreateSimulationResultDto,
+    @Arg("data", () => CreateSimulationInputDto)
+    data: CreateSimulationInputDto,
     @Ctx() { simulationService }: Context
-  ): Promise<SimulationResult> {
+  ): Promise<SimulationInput> {
     return (await simulationService.createAndRunSimulation(
       data
-    )) as SimulationResult;
+    )) as SimulationInput;
   }
 
-  @Mutation(() => SimulationResult, { nullable: true })
+  @Mutation(() => SimulationInput, { nullable: true })
   async updateSimulation(
     @Arg("id", () => Int) id: number,
-    @Arg("data", () => UpdateSimulationResultDto)
-    data: UpdateSimulationResultDto,
+    @Arg("data", () => UpdateSimulationInputDto)
+    data: UpdateSimulationInputDto,
     @Ctx() { simulationService }: Context
-  ): Promise<SimulationResult | null> {
+  ): Promise<SimulationInput | null> {
     return (await simulationService.updateSimulation(
       id,
       data
-    )) as SimulationResult | null;
+    )) as SimulationInput | null;
   }
 
   @Mutation(() => Boolean)

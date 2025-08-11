@@ -12,7 +12,7 @@ export class SimulationService {
     chargingPowerKw: number;
   }) {
     // First, try to find existing simulation with these exact parameters
-    const existingSimulation = await this.prisma.simulationResult.findFirst({
+    const existingSimulation = await this.prisma.simulationInput.findFirst({
       where: {
         chargePoints: params.chargePoints,
         arrivalMultiplier: params.arrivalMultiplier,
@@ -44,7 +44,7 @@ export class SimulationService {
     chargingPowerKw: number;
   }) {
     // Create the simulation input first
-    const simulationResult = await this.prisma.simulationResult.create({
+    const simulationInput = await this.prisma.simulationInput.create({
       data,
     });
 
@@ -53,7 +53,7 @@ export class SimulationService {
 
     // Create the simulation output
     const outputData = {
-      inputId: simulationResult.id,
+      inputId: simulationInput.id,
       ...simulationData,
     };
 
@@ -62,8 +62,8 @@ export class SimulationService {
     });
 
     // Return the input with its output
-    return await this.prisma.simulationResult.findUnique({
-      where: { id: simulationResult.id },
+    return await this.prisma.simulationInput.findUnique({
+      where: { id: simulationInput.id },
       include: {
         simulationOutputs: {
           include: {
@@ -125,7 +125,7 @@ export class SimulationService {
   }
 
   async getAllSimulations() {
-    return await this.prisma.simulationResult.findMany({
+    return await this.prisma.simulationInput.findMany({
       include: {
         simulationOutputs: {
           include: {
@@ -140,7 +140,7 @@ export class SimulationService {
   }
 
   async getSimulationById(id: number) {
-    return await this.prisma.simulationResult.findUnique({
+    return await this.prisma.simulationInput.findUnique({
       where: { id },
       include: {
         simulationOutputs: {
@@ -161,7 +161,7 @@ export class SimulationService {
       chargingPowerKw?: number;
     }
   ) {
-    return await this.prisma.simulationResult.update({
+    return await this.prisma.simulationInput.update({
       where: { id },
       data,
       include: {
@@ -180,7 +180,7 @@ export class SimulationService {
       where: { inputId: id },
     });
 
-    return await this.prisma.simulationResult.delete({
+    return await this.prisma.simulationInput.delete({
       where: { id },
     });
   }

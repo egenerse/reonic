@@ -7,7 +7,7 @@ async function main() {
 
   // Create some sample simulation results using findFirst + create pattern to avoid duplicates
   
-  let simulation1 = await prisma.simulationResult.findFirst({
+  let simulation1 = await prisma.simulationInput.findFirst({
     where: {
       chargePoints: 4,
       arrivalMultiplier: 1.0,
@@ -17,7 +17,7 @@ async function main() {
   });
 
   if (!simulation1) {
-    simulation1 = await prisma.simulationResult.create({
+    simulation1 = await prisma.simulationInput.create({
       data: {
         chargePoints: 4,
         arrivalMultiplier: 1.0,
@@ -30,7 +30,7 @@ async function main() {
     console.log("Found existing simulation1");
   }
 
-  let simulation2 = await prisma.simulationResult.findFirst({
+  let simulation2 = await prisma.simulationInput.findFirst({
     where: {
       chargePoints: 8,
       arrivalMultiplier: 1.5,
@@ -40,7 +40,7 @@ async function main() {
   });
 
   if (!simulation2) {
-    simulation2 = await prisma.simulationResult.create({
+    simulation2 = await prisma.simulationInput.create({
       data: {
         chargePoints: 8,
         arrivalMultiplier: 1.5,
@@ -53,7 +53,7 @@ async function main() {
     console.log("Found existing simulation2");
   }
 
-  let simulation3 = await prisma.simulationResult.findFirst({
+  let simulation3 = await prisma.simulationInput.findFirst({
     where: {
       chargePoints: 6,
       arrivalMultiplier: 0.8,
@@ -63,7 +63,7 @@ async function main() {
   });
 
   if (!simulation3) {
-    simulation3 = await prisma.simulationResult.create({
+    simulation3 = await prisma.simulationInput.create({
       data: {
         chargePoints: 6,
         arrivalMultiplier: 0.8,

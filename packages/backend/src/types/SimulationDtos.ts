@@ -1,7 +1,7 @@
 import { InputType, Field, Int, Float } from "type-graphql";
 
 @InputType()
-export class CreateSimulationResultDto {
+export class CreateSimulationInputDto {
   @Field(() => Int)
   chargePoints!: number;
 
@@ -16,7 +16,7 @@ export class CreateSimulationResultDto {
 }
 
 @InputType()
-export class UpdateSimulationResultDto {
+export class UpdateSimulationInputDto {
   @Field(() => Int, { nullable: true })
   chargePoints?: number;
 

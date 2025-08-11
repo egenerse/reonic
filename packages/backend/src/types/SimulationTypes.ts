@@ -2,7 +2,7 @@ import { ObjectType, Field, Int, Float, ID } from "type-graphql";
 import { GraphQLJSONObject } from "graphql-scalars";
 
 @ObjectType()
-export class SimulationResult {
+export class SimulationInput {
   @Field(() => Int)
   id!: number;
 
@@ -60,6 +60,6 @@ export class SimulationOutput {
   @Field(() => Date)
   createdAt!: Date;
 
-  @Field(() => SimulationResult)
-  input!: SimulationResult;
+  @Field(() => SimulationInput)
+  input!: SimulationInput;
 }
