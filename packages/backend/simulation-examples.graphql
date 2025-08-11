@@ -1,9 +1,11 @@
 # GraphQL Mutations and Queries for Simulation
 
-## Smart Query - Get Simulation by Parameters (Recommended)
-# This query checks if simulation exists for given parameters
-# If exists, returns cached result. If not, creates and runs simulation automatically
-# GraphQL Mutations and Queries for Simulation
+# Data Model:
+# - SimulationInput: Stores input parameters (chargePoints, arrivalMultiplier, etc.)
+# - SimulationOutput: Stores computation results (totalEnergyChargedKwh, chargingEvents, etc.)
+#
+# Note: The GraphQL query names still use "simulationResult" for the SimulationInput type
+# for backward compatibility, but semantically it represents simulation input parameters.
 
 ## Smart Query - Get Simulation by Parameters (Recommended)
 # This query checks if simulation exists for given parameters
@@ -23,6 +25,7 @@ query GetSimulation {
     carConsumptionKwh
     chargingPowerKw
     createdAt
+    updatedAt
     simulationOutputs {
       id
       totalEnergyChargedKwh
@@ -37,8 +40,8 @@ query GetSimulation {
   }
 }
 
-## Create New Simulation (Force new calculation)
-# This mutation always creates a new simulation, even if parameters already exist
+## Create New Simulation Input (Force new calculation)
+# This mutation always creates a new simulation input, even if parameters already exist
 mutation CreateSimulation {
   createSimulation(
     data: {
@@ -54,6 +57,7 @@ mutation CreateSimulation {
     carConsumptionKwh
     chargingPowerKw
     createdAt
+    updatedAt
     simulationOutputs {
       id
       totalEnergyChargedKwh
@@ -68,39 +72,8 @@ mutation CreateSimulation {
   }
 }
 
-## Create New Simulation (Force new calculation)
-# This mutation always creates a new simulation, even if parameters already exist
-mutation CreateSimulation {
-  createSimulation(
-    data: {
-      chargePoints: 5
-      arrivalMultiplier: 1.0
-      carConsumptionKwh: 20.0
-      chargingPowerKw: 22.0
-    }
-  ) {
-    id
-    chargePoints
-    arrivalMultiplier
-    carConsumptionKwh
-    chargingPowerKw
-    createdAt
-    simulationOutputs {
-      id
-      totalEnergyChargedKwh
-      chargingEventsYear
-      chargingEventsMonth
-      chargingEventsWeek
-      chargingEventsDay
-      chargingValues
-      exemplaryDay
-      createdAt
-    }
-  }
-}
-
-## Get All Simulation Results
-query GetAllSimulationResults {
+## Get All Simulation Inputs
+query GetAllSimulationInputs {
   simulationResults {
     id
     chargePoints
@@ -108,6 +81,7 @@ query GetAllSimulationResults {
     carConsumptionKwh
     chargingPowerKw
     createdAt
+    updatedAt
     simulationOutputs {
       id
       totalEnergyChargedKwh
@@ -122,8 +96,8 @@ query GetAllSimulationResults {
   }
 }
 
-## Get Specific Simulation Result
-query GetSpecificSimulationResult {
+## Get Specific Simulation Input
+query GetSpecificSimulationInput {
   simulationResult(id: 1) {
     id
     chargePoints
@@ -131,6 +105,7 @@ query GetSpecificSimulationResult {
     carConsumptionKwh
     chargingPowerKw
     createdAt
+    updatedAt
     simulationOutputs {
       id
       totalEnergyChargedKwh
@@ -145,30 +120,8 @@ query GetSpecificSimulationResult {
   }
 }
 
-## Get Simulation Outputs by Input ID
-query GetSimulationOutputsByInputId {
-  simulationOutputsByInputId(inputId: 1) {
-    id
-    totalEnergyChargedKwh
-    chargingEventsYear
-    chargingEventsMonth
-    chargingEventsWeek
-    chargingEventsDay
-    chargingValues
-    exemplaryDay
-    createdAt
-    input {
-      id
-      chargePoints
-      arrivalMultiplier
-      carConsumptionKwh
-      chargingPowerKw
-    }
-  }
-}
-
-## Update Simulation Result
-mutation UpdateSimulationResult {
+## Update Simulation Input
+mutation UpdateSimulationInput {
   updateSimulation(id: 1, data: { chargePoints: 15, arrivalMultiplier: 1.5 }) {
     id
     chargePoints
@@ -184,12 +137,7 @@ mutation UpdateSimulationResult {
   }
 }
 
-## Delete Simulation Result
-mutation DeleteSimulationResult {
+## Delete Simulation Input (also deletes related outputs)
+mutation DeleteSimulationInput {
   deleteSimulation(id: 1)
-}
-
-## Delete Simulation Output
-mutation DeleteSimulationOutput {
-  deleteSimulationOutput(id: 1)
 }

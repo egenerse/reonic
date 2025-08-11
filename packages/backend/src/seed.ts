@@ -6,7 +6,7 @@ async function main() {
   console.log("🌱 Starting database seed...");
 
   // Create some sample simulation results using findFirst + create pattern to avoid duplicates
-  
+
   let simulation1 = await prisma.simulationInput.findFirst({
     where: {
       chargePoints: 4,
