@@ -7,9 +7,7 @@ function App() {
   return (
     <div className="min-h-screen  bg-blue-50  ">
       <WelcomeScreen />
-
       <SingleSimulation />
-
       <MultipleSimulation />
       <hr />
       <MockedCharts />

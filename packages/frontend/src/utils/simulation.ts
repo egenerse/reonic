@@ -1,9 +1,9 @@
-import { ChargingStation } from "./chargingStation";
 import { arrayOfProbabilities } from "./constants";
 import type {
   SimulationOptions,
   SimulationResult,
   ChargingEvent,
+  ChargingStation,
 } from "./types";
 
 const getNeededKmForCar = (percentage: number) => {
@@ -37,15 +37,14 @@ export const runSimulation = ({
   const chargingStations: ChargingStation[] = [];
   chargerConfigurations.forEach((config) => {
     for (let i = 0; i < config.quantity; i++) {
-      chargingStations.push(
-        new ChargingStation({
-          powerInkW: config.powerInkW,
-          occupiedNumberOfTicks: 0,
-          lockedToChargeTotalkWh: 0,
-          sessionRemainingChargeInkWh: 0,
-          sessionAlreadyChargedInkWh: 0,
-        })
-      );
+      chargingStations.push({
+        id: i,
+        powerInkW: config.powerInkW,
+        occupiedNumberOfTicks: 0,
+        lockedToChargeTotalkWh: 0,
+        sessionRemainingChargeInkWh: 0,
+        sessionAlreadyChargedInkWh: 0,
+      });
     }
   });
 

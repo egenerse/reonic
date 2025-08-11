@@ -39,3 +39,12 @@ export type ParkingData = {
   chargerPowerInKw?: number;
   id: number;
 };
+
+export type ChargingStation = {
+  id: number;
+  occupiedNumberOfTicks: number;
+  powerInkW: number;
+  lockedToChargeTotalkWh: number;
+  sessionRemainingChargeInkWh: number;
+  sessionAlreadyChargedInkWh: number;
+};

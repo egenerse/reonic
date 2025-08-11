@@ -1,6 +1,5 @@
 export const WelcomeScreen = () => {
   const onGetStarted = () => {
-    // Logic to navigate to the simulation form or start the simulation
     document
       .getElementById("single-simulation")
       ?.scrollIntoView({ behavior: "smooth" });

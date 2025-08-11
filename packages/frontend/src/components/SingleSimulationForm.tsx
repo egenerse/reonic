@@ -33,7 +33,6 @@ export const SingleSimulationForm: React.FC<Props> = ({
 
   return (
     <div className="max-w-4xl p-6 bg-blue-300 mb-4 rounded-2xl min-w-2/5">
-      {/* Charger Configuration Section */}
       <ChargerConfigurationForm
         chargerConfigurations={simulationOptions.chargerConfigurations}
         onChargerConfigurationsChange={handleChargerConfigurationsChange}

@@ -75,12 +75,10 @@ export const MockedCharts = () => {
           </button>
         </div>
 
+        {/* Render Selected Charts */}
         {shownCharts.chargingEvents && <ChargingEvents />}
-
         {shownCharts.chargerPowerDistribution && <ChargerPowerDistribution />}
-
         {shownCharts.daySummary && <DaySummary />}
-
         {shownCharts.energyConsumption && <EnergyConsumption />}
       </div>
     </div>
