@@ -1,9 +1,8 @@
-export const WelcomeScreen = () => {
-  const onGetStarted = () => {
-    document
-      .getElementById("single-simulation")
-      ?.scrollIntoView({ behavior: "smooth" })
-  }
+interface Props {
+  onGetStarted: () => void
+}
+
+export const WelcomeScreen: React.FC<Props> = ({ onGetStarted }) => {
   return (
     <div className="mb-40 flex min-h-screen flex-col items-center justify-center bg-blue-50 text-center">
       <div className="p-8">

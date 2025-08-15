@@ -16,7 +16,7 @@ export const SingleResult: React.FC<Props> = ({
   )
 
   return (
-    <div className="mx-auto max-w-2xl rounded-2xl bg-white p-6 shadow-lg">
+    <div className="mx-auto mt-30 max-w-2xl rounded-2xl bg-white p-6 shadow-lg">
       <h2 className="mb-6 text-2xl font-semibold text-gray-800">
         Simulation Result
       </h2>

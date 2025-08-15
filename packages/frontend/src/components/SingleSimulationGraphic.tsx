@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import type {
   ChargerConfiguration,
   ParkingData,
@@ -19,6 +19,7 @@ import { ChargerPowerSelector } from "./ChargerPowerSelector"
 import { ParkingLotGrid } from "./ParkingLotGrid"
 
 export const SingleSimulationGraphic = () => {
+  const simulationResultWrapperRef = useRef<HTMLDivElement>(null)
   const [parkingData, setParkingData] = React.useState<ParkingData[]>(
     initialParkingData_GRAPHIC_SIMULATION
   )
@@ -111,9 +112,7 @@ export const SingleSimulationGraphic = () => {
     setSimulationResult(runSimulation(simulationOptions))
     setResultSimulationOptions(simulationOptions)
 
-    document
-      ?.getElementById("simulation-result")
-      ?.scrollIntoView({ behavior: "smooth" })
+    simulationResultWrapperRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
   const handleOptionsChange = (
@@ -156,14 +155,14 @@ export const SingleSimulationGraphic = () => {
           />
         </div>
 
-        {simulationResult && (
-          <div className="pt-30" id="simulation-result">
+        <div ref={simulationResultWrapperRef}>
+          {simulationResult && (
             <SingleResult
               result={simulationResult}
               simulationOptions={resultSimulationOptions}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )
