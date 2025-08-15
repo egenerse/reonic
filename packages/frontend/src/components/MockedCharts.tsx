@@ -1,25 +1,40 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import {
   ChargerPowerDistribution,
   ChargingEvents,
   DaySummary,
   EnergyConsumption,
 } from "./charts"
+import { ButtonGroup, type ButtonInGroup } from "./buttons/ButtonGroup"
 
 export const MockedCharts = () => {
-  const [shownCharts, setShownCharts] = useState({
-    chargingEvents: false,
-    chargerPowerDistribution: false,
-    daySummary: false,
-    energyConsumption: false,
-  })
+  const [shownChart, setShownChart] = useState("")
 
-  const handleButtonToggle = (chartKey: keyof typeof shownCharts) => {
-    setShownCharts((prev) => ({
-      ...prev,
-      [chartKey]: !prev[chartKey],
-    }))
-  }
+  const buttons: ButtonInGroup[] = useMemo(
+    () => [
+      {
+        label: "Charging Events",
+        onClick: () => setShownChart("chargingEvents"),
+        id: "chargingEvents",
+      },
+      {
+        label: "Charger Power Distribution",
+        onClick: () => setShownChart("chargerPowerDistribution"),
+        id: "chargerPowerDistribution",
+      },
+      {
+        label: "Day Summary",
+        onClick: () => setShownChart("daySummary"),
+        id: "daySummary",
+      },
+      {
+        label: "Energy Consumption",
+        onClick: () => setShownChart("energyConsumption"),
+        id: "energyConsumption",
+      },
+    ],
+    [setShownChart]
+  )
 
   return (
     <div className="my-8 flex min-h-screen flex-1 flex-col items-center gap-2">
@@ -28,58 +43,14 @@ export const MockedCharts = () => {
         Select charts to display.
       </h3>
       <div className="mt-8 flex w-full flex-1 flex-col items-center gap-10">
-        {/* Toggle Buttons */}
-        <div className="flex flex-wrap justify-center gap-4">
-          <button
-            onClick={() => handleButtonToggle("chargingEvents")}
-            className={`rounded-lg border-2 px-6 py-3 font-medium transition-all duration-200 ${
-              shownCharts.chargingEvents
-                ? "border-blue-600 bg-blue-600 text-white shadow-lg"
-                : "border-gray-300 bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            Charging Events
-          </button>
+        <ButtonGroup buttons={buttons} selectedId={shownChart} />
 
-          <button
-            onClick={() => handleButtonToggle("chargerPowerDistribution")}
-            className={`rounded-lg border-2 px-6 py-3 font-medium transition-all duration-200 ${
-              shownCharts.chargerPowerDistribution
-                ? "border-blue-600 bg-blue-600 text-white shadow-lg"
-                : "border-gray-300 bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            Charger Power Distribution
-          </button>
-
-          <button
-            onClick={() => handleButtonToggle("daySummary")}
-            className={`rounded-lg border-2 px-6 py-3 font-medium transition-all duration-200 ${
-              shownCharts.daySummary
-                ? "border-blue-600 bg-blue-600 text-white shadow-lg"
-                : "border-gray-300 bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            Day Summary
-          </button>
-
-          <button
-            onClick={() => handleButtonToggle("energyConsumption")}
-            className={`rounded-lg border-2 px-6 py-3 font-medium transition-all duration-200 ${
-              shownCharts.energyConsumption
-                ? "border-blue-600 bg-blue-600 text-white shadow-lg"
-                : "border-gray-300 bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            Energy Consumption
-          </button>
-        </div>
-
-        {/* Render Selected Charts */}
-        {shownCharts.chargingEvents && <ChargingEvents />}
-        {shownCharts.chargerPowerDistribution && <ChargerPowerDistribution />}
-        {shownCharts.daySummary && <DaySummary />}
-        {shownCharts.energyConsumption && <EnergyConsumption />}
+        {shownChart === "chargingEvents" && <ChargingEvents />}
+        {shownChart === "chargerPowerDistribution" && (
+          <ChargerPowerDistribution />
+        )}
+        {shownChart === "daySummary" && <DaySummary />}
+        {shownChart === "energyConsumption" && <EnergyConsumption />}
       </div>
     </div>
   )

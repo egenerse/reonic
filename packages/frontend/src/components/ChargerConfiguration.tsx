@@ -3,6 +3,7 @@ import type { ChargerConfiguration } from "../utils/types"
 import { SelectInput } from "./inputs"
 import { calculateNumberOfChargers } from "../utils/charger"
 import { AVAILABLE_CHARGER_POWER_OPTIONS } from "../utils/constants"
+import { Button } from "./buttons/Button"
 
 interface Props {
   chargerConfigurations: ChargerConfiguration[]
@@ -63,24 +64,22 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center gap-2">
         <div>
           <h3 className="text-lg font-medium text-gray-800">
             Charger Configurations
           </h3>
           <h2 className="font-semibold">( {totalChargers} total chargers)</h2>
         </div>
-        <button
+        <Button
+          onClick={addChargerConfiguration}
           disabled={
             chargerConfigurations.length >=
             AVAILABLE_CHARGER_POWER_OPTIONS.length
           }
-          type="button"
-          onClick={addChargerConfiguration}
-          className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
         >
           Add Charger Type
-        </button>
+        </Button>
       </div>
 
       {chargerConfigurations.length === 0 && (
@@ -130,14 +129,13 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
                 }
               />
 
-              <button
-                type="button"
+              <Button
+                variant="danger"
                 onClick={() => removeChargerConfiguration(config.id)}
-                className="rounded-md bg-red-500 p-2 text-white hover:bg-red-700 md:col-start-2"
-                aria-label="Remove charger configuration"
+                className="col-start-2"
               >
                 Remove
-              </button>
+              </Button>
             </div>
           </div>
         ))}

@@ -17,6 +17,7 @@ import {
   powerCategoryColors,
 } from "./mockedData"
 import { useState } from "react"
+import { ButtonGroup } from "../buttons/ButtonGroup"
 
 interface TooltipPayload {
   value: number
@@ -31,8 +32,8 @@ interface CustomTooltipProps {
 }
 
 export const EnergyConsumption = () => {
-  const [selectedTimeFrame, setSelectedTimeFrame] = useState(0) // Index for energyConsumptionData
-  const currentData = energyConsumptionData[selectedTimeFrame]
+  const [selectedTimeFrameIndex, setSelectedTimeFrameIndex] = useState(0) // Index for energyConsumptionData
+  const currentData = energyConsumptionData[selectedTimeFrameIndex]
 
   // Prepare data for the energy by category bar chart
   const categoryBarData = Object.entries(currentData.energyByCategory)
@@ -133,6 +134,12 @@ export const EnergyConsumption = () => {
     currentData.energyByCategory
   ).reduce((sum, cat) => sum + cat.totalHours, 0)
 
+  const buttons = energyConsumptionData.map((data, index) => ({
+    id: index.toString(),
+    label: data.timeFrame,
+    onClick: () => setSelectedTimeFrameIndex(index),
+  }))
+
   return (
     <div className="w-full rounded-lg bg-white p-4 shadow-md">
       <div className="mb-4 flex justify-center">
@@ -141,14 +148,17 @@ export const EnergyConsumption = () => {
         </h2>
       </div>
 
-      {/* Time Frame Selector */}
-      <div className="mb-6 flex justify-center">
-        <div className="flex flex-wrap gap-2">
-          {energyConsumptionData.map((data, index) => (
+      <ButtonGroup
+        buttons={buttons}
+        selectedId={selectedTimeFrameIndex.toString()}
+        className="mb-10"
+      />
+
+      {/* {energyConsumptionData.map((data, index) => (
             <button
               key={index}
               onClick={() => setSelectedTimeFrame(index)}
-              className={`rounded px-4 py-2 text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
                 selectedTimeFrame === index
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -156,9 +166,7 @@ export const EnergyConsumption = () => {
             >
               {data.timeFrame}
             </button>
-          ))}
-        </div>
-      </div>
+          ))} */}
 
       {/* Summary Statistics */}
       <div className="mb-6 grid grid-cols-2 gap-4 text-center lg:grid-cols-4">

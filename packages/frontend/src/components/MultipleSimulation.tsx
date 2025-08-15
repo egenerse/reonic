@@ -10,6 +10,7 @@ import { InputField } from "./inputs"
 import { RangeInput } from "./inputs"
 import { defaultSimulationOptions } from "../utils/constants"
 import { ChargerConfigurationForm } from "./ChargerConfiguration"
+import { Button } from "./buttons/Button"
 
 export const MultipleSimulation = () => {
   const [simulationOptions, setSimulationOptions] = useState<SimulationOptions>(
@@ -81,66 +82,51 @@ export const MultipleSimulation = () => {
             Simulation Parameters
           </h2>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
-            <div className="col-span-3 col-start-2 col-end-5">
-              <ChargerConfigurationForm
-                chargerConfigurations={simulationOptions.chargerConfigurations}
-                onChargerConfigurationsChange={
-                  handleChargerConfigurationsChange
-                }
+          <div className="flex flex-1 flex-col gap-3 px-10 md:px-20 lg:px-40">
+            <ChargerConfigurationForm
+              chargerConfigurations={simulationOptions.chargerConfigurations}
+              onChargerConfigurationsChange={handleChargerConfigurationsChange}
+            />
+            <div className="flex justify-between gap-3">
+              <InputField
+                id="carNeedskWhPer100kms"
+                name="carNeedskWhPer100kms"
+                label="Car Efficiency (kWh/100km)"
+                type="number"
+                min={1}
+                step={0.1}
+                value={simulationOptions.carNeedskWhPer100kms}
+                onChange={handleOptionsChange}
+              />
+
+              <InputField
+                id="numberOfSimulationDays"
+                name="numberOfSimulationDays"
+                label="Simulation Days"
+                type="number"
+                min={1}
+                value={simulationOptions.numberOfSimulationDays}
+                onChange={handleOptionsChange}
+              />
+
+              <RangeInput
+                id="carArrivalProbabilityMultiplier"
+                name="carArrivalProbabilityMultiplier"
+                label="Car Arrival Probability Multiplier"
+                min={20}
+                max={220}
+                step={10}
+                value={simulationOptions.carArrivalProbabilityMultiplier}
+                onChange={handleOptionsChange}
+                percentage
               />
             </div>
-            <InputField
-              className="col-start-2 row-start-2"
-              id="carNeedskWhPer100kms"
-              name="carNeedskWhPer100kms"
-              label="Car Efficiency (kWh/100km)"
-              type="number"
-              min={1}
-              step={0.1}
-              value={simulationOptions.carNeedskWhPer100kms}
-              onChange={handleOptionsChange}
-            />
 
-            <InputField
-              className="col-start-3 row-start-2"
-              id="numberOfSimulationDays"
-              name="numberOfSimulationDays"
-              label="Simulation Days"
-              type="number"
-              min={1}
-              value={simulationOptions.numberOfSimulationDays}
-              onChange={handleOptionsChange}
-            />
-
-            <RangeInput
-              className="col-start-4 row-start-2"
-              id="carArrivalProbabilityMultiplier"
-              name="carArrivalProbabilityMultiplier"
-              label="Car Arrival Probability Multiplier"
-              min={20}
-              max={220}
-              step={10}
-              value={simulationOptions.carArrivalProbabilityMultiplier}
-              onChange={handleOptionsChange}
-              percentage
-            />
-
-            <div className="flex items-end lg:col-span-3 lg:col-start-2">
-              <button
-                onClick={runAllSimulations}
-                disabled={isRunning}
-                className={`w-full rounded-md px-6 py-3 font-semibold text-white transition-colors duration-200 ${
-                  isRunning
-                    ? "cursor-not-allowed bg-gray-400"
-                    : "bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-                }`}
-              >
-                {isRunning
-                  ? `Running... (${results.length}/30)`
-                  : "Run Simulations (1-30 Chargers)"}
-              </button>
-            </div>
+            <Button onClick={runAllSimulations} disabled={isRunning}>
+              {isRunning
+                ? `Running... (${results.length}/30)`
+                : "Run Simulations (1-30 Chargers)"}
+            </Button>
           </div>
         </div>
 

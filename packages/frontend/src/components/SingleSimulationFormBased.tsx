@@ -5,6 +5,7 @@ import { runSimulation } from "../utils/simulation"
 import { SingleResult } from "./SingleResult"
 import { defaultSimulationOptions } from "../utils/constants"
 import { validateSimulationOptions } from "../utils/formValidation"
+import { Button } from "./buttons/Button"
 
 export const SingleSimulationFormBased = () => {
   const [simulationOptions, setSimulationOptions] = useState<SimulationOptions>(
@@ -50,18 +51,11 @@ export const SingleSimulationFormBased = () => {
         setSimulationOptions={setSimulationOptions}
       />
       <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
-        <button
-          className="rounded-md bg-blue-400 px-6 py-3 font-semibold text-white"
-          onClick={onRunSimulation}
-        >
-          Run Simulation
-        </button>
-        <button
-          className="rounded-md bg-red-400 px-6 py-3 font-semibold text-white"
-          onClick={onResetOptions}
-        >
+        <Button onClick={onRunSimulation}>Run Simulation</Button>
+
+        <Button variant="danger" onClick={onResetOptions}>
           Reset Options
-        </button>
+        </Button>
       </div>
 
       {simulationResult && (

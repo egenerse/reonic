@@ -12,6 +12,7 @@ import {
   Legend,
 } from "recharts"
 import { chargingEventsData, powerCategoryColors } from "./mockedData"
+import { ButtonGroup, type ButtonInGroup } from "../buttons/ButtonGroup"
 
 interface TooltipPayload {
   value: number
@@ -45,6 +46,29 @@ export const ChargingEvents = () => {
   }
 
   const currentData = getCurrentData()
+
+  const buttons: ButtonInGroup[] = [
+    {
+      id: "daily",
+      label: "Daily (30 days)",
+      onClick: () => setSelectedView("daily"),
+    },
+    {
+      id: "weekly",
+      label: "Weekly (12 weeks)",
+      onClick: () => setSelectedView("weekly"),
+    },
+    {
+      id: "monthly",
+      label: "Monthly (12 months)",
+      onClick: () => setSelectedView("monthly"),
+    },
+    {
+      id: "heatmap",
+      label: "Hourly Heatmap",
+      onClick: () => setSelectedView("heatmap"),
+    },
+  ]
 
   // Custom tooltip for line/bar charts
   const EventsTooltip = ({ active, payload, label }: CustomTooltipProps) => {
@@ -149,33 +173,11 @@ export const ChargingEvents = () => {
         <h2 className="text-3xl font-semibold">Charging Events Analysis</h2>
       </div>
 
-      {/* View Selector */}
-      <div className="mb-6 flex justify-center">
-        <div className="flex flex-wrap gap-2">
-          {[
-            { key: "daily", label: "Daily (30 days)" },
-            { key: "weekly", label: "Weekly (12 weeks)" },
-            { key: "monthly", label: "Monthly (12 months)" },
-            { key: "heatmap", label: "Hourly Heatmap" },
-          ].map((view) => (
-            <button
-              key={view.key}
-              onClick={() =>
-                setSelectedView(
-                  view.key as "daily" | "weekly" | "monthly" | "heatmap"
-                )
-              }
-              className={`rounded px-4 py-2 text-sm font-medium transition-colors ${
-                selectedView === view.key
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
-            >
-              {view.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <ButtonGroup
+        buttons={buttons}
+        selectedId={selectedView}
+        className="mb-10"
+      />
 
       {/* Summary Statistics */}
       {selectedView !== "heatmap" && (

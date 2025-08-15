@@ -3,6 +3,7 @@ import { InputField, RangeInput } from "./inputs"
 import { ErrorBox } from "./ErrorBox"
 import type { ChargerConfiguration, SimulationOptions } from "../utils/types"
 import { calculateNumberOfChargers } from "../utils/charger"
+import { Button } from "./buttons/Button"
 
 interface Props {
   simulationOptions: SimulationOptions
@@ -54,12 +55,9 @@ export const GraphicSimulationForm: React.FC<Props> = ({
         }}
       />
       <div className="-mt-3 text-sm text-gray-400">Maximum Parkinglot: 300</div>
-      <button
-        onClick={() => handleUpdateParkingLots(parkingLotCount)}
-        className="min-w-20 rounded bg-blue-300 p-2 text-white"
-      >
-        Update Max Parking Lots
-      </button>
+      <Button onClick={() => handleUpdateParkingLots(parkingLotCount)}>
+        Set Max Lots
+      </Button>
 
       <div className="flex flex-col gap-2">
         <label className="text-lg font-semibold">Parking Lots:</label>
@@ -121,12 +119,7 @@ export const GraphicSimulationForm: React.FC<Props> = ({
         />
       </div>
 
-      <button
-        onClick={onRunSimulation}
-        className="w-full rounded bg-blue-300 p-2 text-white"
-      >
-        Run
-      </button>
+      <Button onClick={onRunSimulation}>Run</Button>
     </div>
   )
 }

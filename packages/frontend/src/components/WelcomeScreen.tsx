@@ -1,3 +1,5 @@
+import { Button } from "./buttons/Button"
+
 interface Props {
   onGetStarted: () => void
 }
@@ -13,12 +15,7 @@ export const WelcomeScreen: React.FC<Props> = ({ onGetStarted }) => {
         </p>
       </div>
 
-      <button
-        className="min-w-40 rounded bg-blue-600 px-4 py-2 text-white"
-        onClick={onGetStarted}
-      >
-        Get Started
-      </button>
+      <Button onClick={onGetStarted}>Get Started</Button>
     </div>
   )
 }

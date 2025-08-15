@@ -68,11 +68,6 @@ export const SingleSimulationGraphic = () => {
     }))
   }, [chargerConfigurations])
 
-  const handleSelectChargerPower = (power: number) => {
-    if (selectedChargerPower === power) setSelectedChargerPower(undefined)
-    else setSelectedChargerPower(power)
-  }
-
   const setParkingLotPower = (id: number) => {
     if (!selectedChargerPower) return
     setParkingData((prevData) =>
@@ -130,8 +125,7 @@ export const SingleSimulationGraphic = () => {
       <div className="flex flex-col gap-4 p-5 md:p-8 lg:p-10">
         <ChargerPowerSelector
           selectedChargerPower={selectedChargerPower}
-          onSelectChargerPower={handleSelectChargerPower}
-          onClearSelection={() => setSelectedChargerPower(undefined)}
+          onSelectChargerPower={setSelectedChargerPower}
         />
 
         <div className="flex flex-col gap-2 sm:flex-row">
