@@ -2,15 +2,20 @@ import React from "react"
 import { AVAILABLE_CHARGER_POWER_OPTIONS } from "../utils/constants"
 import { ButtonGroup, type ButtonInGroup } from "./buttons/ButtonGroup"
 import { Button } from "./buttons/Button"
+import type { SimulationOptions } from "../utils/types"
+import type { ZodError } from "zod"
+import { ErrorMessage } from "./ErrorMessage"
 
 interface ChargerPowerSelectorProps {
   selectedChargerPower: number | undefined
   onSelectChargerPower: (power: number | undefined) => void
+  error?: ZodError<SimulationOptions>
 }
 
 export const ChargerPowerSelector: React.FC<ChargerPowerSelectorProps> = ({
   selectedChargerPower,
   onSelectChargerPower,
+  error,
 }) => {
   const buttons: ButtonInGroup[] = AVAILABLE_CHARGER_POWER_OPTIONS.map(
     (option) => ({
@@ -18,6 +23,10 @@ export const ChargerPowerSelector: React.FC<ChargerPowerSelectorProps> = ({
       label: option.label,
       onClick: () => onSelectChargerPower(option.value),
     })
+  )
+
+  const chargerError = error?.issues.find(
+    (issue) => issue.path[0] === "chargerConfigurations"
   )
 
   return (
@@ -29,6 +38,13 @@ export const ChargerPowerSelector: React.FC<ChargerPowerSelectorProps> = ({
           selectedId={selectedChargerPower?.toString()}
         />
       </div>
+      {chargerError && (
+        <ErrorMessage
+          key={chargerError.message}
+          message={chargerError.message}
+        />
+      )}
+
       {selectedChargerPower && (
         <Button
           variant="danger"

@@ -1,52 +1,48 @@
-import { useState } from "react"
-import type { SimulationOptions, SimulationResult } from "../utils/types"
+import { useRef, useState } from "react"
+import {
+  simulationOptionsSchema,
+  type SimulationOptions,
+  type SimulationResult,
+} from "../utils/types"
 import { SingleSimulationForm } from "./SingleSimulationForm"
 import { runSimulation } from "../utils/simulation"
 import { SingleResult } from "./SingleResult"
 import { defaultSimulationOptions } from "../utils/constants"
-import { validateSimulationOptions } from "../utils/formValidation"
 import { Button } from "./buttons/Button"
+import type { ZodError } from "zod"
 
 export const SingleSimulationFormBased = () => {
+  const simulationResultWrapperRef = useRef<HTMLDivElement>(null)
   const [simulationOptions, setSimulationOptions] = useState<SimulationOptions>(
     defaultSimulationOptions
   )
-  const [errors, setErrors] = useState<string[]>([])
+  const [error, setError] = useState<ZodError<SimulationOptions>>()
   const [simulationResult, setSimulationResult] = useState<SimulationResult>()
   const [resultSimulationOptions, setResultSimulationOptions] =
     useState<SimulationOptions>(defaultSimulationOptions)
 
   const onRunSimulation = () => {
-    const errors = validateSimulationOptions(simulationOptions)
-    if (errors.length > 0) {
-      setErrors(errors)
-      return
+    const { data, error, success } =
+      simulationOptionsSchema.safeParse(simulationOptions)
+
+    setError(error)
+
+    if (success) {
+      setSimulationResult(runSimulation(data))
+      setResultSimulationOptions(data)
+      simulationResultWrapperRef.current?.scrollIntoView({ behavior: "smooth" })
     }
-    setErrors([])
-    setSimulationResult(runSimulation(simulationOptions))
-    setResultSimulationOptions(simulationOptions)
   }
 
   const onResetOptions = () => {
-    setErrors([])
+    setError(undefined)
     setSimulationOptions(defaultSimulationOptions)
   }
 
   return (
     <div className="mb-5 flex flex-col items-center justify-center">
-      {errors.length > 0 && (
-        <div className="mb-4">
-          <h3 className="text-red-500">Form Errors:</h3>
-          <ul className="list-inside list-disc">
-            {errors.map((error, index) => (
-              <li key={index} className="text-red-500">
-                {error}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
       <SingleSimulationForm
+        error={error}
         simulationOptions={simulationOptions}
         setSimulationOptions={setSimulationOptions}
       />
@@ -58,14 +54,14 @@ export const SingleSimulationFormBased = () => {
         </Button>
       </div>
 
-      {simulationResult && (
-        <div className="my-4">
+      <div className="my-4" ref={simulationResultWrapperRef}>
+        {simulationResult && (
           <SingleResult
             result={simulationResult}
             simulationOptions={resultSimulationOptions}
           />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

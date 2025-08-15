@@ -1,20 +1,24 @@
 import React from "react"
-import type { ChargerConfiguration } from "../utils/types"
+import type { ChargerConfiguration, SimulationOptions } from "../utils/types"
 import { SelectInput } from "./inputs"
 import { calculateNumberOfChargers } from "../utils/charger"
 import { AVAILABLE_CHARGER_POWER_OPTIONS } from "../utils/constants"
 import { Button } from "./buttons/Button"
+import type { ZodError } from "zod"
+import { ErrorMessage } from "./ErrorMessage"
 
 interface Props {
   chargerConfigurations: ChargerConfiguration[]
   onChargerConfigurationsChange: (
     configurations: ChargerConfiguration[]
   ) => void
+  error?: ZodError<SimulationOptions>
 }
 
 export const ChargerConfigurationForm: React.FC<Props> = ({
   chargerConfigurations,
   onChargerConfigurationsChange,
+  error,
 }) => {
   const addChargerConfiguration = () => {
     const missingPowerInKw = AVAILABLE_CHARGER_POWER_OPTIONS.find(
@@ -62,6 +66,10 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
 
   const totalChargers = calculateNumberOfChargers(chargerConfigurations)
 
+  const chargerErrors = error?.issues.find(
+    (issue) => issue.path[0] === "chargerConfigurations"
+  )
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
@@ -81,6 +89,11 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
           Add Charger Type
         </Button>
       </div>
+      {chargerErrors?.message && (
+        <div className="mt-4">
+          <ErrorMessage message={chargerErrors.message} />
+        </div>
+      )}
 
       {chargerConfigurations.length === 0 && (
         <div className="py-8 text-center text-gray-500">

@@ -1,6 +1,7 @@
 import React from "react"
 import ParkingIcon from "./icons/ParkingIcon"
 import ChargerIcon from "./icons/ChargerIcon"
+import clsx from "clsx"
 
 interface Props {
   id: number
@@ -19,13 +20,24 @@ export const ParkingLot: React.FC<Props> = ({
 }) => {
   return (
     <div
-      className={`relative flex h-40 w-28 flex-col items-center gap-1 rounded-lg border-2 bg-gray-100 p-4 ${
-        !showEdit ? "justify-center" : " "
-      } ${chargerPowerInKw ? "border-green-600" : ""} `}
+      className={clsx(
+        "relative flex h-40 w-28 flex-col items-center gap-1 rounded-lg border-2 p-4",
+        { "justify-center": !showEdit },
+        { "border-green-600 bg-green-50": chargerPowerInKw }
+      )}
     >
       {/* Parking SVG Background */}
       {chargerPowerInKw ? (
-        <ChargerIcon className="absolute inset-0 z-0 h-full w-full text-green-900 opacity-40" />
+        <ChargerIcon
+          className={clsx(
+            "absolute inset-0 z-0 h-full w-full stroke-amber-100 opacity-40",
+            { "text-blue-300": chargerPowerInKw === 2.75 },
+            { "text-blue-500": chargerPowerInKw === 5.5 },
+            { "text-orange-600": chargerPowerInKw === 11 },
+            { "text-orange-700": chargerPowerInKw === 18 },
+            { "text-fuchsia-800": chargerPowerInKw === 25 }
+          )}
+        />
       ) : (
         <ParkingIcon className="absolute inset-0 z-0 h-full w-full opacity-40" />
       )}

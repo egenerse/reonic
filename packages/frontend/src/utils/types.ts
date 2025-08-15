@@ -1,3 +1,45 @@
+import { z } from "zod"
+
+const chargerConfigurationSchema = z.object({
+  id: z.string(),
+  powerInkW: z.number().min(0).max(100),
+  quantity: z
+    .number()
+    .min(0)
+    .max(30, "Number of charger must be less than or equal to 30"),
+  name: z.string().min(2).max(100),
+})
+
+export const simulationOptionsSchema = z.object({
+  chargerConfigurations: z.array(chargerConfigurationSchema).refine(
+    (chargerConfigs) => {
+      const totalQuantity = chargerConfigs.reduce(
+        (sum, config) => sum + config.quantity,
+        0
+      )
+
+      return totalQuantity <= 30
+    },
+    {
+      error: "Total number of chargers must not exceed 30",
+    }
+  ),
+  numberOfSimulationDays: z
+    .number()
+    .min(1, "Number of simulation days must be at least 1")
+    .max(365, "Number of simulation days must be between 1 and 365"),
+  carNeedskWhPer100kms: z.number().min(0),
+  carArrivalProbabilityMultiplier: z.number().min(20).max(220),
+})
+
+export const parkingLotCountSchema = z
+  .number()
+  .min(0, "Number of parking lots must be greater than or equal to 0")
+  .max(200, "Number of parking lots must be less than or equal to 200")
+
+export type ChargerConfiguration = z.infer<typeof chargerConfigurationSchema>
+export type SimulationOptions = z.infer<typeof simulationOptionsSchema>
+
 export type ChargingStationState = {
   chargerId: number
   occupiedNumberOfTicks: number
@@ -5,20 +47,6 @@ export type ChargingStationState = {
   lockedToChargeTotalkWh: number
   sessionRemainingChargeInkWh: number
   sessionAlreadyChargedInkWh: number
-}
-
-export type ChargerConfiguration = {
-  id: string
-  powerInkW: number
-  quantity: number
-  name: string
-}
-
-export type SimulationOptions = {
-  chargerConfigurations: ChargerConfiguration[]
-  numberOfSimulationDays: number
-  carNeedskWhPer100kms: number
-  carArrivalProbabilityMultiplier: number
 }
 
 export type SimulationResult = {

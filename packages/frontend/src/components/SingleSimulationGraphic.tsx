@@ -1,22 +1,23 @@
 import React, { useEffect, useRef, useState } from "react"
-import type {
-  ChargerConfiguration,
-  ParkingData,
-  SimulationOptions,
-  SimulationResult,
+import {
+  simulationOptionsSchema,
+  type ChargerConfiguration,
+  type ParkingData,
+  type SimulationOptions,
+  type SimulationResult,
 } from "../utils/types"
 import {
-  defaultSimulationOptions,
+  defaultGraphicSimulationOptions,
   initialParkingData_GRAPHIC_SIMULATION,
   AVAILABLE_CHARGER_POWER_OPTIONS,
 } from "../utils/constants"
-import { validateSimulationOptions } from "../utils/formValidation"
 import { runSimulation } from "../utils/simulation"
 import { SingleResult } from "./SingleResult"
 import { calculateChargerConfigurationsFromParkingData } from "../utils/charger"
 import { GraphicSimulationForm } from "./GraphicSimulationForm"
 import { ChargerPowerSelector } from "./ChargerPowerSelector"
 import { ParkingLotGrid } from "./ParkingLotGrid"
+import type { ZodError } from "zod"
 
 export const SingleSimulationGraphic = () => {
   const simulationResultWrapperRef = useRef<HTMLDivElement>(null)
@@ -28,12 +29,12 @@ export const SingleSimulationGraphic = () => {
   >(calculateChargerConfigurationsFromParkingData(parkingData))
 
   const [simulationOptions, setSimulationOptions] = useState<SimulationOptions>(
-    defaultSimulationOptions
+    defaultGraphicSimulationOptions
   )
   const [resultSimulationOptions, setResultSimulationOptions] =
-    useState<SimulationOptions>(defaultSimulationOptions)
+    useState<SimulationOptions>(defaultGraphicSimulationOptions)
 
-  const [errors, setErrors] = useState<string[]>([])
+  const [error, setError] = useState<ZodError<SimulationOptions>>()
   const [simulationResult, setSimulationResult] = useState<SimulationResult>()
   const [selectedChargerPower, setSelectedChargerPower] = React.useState<
     number | undefined
@@ -97,26 +98,28 @@ export const SingleSimulationGraphic = () => {
   }
 
   const onRunSimulation = () => {
-    const errors = validateSimulationOptions(simulationOptions)
-    if (errors.length > 0) {
-      setErrors(errors)
-      return
+    const { data, error, success } =
+      simulationOptionsSchema.safeParse(simulationOptions)
+    console.log("DEBUG simulationOptions:", data)
+
+    setError(error)
+    if (success) {
+      setSimulationResult(runSimulation(data))
+      setResultSimulationOptions(data)
+      simulationResultWrapperRef.current?.scrollIntoView({ behavior: "smooth" })
     }
-
-    setErrors([])
-    setSimulationResult(runSimulation(simulationOptions))
-    setResultSimulationOptions(simulationOptions)
-
-    simulationResultWrapperRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
   const handleOptionsChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target
+    const newValue = Number(value)
+    if (isNaN(newValue)) return
+
     setSimulationOptions({
       ...simulationOptions,
-      [name]: Number(value),
+      [name]: newValue,
     })
   }
 
@@ -126,6 +129,7 @@ export const SingleSimulationGraphic = () => {
         <ChargerPowerSelector
           selectedChargerPower={selectedChargerPower}
           onSelectChargerPower={setSelectedChargerPower}
+          error={error}
         />
 
         <div className="flex flex-col gap-2 sm:flex-row">
@@ -142,7 +146,7 @@ export const SingleSimulationGraphic = () => {
             }
             simulationOptions={simulationOptions}
             chargerConfigurations={chargerConfigurations}
-            errors={errors}
+            error={error}
             onOptionsChange={handleOptionsChange}
             handleUpdateParkingLots={handleUpdateParkingLots}
             onRunSimulation={onRunSimulation}

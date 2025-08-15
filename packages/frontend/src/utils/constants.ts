@@ -42,6 +42,19 @@ export const defaultSimulationOptions: SimulationOptions = {
   carNeedskWhPer100kms: 18,
   carArrivalProbabilityMultiplier: 100,
 }
+export const defaultGraphicSimulationOptions: SimulationOptions = {
+  chargerConfigurations: [
+    {
+      id: "default-charger-1",
+      powerInkW: 11,
+      quantity: 1,
+      name: "11 kW Chargers",
+    },
+  ],
+  numberOfSimulationDays: 365,
+  carNeedskWhPer100kms: 18,
+  carArrivalProbabilityMultiplier: 100,
+}
 
 export const AVAILABLE_CHARGER_POWER_OPTIONS = [
   { value: 2.75, label: "2.75 kW" },

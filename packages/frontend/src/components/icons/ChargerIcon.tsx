@@ -17,7 +17,7 @@ const ChargerIcon: React.FC<{ className?: string }> = ({ className }) => (
       />
 
       <path
-        d="   M14,65V13c0-2.209,1.791-4,4-4h24c2.209,0,4,1.791,4,4v52"
+        d="M14,65V13c0-2.209,1.791-4,4-4h24c2.209,0,4,1.791,4,4v52"
         fill="none"
         stroke="currentColor"
         strokeLinecap="round"
@@ -27,7 +27,7 @@ const ChargerIcon: React.FC<{ className?: string }> = ({ className }) => (
       />
 
       <path
-        d="   M36,33H24c-2.209,0-4-1.791-4-4V19c0-2.209,1.791-4,4-4h12c2.209,0,4,1.791,4,4v10C40,31.209,38.209,33,36,33z"
+        d="M36,33H24c-2.209,0-4-1.791-4-4V19c0-2.209,1.791-4,4-4h12c2.209,0,4,1.791,4,4v10C40,31.209,38.209,33,36,33z"
         fill="none"
         stroke="currentColor"
         strokeLinecap="round"

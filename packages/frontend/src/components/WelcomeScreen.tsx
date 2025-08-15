@@ -6,7 +6,7 @@ interface Props {
 
 export const WelcomeScreen: React.FC<Props> = ({ onGetStarted }) => {
   return (
-    <div className="mb-40 flex min-h-screen flex-col items-center justify-center bg-blue-50 text-center">
+    <div className="mb-40 flex min-h-screen flex-col items-center justify-center text-center">
       <div className="p-8">
         <h1 className="mb-4 text-4xl font-bold">Reonic Parking Lot App</h1>
         <p className="mt-6 text-lg">
