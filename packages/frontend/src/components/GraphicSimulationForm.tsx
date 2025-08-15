@@ -37,7 +37,7 @@ export const GraphicSimulationForm: React.FC<Props> = ({
   )
 
   return (
-    <div className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-amber-200 p-4">
+    <div className="flex h-full flex-col gap-4 rounded-xl bg-amber-200 p-4">
       <div className="text-semibold text-2xl">Simulation Options</div>
 
       <ErrorBox errors={errors} />
