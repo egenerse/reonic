@@ -1,11 +1,11 @@
-import React from "react";
-import type { SimulationOptions, ChargerConfiguration } from "../utils/types";
-import { InputField, RangeInput } from "./inputs";
-import { ChargerConfigurationForm } from "./ChargerConfiguration";
+import React from "react"
+import type { SimulationOptions, ChargerConfiguration } from "../utils/types"
+import { InputField, RangeInput } from "./inputs"
+import { ChargerConfigurationForm } from "./ChargerConfiguration"
 
 interface Props {
-  simulationOptions: SimulationOptions;
-  setSimulationOptions: (simulationOptions: SimulationOptions) => void;
+  simulationOptions: SimulationOptions
+  setSimulationOptions: (simulationOptions: SimulationOptions) => void
 }
 
 export const SingleSimulationForm: React.FC<Props> = ({
@@ -15,12 +15,12 @@ export const SingleSimulationForm: React.FC<Props> = ({
   const handleOptionsChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setSimulationOptions({
       ...simulationOptions,
       [name]: Number(value),
-    });
-  };
+    })
+  }
 
   const handleChargerConfigurationsChange = (
     configurations: ChargerConfiguration[]
@@ -28,17 +28,17 @@ export const SingleSimulationForm: React.FC<Props> = ({
     setSimulationOptions({
       ...simulationOptions,
       chargerConfigurations: configurations,
-    });
-  };
+    })
+  }
 
   return (
-    <div className="max-w-4xl p-6 bg-blue-300 mb-4 rounded-2xl min-w-2/5">
+    <div className="mb-4 max-w-4xl min-w-2/5 rounded-2xl bg-blue-300 p-6">
       <ChargerConfigurationForm
         chargerConfigurations={simulationOptions.chargerConfigurations}
         onChargerConfigurationsChange={handleChargerConfigurationsChange}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4  border-blue-400">
+      <div className="grid grid-cols-1 gap-4 border-blue-400 pt-4 md:grid-cols-2">
         <InputField
           type="number"
           max={365}
@@ -72,5 +72,5 @@ export const SingleSimulationForm: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

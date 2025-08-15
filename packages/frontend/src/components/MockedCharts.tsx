@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState } from "react"
 import {
   ChargerPowerDistribution,
   ChargingEvents,
   DaySummary,
   EnergyConsumption,
-} from "./charts";
+} from "./charts"
 
 export const MockedCharts = () => {
   const [shownCharts, setShownCharts] = useState({
@@ -12,30 +12,30 @@ export const MockedCharts = () => {
     chargerPowerDistribution: false,
     daySummary: false,
     energyConsumption: false,
-  });
+  })
 
   const handleButtonToggle = (chartKey: keyof typeof shownCharts) => {
     setShownCharts((prev) => ({
       ...prev,
       [chartKey]: !prev[chartKey],
-    }));
-  };
+    }))
+  }
 
   return (
-    <div className="min-h-screen flex flex-1 flex-col items-center my-8 gap-2">
-      <h1 className="text-4xl font-bold text-gray-900  ">Mocked Charts</h1>
-      <h3 className="text-2xl font-semibold text-gray-500 ">
+    <div className="my-8 flex min-h-screen flex-1 flex-col items-center gap-2">
+      <h1 className="text-4xl font-bold text-gray-900">Mocked Charts</h1>
+      <h3 className="text-2xl font-semibold text-gray-500">
         Select charts to display.
       </h3>
-      <div className="flex flex-1 flex-col items-center gap-10 mt-8 w-full">
+      <div className="mt-8 flex w-full flex-1 flex-col items-center gap-10">
         {/* Toggle Buttons */}
-        <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex flex-wrap justify-center gap-4">
           <button
             onClick={() => handleButtonToggle("chargingEvents")}
-            className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 border-2 ${
+            className={`rounded-lg border-2 px-6 py-3 font-medium transition-all duration-200 ${
               shownCharts.chargingEvents
-                ? "bg-blue-600 text-white border-blue-600 shadow-lg"
-                : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
+                ? "border-blue-600 bg-blue-600 text-white shadow-lg"
+                : "border-gray-300 bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             Charging Events
@@ -43,10 +43,10 @@ export const MockedCharts = () => {
 
           <button
             onClick={() => handleButtonToggle("chargerPowerDistribution")}
-            className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 border-2 ${
+            className={`rounded-lg border-2 px-6 py-3 font-medium transition-all duration-200 ${
               shownCharts.chargerPowerDistribution
-                ? "bg-blue-600 text-white border-blue-600 shadow-lg"
-                : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
+                ? "border-blue-600 bg-blue-600 text-white shadow-lg"
+                : "border-gray-300 bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             Charger Power Distribution
@@ -54,10 +54,10 @@ export const MockedCharts = () => {
 
           <button
             onClick={() => handleButtonToggle("daySummary")}
-            className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 border-2 ${
+            className={`rounded-lg border-2 px-6 py-3 font-medium transition-all duration-200 ${
               shownCharts.daySummary
-                ? "bg-blue-600 text-white border-blue-600 shadow-lg"
-                : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
+                ? "border-blue-600 bg-blue-600 text-white shadow-lg"
+                : "border-gray-300 bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             Day Summary
@@ -65,10 +65,10 @@ export const MockedCharts = () => {
 
           <button
             onClick={() => handleButtonToggle("energyConsumption")}
-            className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 border-2 ${
+            className={`rounded-lg border-2 px-6 py-3 font-medium transition-all duration-200 ${
               shownCharts.energyConsumption
-                ? "bg-blue-600 text-white border-blue-600 shadow-lg"
-                : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
+                ? "border-blue-600 bg-blue-600 text-white shadow-lg"
+                : "border-gray-300 bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             Energy Consumption
@@ -82,5 +82,5 @@ export const MockedCharts = () => {
         {shownCharts.energyConsumption && <EnergyConsumption />}
       </div>
     </div>
-  );
-};
+  )
+}

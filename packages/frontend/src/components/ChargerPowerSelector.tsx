@@ -1,10 +1,10 @@
-import React from "react";
-import { AVAILABLE_CHARGER_POWER_OPTIONS } from "../utils/constants";
+import React from "react"
+import { AVAILABLE_CHARGER_POWER_OPTIONS } from "../utils/constants"
 
 interface ChargerPowerSelectorProps {
-  selectedChargerPower: number | undefined;
-  onSelectChargerPower: (power: number) => void;
-  onClearSelection: () => void;
+  selectedChargerPower: number | undefined
+  onSelectChargerPower: (power: number) => void
+  onClearSelection: () => void
 }
 
 export const ChargerPowerSelector: React.FC<ChargerPowerSelectorProps> = ({
@@ -13,13 +13,13 @@ export const ChargerPowerSelector: React.FC<ChargerPowerSelectorProps> = ({
   onClearSelection,
 }) => {
   return (
-    <div className="flex items-center flex-col gap-2">
+    <div className="flex flex-col items-center gap-2">
       <div>Please select a Charging Power to place in Parking lot</div>
-      <div className="flex justify-center gap-2 flex-wrap">
+      <div className="flex flex-wrap justify-center gap-2">
         {AVAILABLE_CHARGER_POWER_OPTIONS.map((option) => (
           <button
             key={option.value}
-            className={`bg-gray-500 text-white p-2 rounded min-w-20 ${
+            className={`min-w-20 rounded bg-gray-500 p-2 text-white ${
               selectedChargerPower === option.value ? "bg-gray-800" : ""
             }`}
             onClick={() => onSelectChargerPower(option.value)}
@@ -31,11 +31,11 @@ export const ChargerPowerSelector: React.FC<ChargerPowerSelectorProps> = ({
       {selectedChargerPower && (
         <button
           onClick={onClearSelection}
-          className="bg-red-500 text-white p-2 rounded min-w-20"
+          className="min-w-20 rounded bg-red-500 p-2 text-white"
         >
           Remove Charge Selection
         </button>
       )}
     </div>
-  );
-};
+  )
+}

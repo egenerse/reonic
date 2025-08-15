@@ -1,14 +1,14 @@
-import React from "react";
-import type { ChargerConfiguration } from "../utils/types";
-import { SelectInput } from "./inputs";
-import { calculateNumberOfChargers } from "../utils/charger";
-import { AVAILABLE_CHARGER_POWER_OPTIONS } from "../utils/constants";
+import React from "react"
+import type { ChargerConfiguration } from "../utils/types"
+import { SelectInput } from "./inputs"
+import { calculateNumberOfChargers } from "../utils/charger"
+import { AVAILABLE_CHARGER_POWER_OPTIONS } from "../utils/constants"
 
 interface Props {
-  chargerConfigurations: ChargerConfiguration[];
+  chargerConfigurations: ChargerConfiguration[]
   onChargerConfigurationsChange: (
     configurations: ChargerConfiguration[]
-  ) => void;
+  ) => void
 }
 
 export const ChargerConfigurationForm: React.FC<Props> = ({
@@ -21,22 +21,22 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
         !chargerConfigurations.some(
           (config) => config.powerInkW === option.value
         )
-    );
-    const newPowerInKw = missingPowerInKw ? missingPowerInKw.value : 11;
+    )
+    const newPowerInKw = missingPowerInKw ? missingPowerInKw.value : 11
     const newConfig: ChargerConfiguration = {
       id: `charger-${Date.now()}`,
       powerInkW: newPowerInKw,
       quantity: 1,
       name: `${newPowerInKw} kW Chargers`,
-    };
-    onChargerConfigurationsChange([...chargerConfigurations, newConfig]);
-  };
+    }
+    onChargerConfigurationsChange([...chargerConfigurations, newConfig])
+  }
 
   const removeChargerConfiguration = (id: string) => {
     onChargerConfigurationsChange(
       chargerConfigurations.filter((config) => config.id !== id)
-    );
-  };
+    )
+  }
 
   const updateChargerConfiguration = (
     id: string,
@@ -45,25 +45,25 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
   ) => {
     const updatedConfigurations = chargerConfigurations.map((config) => {
       if (config.id === id) {
-        const updatedConfig = { ...config, [field]: value };
+        const updatedConfig = { ...config, [field]: value }
 
         // Auto-update name when power changes
         if (field === "powerInkW") {
-          updatedConfig.name = `${value} kW Chargers`;
+          updatedConfig.name = `${value} kW Chargers`
         }
 
-        return updatedConfig;
+        return updatedConfig
       }
-      return config;
-    });
-    onChargerConfigurationsChange(updatedConfigurations);
-  };
+      return config
+    })
+    onChargerConfigurationsChange(updatedConfigurations)
+  }
 
-  const totalChargers = calculateNumberOfChargers(chargerConfigurations);
+  const totalChargers = calculateNumberOfChargers(chargerConfigurations)
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center gap-2">
+      <div className="flex items-center justify-between gap-2">
         <div>
           <h3 className="text-lg font-medium text-gray-800">
             Charger Configurations
@@ -77,26 +77,26 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
           }
           type="button"
           onClick={addChargerConfiguration}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
+          className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
         >
           Add Charger Type
         </button>
       </div>
 
       {chargerConfigurations.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
+        <div className="py-8 text-center text-gray-500">
           No charger configurations added yet. Click "Add Charger Type" to get
           started.
         </div>
       )}
 
-      <div className=" grid grid-cols-1 md:grid-cols-2  gap-1">
+      <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
         {chargerConfigurations.map((config) => (
           <div
             key={config.id}
-            className="p-4 border border-gray-300 rounded-lg bg-white shadow-sm"
+            className="rounded-lg border border-gray-300 bg-white p-4 shadow-sm"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <SelectInput
                 id={`power-${config.id}`}
                 label="Charger Power (kW)"
@@ -133,7 +133,7 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
               <button
                 type="button"
                 onClick={() => removeChargerConfiguration(config.id)}
-                className="bg-red-500 hover:bg-red-700 text-white p-2 rounded-md md:col-start-2"
+                className="rounded-md bg-red-500 p-2 text-white hover:bg-red-700 md:col-start-2"
                 aria-label="Remove charger configuration"
               >
                 Remove
@@ -143,5 +143,5 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
         ))}
       </div>
     </div>
-  );
-};
+  )
+}

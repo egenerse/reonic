@@ -1,19 +1,19 @@
-import React from "react";
-import { InputField, RangeInput } from "./inputs";
-import { ErrorBox } from "./ErrorBox";
-import type { ChargerConfiguration, SimulationOptions } from "../utils/types";
-import { calculateNumberOfChargers } from "../utils/charger";
+import React from "react"
+import { InputField, RangeInput } from "./inputs"
+import { ErrorBox } from "./ErrorBox"
+import type { ChargerConfiguration, SimulationOptions } from "../utils/types"
+import { calculateNumberOfChargers } from "../utils/charger"
 
 interface Props {
-  simulationOptions: SimulationOptions;
-  chargerConfigurations: ChargerConfiguration[];
-  errors: string[];
+  simulationOptions: SimulationOptions
+  chargerConfigurations: ChargerConfiguration[]
+  errors: string[]
   onOptionsChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => void;
-  handleUpdateParkingLots: (value: number) => void;
-  onRunSimulation: () => void;
-  initialParkingLotCount: number;
+  ) => void
+  handleUpdateParkingLots: (value: number) => void
+  onRunSimulation: () => void
+  initialParkingLotCount: number
 }
 
 export const GraphicSimulationForm: React.FC<Props> = ({
@@ -27,16 +27,16 @@ export const GraphicSimulationForm: React.FC<Props> = ({
 }) => {
   const [parkingLotCount, setParkingLotCount] = React.useState(
     initialParkingLotCount
-  );
-  const totalChargers = calculateNumberOfChargers(chargerConfigurations);
+  )
+  const totalChargers = calculateNumberOfChargers(chargerConfigurations)
 
   const theoreticalMaxPowerDemand = chargerConfigurations.reduce(
     (previous, current) => previous + current.powerInkW * current.quantity,
     0
-  );
+  )
 
   return (
-    <div className="flex-1 bg-amber-200 h-full p-4 flex flex-col gap-4 rounded-xl">
+    <div className="flex h-full flex-1 flex-col gap-4 rounded-xl bg-amber-200 p-4">
       <div className="text-semibold text-2xl">Simulation Options</div>
 
       <ErrorBox errors={errors} />
@@ -47,16 +47,16 @@ export const GraphicSimulationForm: React.FC<Props> = ({
         label="Number of Parking Lots"
         value={parkingLotCount}
         onChange={(e) => {
-          const newValue = Number(e.target.value);
+          const newValue = Number(e.target.value)
           if (newValue >= 0 && newValue <= 300) {
-            setParkingLotCount(newValue);
+            setParkingLotCount(newValue)
           }
         }}
       />
-      <div className="text-sm text-gray-400 -mt-3">Maximum Parkinglot: 300</div>
+      <div className="-mt-3 text-sm text-gray-400">Maximum Parkinglot: 300</div>
       <button
         onClick={() => handleUpdateParkingLots(parkingLotCount)}
-        className="bg-blue-300 text-white p-2 rounded min-w-20"
+        className="min-w-20 rounded bg-blue-300 p-2 text-white"
       >
         Update Max Parking Lots
       </button>
@@ -123,10 +123,10 @@ export const GraphicSimulationForm: React.FC<Props> = ({
 
       <button
         onClick={onRunSimulation}
-        className="bg-blue-300 text-white p-2 rounded w-full"
+        className="w-full rounded bg-blue-300 p-2 text-white"
       >
         Run
       </button>
     </div>
-  );
-};
+  )
+}

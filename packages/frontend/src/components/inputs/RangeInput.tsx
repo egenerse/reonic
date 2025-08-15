@@ -1,17 +1,17 @@
-import React from "react";
+import React from "react"
 
 interface InputFieldProps {
-  id: string;
-  name: string;
-  label: string;
-  value: string | number;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  min: number;
-  max: number;
-  step: number;
-  percentage?: boolean;
-  required?: boolean;
-  className?: string;
+  id: string
+  name: string
+  label: string
+  value: string | number
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  min: number
+  max: number
+  step: number
+  percentage?: boolean
+  required?: boolean
+  className?: string
 }
 
 export const RangeInput: React.FC<InputFieldProps> = ({
@@ -31,12 +31,12 @@ export const RangeInput: React.FC<InputFieldProps> = ({
     <div className={className}>
       <label
         htmlFor={id}
-        className="block text-sm font-medium text-gray-700 mb-1"
+        className="mb-1 block text-sm font-medium text-gray-700"
       >
         {label}
         <br />
         {value} {percentage && "%"}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="ml-1 text-red-500">*</span>}
       </label>
 
       <div className="w-full">
@@ -49,9 +49,9 @@ export const RangeInput: React.FC<InputFieldProps> = ({
           min={min}
           max={max}
           step={step}
-          className="w-full rounded-md h-10"
+          className="h-10 w-full rounded-md"
         />
-        <div className="flex justify-between text-xs -mt-1 text-gray-500 ">
+        <div className="-mt-1 flex justify-between text-xs text-gray-500">
           <div>
             {min}
             {percentage && "%"}
@@ -63,5 +63,5 @@ export const RangeInput: React.FC<InputFieldProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

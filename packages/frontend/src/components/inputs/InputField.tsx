@@ -1,18 +1,18 @@
-import React from "react";
+import React from "react"
 
 interface InputFieldProps {
-  id: string;
-  name: string;
-  label: string;
-  type?: "text" | "number";
-  value: string | number;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  min?: number;
-  max?: number;
-  placeholder?: string;
-  required?: boolean;
-  className?: string;
-  step?: number;
+  id: string
+  name: string
+  label: string
+  type?: "text" | "number"
+  value: string | number
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  min?: number
+  max?: number
+  placeholder?: string
+  required?: boolean
+  className?: string
+  step?: number
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -33,10 +33,10 @@ export const InputField: React.FC<InputFieldProps> = ({
     <div className={className}>
       <label
         htmlFor={id}
-        className="block text-sm font-medium text-gray-700 mb-1"
+        className="mb-1 block text-sm font-medium text-gray-700"
       >
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="ml-1 text-red-500">*</span>}
       </label>
       <input
         type={type}
@@ -49,8 +49,8 @@ export const InputField: React.FC<InputFieldProps> = ({
         placeholder={placeholder}
         required={required}
         step={step}
-        className="w-full h-10 px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm "
+        className="h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm"
       />
     </div>
-  );
-};
+  )
+}

@@ -1,42 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"
 import type {
   ChargerConfiguration,
   ParkingData,
   SimulationOptions,
   SimulationResult,
-} from "../utils/types";
+} from "../utils/types"
 import {
   defaultSimulationOptions,
   initialParkingData_GRAPHIC_SIMULATION,
   AVAILABLE_CHARGER_POWER_OPTIONS,
-} from "../utils/constants";
-import { validateSimulationOptions } from "../utils/formValidation";
-import { runSimulation } from "../utils/simulation";
-import { SingleResult } from "./SingleResult";
-import { calculateChargerConfigurationsFromParkingData } from "../utils/charger";
-import { GraphicSimulationForm } from "./GraphicSimulationForm";
-import { ChargerPowerSelector } from "./ChargerPowerSelector";
-import { ParkingLotGrid } from "./ParkingLotGrid";
+} from "../utils/constants"
+import { validateSimulationOptions } from "../utils/formValidation"
+import { runSimulation } from "../utils/simulation"
+import { SingleResult } from "./SingleResult"
+import { calculateChargerConfigurationsFromParkingData } from "../utils/charger"
+import { GraphicSimulationForm } from "./GraphicSimulationForm"
+import { ChargerPowerSelector } from "./ChargerPowerSelector"
+import { ParkingLotGrid } from "./ParkingLotGrid"
 
 export const SingleSimulationGraphic = () => {
   const [parkingData, setParkingData] = React.useState<ParkingData[]>(
     initialParkingData_GRAPHIC_SIMULATION
-  );
+  )
   const [chargerConfigurations, setChargerConfigurations] = useState<
     ChargerConfiguration[]
-  >(calculateChargerConfigurationsFromParkingData(parkingData));
+  >(calculateChargerConfigurationsFromParkingData(parkingData))
 
   const [simulationOptions, setSimulationOptions] = useState<SimulationOptions>(
     defaultSimulationOptions
-  );
+  )
   const [resultSimulationOptions, setResultSimulationOptions] =
-    useState<SimulationOptions>(defaultSimulationOptions);
+    useState<SimulationOptions>(defaultSimulationOptions)
 
-  const [errors, setErrors] = useState<string[]>([]);
-  const [simulationResult, setSimulationResult] = useState<SimulationResult>();
+  const [errors, setErrors] = useState<string[]>([])
+  const [simulationResult, setSimulationResult] = useState<SimulationResult>()
   const [selectedChargerPower, setSelectedChargerPower] = React.useState<
     number | undefined
-  >(undefined);
+  >(undefined)
 
   useEffect(() => {
     const chargingPowers: ChargerConfiguration[] =
@@ -45,18 +45,18 @@ export const SingleSimulationGraphic = () => {
         name: option.label,
         quantity: 0,
         powerInkW: option.value,
-      }));
+      }))
     parkingData.forEach((lot) => {
       const powerOption = chargingPowers.find(
         (option) => option.powerInkW === lot.chargerPowerInKw
-      );
+      )
       if (powerOption) {
-        powerOption.quantity += 1;
+        powerOption.quantity += 1
       }
-    });
+    })
 
-    setChargerConfigurations(chargingPowers);
-  }, [parkingData]);
+    setChargerConfigurations(chargingPowers)
+  }, [parkingData])
 
   useEffect(() => {
     setSimulationOptions((prevOptions) => ({
@@ -64,30 +64,30 @@ export const SingleSimulationGraphic = () => {
       chargerConfigurations: chargerConfigurations.filter(
         (config) => config.quantity > 0
       ),
-    }));
-  }, [chargerConfigurations]);
+    }))
+  }, [chargerConfigurations])
 
   const handleSelectChargerPower = (power: number) => {
-    if (selectedChargerPower === power) setSelectedChargerPower(undefined);
-    else setSelectedChargerPower(power);
-  };
+    if (selectedChargerPower === power) setSelectedChargerPower(undefined)
+    else setSelectedChargerPower(power)
+  }
 
   const setParkingLotPower = (id: number) => {
-    if (!selectedChargerPower) return;
+    if (!selectedChargerPower) return
     setParkingData((prevData) =>
       prevData.map((lot) =>
         lot.id === id ? { ...lot, chargerPowerInKw: selectedChargerPower } : lot
       )
-    );
-  };
+    )
+  }
 
   const removeParkingLotPower = (id: number) => {
     setParkingData((prevData) =>
       prevData.map((lot) =>
         lot.id === id ? { ...lot, chargerPowerInKw: undefined } : lot
       )
-    );
-  };
+    )
+  }
 
   const handleUpdateParkingLots = (value: number) => {
     const updatedParkingData: ParkingData[] = Array.from(
@@ -96,46 +96,46 @@ export const SingleSimulationGraphic = () => {
         id: i,
         chargerPowerInKw: parkingData[i]?.chargerPowerInKw,
       })
-    );
-    setParkingData(updatedParkingData);
-  };
+    )
+    setParkingData(updatedParkingData)
+  }
 
   const onRunSimulation = () => {
-    const errors = validateSimulationOptions(simulationOptions);
+    const errors = validateSimulationOptions(simulationOptions)
     if (errors.length > 0) {
-      setErrors(errors);
-      return;
+      setErrors(errors)
+      return
     }
 
-    setErrors([]);
-    setSimulationResult(runSimulation(simulationOptions));
-    setResultSimulationOptions(simulationOptions);
+    setErrors([])
+    setSimulationResult(runSimulation(simulationOptions))
+    setResultSimulationOptions(simulationOptions)
 
     document
       ?.getElementById("simulation-result")
-      ?.scrollIntoView({ behavior: "smooth" });
-  };
+      ?.scrollIntoView({ behavior: "smooth" })
+  }
 
   const handleOptionsChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setSimulationOptions({
       ...simulationOptions,
       [name]: Number(value),
-    });
-  };
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gray-200">
-      <div className="flex flex-col p-5 md:p-8 lg:p-10 gap-4">
+      <div className="flex flex-col gap-4 p-5 md:p-8 lg:p-10">
         <ChargerPowerSelector
           selectedChargerPower={selectedChargerPower}
           onSelectChargerPower={handleSelectChargerPower}
           onClearSelection={() => setSelectedChargerPower(undefined)}
         />
 
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
           <ParkingLotGrid
             parkingData={parkingData}
             removeParkingLotPower={removeParkingLotPower}
@@ -166,5 +166,5 @@ export const SingleSimulationGraphic = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

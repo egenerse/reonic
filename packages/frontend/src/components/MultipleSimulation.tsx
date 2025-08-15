@@ -1,42 +1,42 @@
-import { useState } from "react";
-import { runSimulation } from "../utils/simulation";
+import { useState } from "react"
+import { runSimulation } from "../utils/simulation"
 import type {
   ChargerConfiguration,
   SimulationOptions,
   SimulationResult,
-} from "../utils/types";
-import { ResultsTable } from "./ResultsTable";
-import { InputField } from "./inputs";
-import { RangeInput } from "./inputs";
-import { defaultSimulationOptions } from "../utils/constants";
-import { ChargerConfigurationForm } from "./ChargerConfiguration";
+} from "../utils/types"
+import { ResultsTable } from "./ResultsTable"
+import { InputField } from "./inputs"
+import { RangeInput } from "./inputs"
+import { defaultSimulationOptions } from "../utils/constants"
+import { ChargerConfigurationForm } from "./ChargerConfiguration"
 
 export const MultipleSimulation = () => {
   const [simulationOptions, setSimulationOptions] = useState<SimulationOptions>(
     defaultSimulationOptions
-  );
-  const [results, setResults] = useState<SimulationResult[]>([]);
+  )
+  const [results, setResults] = useState<SimulationResult[]>([])
   const [resultSimulationOptions, setResultSimulationOptions] =
-    useState<SimulationOptions>(defaultSimulationOptions);
+    useState<SimulationOptions>(defaultSimulationOptions)
 
   const handleOptionsChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setSimulationOptions({
       ...simulationOptions,
       [name]: Number(value),
-    });
-  };
+    })
+  }
 
-  const [isRunning, setIsRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(false)
 
   const runAllSimulations = async () => {
-    setIsRunning(true);
-    setResults([]);
-    setResultSimulationOptions(defaultSimulationOptions);
+    setIsRunning(true)
+    setResults([])
+    setResultSimulationOptions(defaultSimulationOptions)
 
-    const allResults: SimulationResult[] = [];
+    const allResults: SimulationResult[] = []
 
     // Run simulations for 1 to 30 charging points
     for (let i = 1; i <= 30; i++) {
@@ -48,40 +48,40 @@ export const MultipleSimulation = () => {
             quantity: i,
           })
         ),
-      };
+      }
 
-      const result = runSimulation(options);
-      allResults.push(result);
+      const result = runSimulation(options)
+      allResults.push(result)
 
-      setResults([...allResults]);
+      setResults([...allResults])
 
-      await new Promise((resolve) => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10))
     }
 
-    setIsRunning(false);
-  };
+    setIsRunning(false)
+  }
   const handleChargerConfigurationsChange = (
     configurations: ChargerConfiguration[]
   ) => {
     setSimulationOptions({
       ...simulationOptions,
       chargerConfigurations: configurations,
-    });
-  };
+    })
+  }
 
   return (
-    <div className=" p-4">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
+    <div className="p-4">
+      <div className="mx-auto max-w-7xl">
+        <h1 className="mb-8 text-center text-4xl font-bold text-gray-900">
           Run Multiple Simulations
         </h1>
 
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+        <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6 shadow-lg">
+          <h2 className="mb-6 text-center text-2xl font-semibold text-gray-800">
             Simulation Parameters
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
             <div className="col-span-3 col-start-2 col-end-5">
               <ChargerConfigurationForm
                 chargerConfigurations={simulationOptions.chargerConfigurations}
@@ -91,7 +91,7 @@ export const MultipleSimulation = () => {
               />
             </div>
             <InputField
-              className="row-start-2 col-start-2"
+              className="col-start-2 row-start-2"
               id="carNeedskWhPer100kms"
               name="carNeedskWhPer100kms"
               label="Car Efficiency (kWh/100km)"
@@ -103,7 +103,7 @@ export const MultipleSimulation = () => {
             />
 
             <InputField
-              className="row-start-2 col-start-3"
+              className="col-start-3 row-start-2"
               id="numberOfSimulationDays"
               name="numberOfSimulationDays"
               label="Simulation Days"
@@ -114,7 +114,7 @@ export const MultipleSimulation = () => {
             />
 
             <RangeInput
-              className="row-start-2 col-start-4"
+              className="col-start-4 row-start-2"
               id="carArrivalProbabilityMultiplier"
               name="carArrivalProbabilityMultiplier"
               label="Car Arrival Probability Multiplier"
@@ -126,14 +126,14 @@ export const MultipleSimulation = () => {
               percentage
             />
 
-            <div className="flex items-end lg:col-start-2 lg:col-span-3">
+            <div className="flex items-end lg:col-span-3 lg:col-start-2">
               <button
                 onClick={runAllSimulations}
                 disabled={isRunning}
-                className={`w-full px-6 py-3 text-white font-semibold rounded-md transition-colors duration-200 ${
+                className={`w-full rounded-md px-6 py-3 font-semibold text-white transition-colors duration-200 ${
                   isRunning
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    ? "cursor-not-allowed bg-gray-400"
+                    : "bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
                 }`}
               >
                 {isRunning
@@ -145,8 +145,8 @@ export const MultipleSimulation = () => {
         </div>
 
         {results.length > 0 && (
-          <div className="mt-8 max-w-7xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
+          <div className="mx-auto mt-8 max-w-7xl">
+            <h2 className="mb-6 text-3xl font-bold text-gray-900">
               Charging Station Analysis
             </h2>
             <ResultsTable
@@ -157,5 +157,5 @@ export const MultipleSimulation = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

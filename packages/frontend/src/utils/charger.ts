@@ -1,5 +1,5 @@
-import { AVAILABLE_CHARGER_POWER_OPTIONS } from "./constants";
-import type { ChargerConfiguration, ParkingData } from "./types";
+import { AVAILABLE_CHARGER_POWER_OPTIONS } from "./constants"
+import type { ChargerConfiguration, ParkingData } from "./types"
 
 export const calculateNumberOfChargers = (
   chargerConfigurations: ChargerConfiguration[]
@@ -7,8 +7,8 @@ export const calculateNumberOfChargers = (
   return chargerConfigurations.reduce(
     (total, config) => total + config.quantity,
     0
-  );
-};
+  )
+}
 
 export const calculateChargerConfigurationsFromParkingData = (
   parkingData: ParkingData[]
@@ -19,16 +19,16 @@ export const calculateChargerConfigurationsFromParkingData = (
       name: option.label,
       quantity: 0,
       powerInkW: option.value,
-    }));
+    }))
 
   parkingData.forEach((lot) => {
     const powerOption = chargingPowers.find(
       (option) => option.powerInkW === lot.chargerPowerInKw
-    );
+    )
     if (powerOption) {
-      powerOption.quantity += 1;
+      powerOption.quantity += 1
     }
-  });
+  })
 
-  return chargingPowers;
-};
+  return chargingPowers
+}

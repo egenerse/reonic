@@ -1,17 +1,17 @@
-import React from "react";
+import React from "react"
 
 interface Option {
-  value: number;
-  label: string;
+  value: number
+  label: string
 }
 
 interface SelectInputProps {
-  id: string;
-  label: string;
-  name: string;
-  value: number;
-  options: Option[];
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  id: string
+  label: string
+  name: string
+  value: number
+  options: Option[]
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
 export const SelectInput: React.FC<SelectInputProps> = ({
@@ -23,7 +23,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
   onChange,
 }) => {
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col">
       <label htmlFor={id} className="mb-1 text-sm font-medium text-gray-700">
         {label}
       </label>
@@ -32,7 +32,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
         name={name}
         value={value}
         onChange={onChange}
-        className="h-10 px-3 py-2 border border-gray-300 bg-white rounded-md "
+        className="h-10 rounded-md border border-gray-300 bg-white px-3 py-2"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -41,5 +41,5 @@ export const SelectInput: React.FC<SelectInputProps> = ({
         ))}
       </select>
     </div>
-  );
-};
+  )
+}

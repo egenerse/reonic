@@ -1,9 +1,9 @@
-import type { SimulationOptions, SimulationResult } from "../utils/types";
-import { SimulationRow } from "./SimulationRow";
+import type { SimulationOptions, SimulationResult } from "../utils/types"
+import { SimulationRow } from "./SimulationRow"
 
 interface Props {
-  simulationResults: SimulationResult[];
-  simulationOptions: SimulationOptions;
+  simulationResults: SimulationResult[]
+  simulationOptions: SimulationOptions
 }
 
 export const ResultsTable: React.FC<Props> = ({
@@ -11,13 +11,13 @@ export const ResultsTable: React.FC<Props> = ({
   simulationOptions,
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+    <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4">
-        <h3 className="text-xl font-semibold mb-3">
+      <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white">
+        <h3 className="mb-3 text-xl font-semibold">
           Simulation Results (1-30 Charging Points)
         </h3>
-        <div className="grid grid-cols-6 gap-2 font-medium  text-xs md:text-sm">
+        <div className="grid grid-cols-6 gap-2 text-xs font-medium md:text-sm">
           <div className="text-center">Chargers</div>
           <div className="text-center">Max Power (kW)</div>
           <div className="text-center">Power Ratio</div>
@@ -41,8 +41,8 @@ export const ResultsTable: React.FC<Props> = ({
       </div>
 
       {/* Summary Footer */}
-      <div className="bg-gray-50 border-t border-gray-200 p-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+      <div className="border-t border-gray-200 bg-gray-50 p-4">
+        <div className="grid grid-cols-2 gap-4 text-center md:grid-cols-3">
           <div>
             <p className="text-sm text-gray-600">Total Simulations</p>
             <p className="text-xl font-bold text-gray-900">
@@ -75,5 +75,5 @@ export const ResultsTable: React.FC<Props> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

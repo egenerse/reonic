@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   LineChart,
   Line,
@@ -10,59 +10,59 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
-} from "recharts";
-import { chargingEventsData, powerCategoryColors } from "./mockedData";
+} from "recharts"
+import { chargingEventsData, powerCategoryColors } from "./mockedData"
 
 interface TooltipPayload {
-  value: number;
-  dataKey: string;
-  color: string;
+  value: number
+  dataKey: string
+  color: string
 }
 
 interface CustomTooltipProps {
-  active?: boolean;
-  payload?: TooltipPayload[];
-  label?: string;
+  active?: boolean
+  payload?: TooltipPayload[]
+  label?: string
 }
 
 export const ChargingEvents = () => {
   const [selectedView, setSelectedView] = useState<
     "daily" | "weekly" | "monthly" | "heatmap"
-  >("daily");
+  >("daily")
 
   // Get the appropriate data based on selected view
   const getCurrentData = () => {
     switch (selectedView) {
       case "daily":
-        return chargingEventsData.daily.slice(-30); // Last 30 days
+        return chargingEventsData.daily.slice(-30) // Last 30 days
       case "weekly":
-        return chargingEventsData.weekly.slice(-12); // Last 12 weeks
+        return chargingEventsData.weekly.slice(-12) // Last 12 weeks
       case "monthly":
-        return chargingEventsData.monthly;
+        return chargingEventsData.monthly
       default:
-        return chargingEventsData.daily.slice(-30);
+        return chargingEventsData.daily.slice(-30)
     }
-  };
+  }
 
-  const currentData = getCurrentData();
+  const currentData = getCurrentData()
 
   // Custom tooltip for line/bar charts
   const EventsTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       const totalEvents =
-        payload.find((p) => p.dataKey === "totalEvents")?.value || 0;
+        payload.find((p) => p.dataKey === "totalEvents")?.value || 0
       const categoryData = payload.filter(
         (p) => p.dataKey !== "totalEvents" && p.value > 0
-      );
+      )
 
       return (
-        <div className="bg-white p-3 border border-gray-300 rounded shadow-lg max-w-xs">
+        <div className="max-w-xs rounded border border-gray-300 bg-white p-3 shadow-lg">
           <p className="font-semibold">{`${label}`}</p>
-          <p className="text-blue-600 font-medium">{`Total Events: ${totalEvents}`}</p>
+          <p className="font-medium text-blue-600">{`Total Events: ${totalEvents}`}</p>
 
           {categoryData.length > 0 && (
             <div className="mt-2 space-y-1">
-              <p className="text-xs font-medium text-gray-700 mb-1">
+              <p className="mb-1 text-xs font-medium text-gray-700">
                 Events by Category:
               </p>
               {categoryData
@@ -70,7 +70,7 @@ export const ChargingEvents = () => {
                 .map((entry, index) => (
                   <div
                     key={index}
-                    className="flex justify-between items-center text-xs"
+                    className="flex items-center justify-between text-xs"
                   >
                     <span
                       style={{
@@ -89,23 +89,23 @@ export const ChargingEvents = () => {
             </div>
           )}
         </div>
-      );
+      )
     }
-    return null;
-  };
+    return null
+  }
 
   // Calculate summary statistics
   const totalEvents = currentData.reduce(
     (sum: number, item: unknown) =>
       sum + ((item as Record<string, number>).totalEvents || 0),
     0
-  );
-  const avgEventsPerPeriod = Math.round(totalEvents / currentData.length);
+  )
+  const avgEventsPerPeriod = Math.round(totalEvents / currentData.length)
   const maxEvents = Math.max(
     ...currentData.map(
       (item: unknown) => (item as Record<string, number>).totalEvents || 0
     )
-  );
+  )
 
   // Get most active category
   const categoryTotals = Object.keys(powerCategoryColors).reduce(
@@ -114,15 +114,15 @@ export const ChargingEvents = () => {
         (sum: number, item: unknown) =>
           sum + ((item as Record<string, number>)[category] || 0),
         0
-      );
-      return acc;
+      )
+      return acc
     },
     {} as Record<string, number>
-  );
+  )
 
   const mostActiveCategory = Object.entries(categoryTotals).reduce(
     (prev, current) => (current[1] > prev[1] ? current : prev)
-  );
+  )
 
   // Prepare heatmap data for display
   const heatmapCells = chargingEventsData.heatmap.flatMap((dayData) =>
@@ -132,25 +132,25 @@ export const ChargingEvents = () => {
       events: hourData.events,
       isWeekend: hourData.isWeekend,
     }))
-  );
+  )
 
   // Get max events for heatmap color scaling
-  const maxHeatmapEvents = Math.max(...heatmapCells.map((cell) => cell.events));
+  const maxHeatmapEvents = Math.max(...heatmapCells.map((cell) => cell.events))
 
   const getHeatmapColor = (events: number) => {
-    const intensity = events / maxHeatmapEvents;
-    const alpha = Math.max(0.1, intensity);
-    return `rgba(59, 130, 246, ${alpha})`; // Blue with varying opacity
-  };
+    const intensity = events / maxHeatmapEvents
+    const alpha = Math.max(0.1, intensity)
+    return `rgba(59, 130, 246, ${alpha})` // Blue with varying opacity
+  }
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-md p-4">
-      <div className="flex justify-center mb-4">
+    <div className="w-full rounded-lg bg-white p-4 shadow-md">
+      <div className="mb-4 flex justify-center">
         <h2 className="text-3xl font-semibold">Charging Events Analysis</h2>
       </div>
 
       {/* View Selector */}
-      <div className="flex justify-center mb-6">
+      <div className="mb-6 flex justify-center">
         <div className="flex flex-wrap gap-2">
           {[
             { key: "daily", label: "Daily (30 days)" },
@@ -165,7 +165,7 @@ export const ChargingEvents = () => {
                   view.key as "daily" | "weekly" | "monthly" | "heatmap"
                 )
               }
-              className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
+              className={`rounded px-4 py-2 text-sm font-medium transition-colors ${
                 selectedView === view.key
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -179,8 +179,8 @@ export const ChargingEvents = () => {
 
       {/* Summary Statistics */}
       {selectedView !== "heatmap" && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 text-center">
-          <div className="bg-blue-50 p-3 rounded">
+        <div className="mb-6 grid grid-cols-2 gap-4 text-center lg:grid-cols-4">
+          <div className="rounded bg-blue-50 p-3">
             <div className="text-2xl font-bold text-blue-600">
               {totalEvents.toLocaleString()}
             </div>
@@ -189,12 +189,12 @@ export const ChargingEvents = () => {
               {selectedView === "daily"
                 ? "Last 30 days"
                 : selectedView === "weekly"
-                ? "Last 12 weeks"
-                : "Last 12 months"}
+                  ? "Last 12 weeks"
+                  : "Last 12 months"}
             </div>
           </div>
 
-          <div className="bg-green-50 p-3 rounded">
+          <div className="rounded bg-green-50 p-3">
             <div className="text-2xl font-bold text-green-600">
               {avgEventsPerPeriod}
             </div>
@@ -203,13 +203,13 @@ export const ChargingEvents = () => {
               {selectedView === "monthly"
                 ? "month"
                 : selectedView === "weekly"
-                ? "week"
-                : "day"}
+                  ? "week"
+                  : "day"}
             </div>
             <div className="text-xs text-gray-500">Average events</div>
           </div>
 
-          <div className="bg-purple-50 p-3 rounded">
+          <div className="rounded bg-purple-50 p-3">
             <div className="text-2xl font-bold text-purple-600">
               {mostActiveCategory[0]}
             </div>
@@ -219,7 +219,7 @@ export const ChargingEvents = () => {
             </div>
           </div>
 
-          <div className="bg-orange-50 p-3 rounded">
+          <div className="rounded bg-orange-50 p-3">
             <div className="text-2xl font-bold text-orange-600">
               {maxEvents}
             </div>
@@ -230,22 +230,22 @@ export const ChargingEvents = () => {
       )}
 
       {/* Chart Container */}
-      <div className="bg-gray-50 rounded-lg p-4 mb-6">
+      <div className="mb-6 rounded-lg bg-gray-50 p-4">
         {selectedView === "heatmap" ? (
           <>
-            <h3 className="text-md font-medium text-center mb-4">
+            <h3 className="text-md mb-4 text-center font-medium">
               Charging Events Heatmap - Hour vs Day of Week
             </h3>
             <div className="overflow-x-auto">
-              <div className="grid grid-cols-25 gap-1 min-w-[800px]">
+              <div className="grid min-w-[800px] grid-cols-25 gap-1">
                 {/* Header row with hours */}
-                <div className="text-xs font-medium text-gray-600 text-center p-1">
+                <div className="p-1 text-center text-xs font-medium text-gray-600">
                   Day
                 </div>
                 {Array.from({ length: 24 }, (_, hour) => (
                   <div
                     key={hour}
-                    className="text-xs font-medium text-gray-600 text-center p-1"
+                    className="p-1 text-center text-xs font-medium text-gray-600"
                   >
                     {hour.toString().padStart(2, "0")}
                   </div>
@@ -254,13 +254,13 @@ export const ChargingEvents = () => {
                 {/* Data rows */}
                 {chargingEventsData.heatmap.map((dayData) => (
                   <React.Fragment key={dayData.day}>
-                    <div className="text-xs font-medium text-gray-700 text-center p-2 bg-gray-100 rounded">
+                    <div className="rounded bg-gray-100 p-2 text-center text-xs font-medium text-gray-700">
                       {dayData.day}
                     </div>
                     {dayData.hours.map((hourData) => (
                       <div
                         key={`${dayData.day}-${hourData.hour}`}
-                        className="text-xs text-center p-2 rounded border border-gray-200 cursor-pointer hover:border-gray-400"
+                        className="cursor-pointer rounded border border-gray-200 p-2 text-center text-xs hover:border-gray-400"
                         style={{
                           backgroundColor: getHeatmapColor(hourData.events),
                         }}
@@ -283,7 +283,7 @@ export const ChargingEvents = () => {
           </>
         ) : (
           <>
-            <h3 className="text-md font-medium text-center mb-4">
+            <h3 className="text-md mb-4 text-center font-medium">
               Charging Events Trend -{" "}
               {selectedView.charAt(0).toUpperCase() + selectedView.slice(1)}{" "}
               View
@@ -378,40 +378,40 @@ export const ChargingEvents = () => {
 
       {/* Events breakdown table (not for heatmap) */}
       {selectedView !== "heatmap" && (
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h3 className="text-md font-medium mb-4">
+        <div className="rounded-lg bg-gray-50 p-4">
+          <h3 className="text-md mb-4 font-medium">
             Events Breakdown by Power Category
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-2 px-3">Power Category</th>
-                  <th className="text-right py-2 px-3">Total Events</th>
-                  <th className="text-right py-2 px-3">Avg per Period</th>
-                  <th className="text-right py-2 px-3">% of Total</th>
-                  <th className="text-right py-2 px-3">Peak Events</th>
+                  <th className="px-3 py-2 text-left">Power Category</th>
+                  <th className="px-3 py-2 text-right">Total Events</th>
+                  <th className="px-3 py-2 text-right">Avg per Period</th>
+                  <th className="px-3 py-2 text-right">% of Total</th>
+                  <th className="px-3 py-2 text-right">Peak Events</th>
                 </tr>
               </thead>
               <tbody>
                 {Object.entries(categoryTotals)
                   .sort(([, a], [, b]) => b - a)
                   .map(([category, total], index) => {
-                    const avgPerPeriod = Math.round(total / currentData.length);
-                    const percentage = ((total / totalEvents) * 100).toFixed(1);
+                    const avgPerPeriod = Math.round(total / currentData.length)
+                    const percentage = ((total / totalEvents) * 100).toFixed(1)
                     const peakEvents = Math.max(
                       ...currentData.map(
                         (item: unknown) =>
                           (item as Record<string, number>)[category] || 0
                       )
-                    );
+                    )
 
                     return (
                       <tr key={index} className="border-b hover:bg-gray-100">
-                        <td className="py-2 px-3">
+                        <td className="px-3 py-2">
                           <div className="flex items-center">
                             <div
-                              className="w-3 h-3 rounded mr-2"
+                              className="mr-2 h-3 w-3 rounded"
                               style={{
                                 backgroundColor:
                                   powerCategoryColors[
@@ -422,14 +422,14 @@ export const ChargingEvents = () => {
                             {category}
                           </div>
                         </td>
-                        <td className="text-right py-2 px-3 font-medium">
+                        <td className="px-3 py-2 text-right font-medium">
                           {total.toLocaleString()}
                         </td>
-                        <td className="text-right py-2 px-3">{avgPerPeriod}</td>
-                        <td className="text-right py-2 px-3">{percentage}%</td>
-                        <td className="text-right py-2 px-3">{peakEvents}</td>
+                        <td className="px-3 py-2 text-right">{avgPerPeriod}</td>
+                        <td className="px-3 py-2 text-right">{percentage}%</td>
+                        <td className="px-3 py-2 text-right">{peakEvents}</td>
                       </tr>
-                    );
+                    )
                   })}
               </tbody>
             </table>
@@ -437,5 +437,5 @@ export const ChargingEvents = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

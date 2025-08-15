@@ -87,5 +87,5 @@ const ChargerIcon: React.FC<{ className?: string }> = ({ className }) => (
       </g>
     </g>
   </svg>
-);
-export default ChargerIcon;
+)
+export default ChargerIcon

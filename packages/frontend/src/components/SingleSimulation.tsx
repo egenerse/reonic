@@ -1,25 +1,25 @@
-import { useState } from "react";
-import { SingleSimulationGraphic } from "./SingleSimulationGraphic";
-import { SingleSimulationFormBased } from "./SingleSimulationFormBased";
+import { useState } from "react"
+import { SingleSimulationGraphic } from "./SingleSimulationGraphic"
+import { SingleSimulationFormBased } from "./SingleSimulationFormBased"
 
-type SimulationType = "form" | "graphic";
+type SimulationType = "form" | "graphic"
 
 export const SingleSimulation = () => {
   const [selectedSimulation, setSelectedSimulation] =
-    useState<SimulationType>("graphic");
+    useState<SimulationType>("graphic")
 
   return (
-    <div id="single-simulation" className="min-h-screen ">
-      <div className=" max-w-7xl mx-auto pt-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
+    <div id="single-simulation" className="min-h-screen">
+      <div className="mx-auto max-w-7xl pt-8">
+        <h1 className="mb-8 text-center text-4xl font-bold text-gray-900">
           Charging Station Simulator
         </h1>
       </div>
-      <div className="max-w-7xl mx-auto mb-8 ">
+      <div className="mx-auto mb-8 max-w-7xl">
         <div className="flex justify-center space-x-4">
           <button
             onClick={() => setSelectedSimulation("form")}
-            className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+            className={`rounded-lg px-6 py-3 font-medium transition-colors ${
               selectedSimulation === "form"
                 ? "bg-blue-600 text-white shadow-lg"
                 : "bg-blue-200 text-blue-800 hover:bg-blue-300"
@@ -29,7 +29,7 @@ export const SingleSimulation = () => {
           </button>
           <button
             onClick={() => setSelectedSimulation("graphic")}
-            className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+            className={`rounded-lg px-6 py-3 font-medium transition-colors ${
               selectedSimulation === "graphic"
                 ? "bg-blue-600 text-white shadow-lg"
                 : "bg-blue-200 text-blue-800 hover:bg-blue-300"
@@ -44,5 +44,5 @@ export const SingleSimulation = () => {
       {selectedSimulation === "form" && <SingleSimulationFormBased />}
       {selectedSimulation === "graphic" && <SingleSimulationGraphic />}
     </div>
-  );
-};
+  )
+}
