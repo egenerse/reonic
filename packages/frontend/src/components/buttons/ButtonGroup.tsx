@@ -1,3 +1,4 @@
+import { cn } from "../../utils/cn"
 import { Button } from "./Button"
 
 export type ButtonInGroup = {
@@ -26,7 +27,13 @@ export const ButtonGroup: React.FC<Props> = ({
           variant="secondary"
           key={index}
           onClick={button.onClick}
-          className={`rounded-none bg-transparent text-black hover:bg-blue-100 ${button.id === selectedId ? "border-b-4 border-b-blue-500" : "opacity-50"}`}
+          className={cn(
+            "rounded-none bg-transparent text-black hover:bg-blue-100",
+            {
+              "border-b-4 border-b-blue-500": button.id === selectedId,
+              "border-b-1 opacity-50": button.id !== selectedId,
+            }
+          )}
         >
           {button.label}
         </Button>

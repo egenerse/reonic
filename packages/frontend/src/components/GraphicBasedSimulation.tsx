@@ -51,7 +51,7 @@ export const GraphicBasedSimulation = () => {
           {chargerConfigurationsError.message}
         </div>
       )}
-      <div className="flex flex-col gap-2 p-5 sm:flex-row md:p-8 lg:p-10">
+      <div className="flex flex-col items-center gap-2 p-5 sm:flex-row md:items-baseline md:p-8 lg:p-10">
         <ParkingLotGrid
           parkingData={parkingData}
           setParkingLotPower={setParkingLotPower}

@@ -20,11 +20,11 @@ export const SingleSimulationResult: React.FC<Props> = ({
   } = result
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 md:gap-10">
+    <div className="mt-10 mb-20 flex flex-col items-center justify-center gap-4 md:gap-10">
       <h1 className="text-bold mb-4 text-4xl">Simulation Results</h1>
 
       {/* PieChart */}
-      <div className="flex items-center gap-3 rounded-lg border-1 border-gray-200 p-4 shadow-lg">
+      <div className="flex flex-col items-center gap-3 rounded-lg border-1 border-gray-200 p-4 shadow-lg md:flex-row">
         <div className="flex flex-col">
           <Card
             name="Max Actual Power"
@@ -42,7 +42,7 @@ export const SingleSimulationResult: React.FC<Props> = ({
           <RatioPieChart percentage={ratioOfActualToMaximumPowerDemand * 100} />
         </div>
       </div>
-      <div className="px- flex max-w-9/12 flex-wrap gap-3 rounded-2xl border-[0.5px] border-gray-50 p-2 shadow-2xl">
+      <div className="flex flex-col flex-wrap gap-3 rounded-2xl border-[0.5px] border-gray-50 p-2 px-4 shadow-2xl md:flex-row">
         <Card
           name="Total Consumed Energy"
           value={`${toDecimal(totalEnergyConsumedInkWh)} kWh`}
