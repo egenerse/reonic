@@ -11,19 +11,22 @@ const chargerConfigurationSchema = z.object({
 })
 
 export const simulationOptionsSchema = z.object({
-  chargerConfigurations: z.array(chargerConfigurationSchema).refine(
-    (chargerConfigs) => {
-      const totalQuantity = chargerConfigs.reduce(
-        (sum, config) => sum + config.quantity,
-        0
-      )
+  chargerConfigurations: z
+    .array(chargerConfigurationSchema)
+    .min(1, "Please add at least one charger configuration")
+    .refine(
+      (chargerConfigs) => {
+        const totalQuantity = chargerConfigs.reduce(
+          (sum, config) => sum + config.quantity,
+          0
+        )
 
-      return totalQuantity <= 30
-    },
-    {
-      error: "Total number of chargers must not exceed 30",
-    }
-  ),
+        return totalQuantity <= 30
+      },
+      {
+        error: "Total number of chargers must not exceed 30",
+      }
+    ),
   numberOfSimulationDays: z
     .number()
     .min(1, "Number of simulation days must be at least 1")

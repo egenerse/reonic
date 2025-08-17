@@ -77,7 +77,7 @@ export const ParkingLot: React.FC<Props> = ({
       )}
       {chargerPowerInKw && !showEdit && (
         <div
-          className="relative z-20 flex h-8 w-8 items-center justify-center rounded-full bg-red-400 text-lg font-bold opacity-100 shadow-md"
+          className="relative flex h-8 w-8 items-center justify-center rounded-full bg-red-400 text-lg font-bold shadow-md"
           onClick={(e) => {
             e.stopPropagation()
             removeParkingLotPower(id)

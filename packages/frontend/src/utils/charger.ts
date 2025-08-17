@@ -10,25 +10,36 @@ export const calculateNumberOfChargers = (
   )
 }
 
-export const calculateChargerConfigurationsFromParkingData = (
-  parkingData: ParkingData[]
+export const calculateTotalPowerDemand = (
+  chargerConfigurations: ChargerConfiguration[]
 ) => {
-  const chargingPowers: ChargerConfiguration[] =
-    AVAILABLE_CHARGER_POWER_OPTIONS.map((option, index) => ({
-      id: index.toString(),
-      name: option.label,
-      quantity: 0,
-      powerInkW: option.value,
-    }))
+  return chargerConfigurations.reduce(
+    (total, config) => total + config.powerInkW * config.quantity,
+    0
+  )
+}
+
+export const getChargerConfigurationFromParkingData = (
+  parkingData: ParkingData[]
+): ChargerConfiguration[] => {
+  const powerCounts = new Map<number, number>(
+    AVAILABLE_CHARGER_POWER_OPTIONS.map((option) => [option.value, 0])
+  )
 
   parkingData.forEach((lot) => {
-    const powerOption = chargingPowers.find(
-      (option) => option.powerInkW === lot.chargerPowerInKw
-    )
-    if (powerOption) {
-      powerOption.quantity += 1
+    if (lot.chargerPowerInKw === undefined) return
+    if (powerCounts.has(lot.chargerPowerInKw)) {
+      powerCounts.set(
+        lot.chargerPowerInKw,
+        powerCounts.get(lot.chargerPowerInKw)! + 1
+      )
     }
   })
 
-  return chargingPowers
+  return AVAILABLE_CHARGER_POWER_OPTIONS.map((option, index) => ({
+    id: index.toString(),
+    name: option.label,
+    quantity: powerCounts.get(option.value) || 0,
+    powerInkW: option.value,
+  }))
 }

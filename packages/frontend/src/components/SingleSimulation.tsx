@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { SingleSimulationGraphic } from "./SingleSimulationGraphic"
-import { SingleSimulationFormBased } from "./SingleSimulationFormBased"
+import { GraphicBasedSimulation } from "./GraphicBasedSimulation"
+import { FormBasedSimulation } from "./FormBasedSimulation"
 import { ButtonGroup, type ButtonInGroup } from "./buttons/ButtonGroup"
 
 export const SingleSimulation = () => {
@@ -8,14 +8,14 @@ export const SingleSimulation = () => {
 
   const buttons: ButtonInGroup[] = [
     {
-      id: "form",
-      label: "Form-Based Simulation",
-      onClick: () => setSelectedSimulationId("form"),
-    },
-    {
       id: "graphic",
       label: "Graphic Simulation",
       onClick: () => setSelectedSimulationId("graphic"),
+    },
+    {
+      id: "form",
+      label: "Form-Based Simulation",
+      onClick: () => setSelectedSimulationId("form"),
     },
   ]
 
@@ -27,9 +27,12 @@ export const SingleSimulation = () => {
         className="py-10"
       />
 
-      {/* Render Selected Simulation */}
-      {selectedSimulationId === "form" && <SingleSimulationFormBased />}
-      {selectedSimulationId === "graphic" && <SingleSimulationGraphic />}
+      <div className={selectedSimulationId === "graphic" ? "block" : "hidden"}>
+        <GraphicBasedSimulation />
+      </div>
+      <div className={selectedSimulationId === "form" ? "block" : "hidden"}>
+        <FormBasedSimulation />
+      </div>
     </div>
   )
 }

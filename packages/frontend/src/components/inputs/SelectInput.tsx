@@ -24,9 +24,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
 }) => {
   return (
     <div className="flex flex-col">
-      <label htmlFor={id} className="mb-1 text-sm font-medium text-gray-700">
-        {label}
-      </label>
+      <div className="mb-1 text-sm font-medium text-gray-700">{label}</div>
       <select
         id={id}
         name={name}

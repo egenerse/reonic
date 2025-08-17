@@ -2,8 +2,9 @@ import clsx from "clsx"
 import React from "react"
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "danger"
+  variant?: "primary" | "secondary" | "danger" | "outlined"
   fullWidth?: boolean
+  isLoading?: boolean
 }
 
 export const Button: React.FC<Props> = ({
@@ -11,10 +12,14 @@ export const Button: React.FC<Props> = ({
   children,
   fullWidth,
   className,
+  type = "button",
+  isLoading = false,
   ...props
 }) => {
   return (
     <button
+      disabled={props.disabled || isLoading}
+      type={type}
       className={clsx(
         "min-w-40 rounded-lg px-5 py-2 font-medium active:scale-95",
         {
@@ -30,7 +35,7 @@ export const Button: React.FC<Props> = ({
       )}
       {...props}
     >
-      {children}
+      {isLoading ? "Loading..." : children}
     </button>
   )
 }

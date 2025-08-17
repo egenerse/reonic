@@ -87,7 +87,7 @@ export const MultipleSimulation = () => {
               chargerConfigurations={simulationOptions.chargerConfigurations}
               onChargerConfigurationsChange={handleChargerConfigurationsChange}
             />
-            <div className="flex justify-between gap-3">
+            <div className="flex flex-wrap justify-between gap-3">
               <InputField
                 id="carNeedskWhPer100kms"
                 name="carNeedskWhPer100kms"

@@ -1,7 +1,6 @@
 import React from "react"
 import type { ChargerConfiguration, SimulationOptions } from "../utils/types"
 import { SelectInput } from "./inputs"
-import { calculateNumberOfChargers } from "../utils/charger"
 import { AVAILABLE_CHARGER_POWER_OPTIONS } from "../utils/constants"
 import { Button } from "./buttons/Button"
 import type { ZodError } from "zod"
@@ -52,7 +51,6 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
       if (config.id === id) {
         const updatedConfig = { ...config, [field]: value }
 
-        // Auto-update name when power changes
         if (field === "powerInkW") {
           updatedConfig.name = `${value} kW Chargers`
         }
@@ -64,95 +62,103 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
     onChargerConfigurationsChange(updatedConfigurations)
   }
 
-  const totalChargers = calculateNumberOfChargers(chargerConfigurations)
-
   const chargerErrors = error?.issues.find(
     (issue) => issue.path[0] === "chargerConfigurations"
   )
 
+  const showAddChargerButton =
+    chargerConfigurations.length < AVAILABLE_CHARGER_POWER_OPTIONS.length
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <div>
-          <h3 className="text-lg font-medium text-gray-800">
-            Charger Configurations
-          </h3>
-          <h2 className="font-semibold">( {totalChargers} total chargers)</h2>
-        </div>
-        <Button
-          onClick={addChargerConfiguration}
-          disabled={
-            chargerConfigurations.length >=
-            AVAILABLE_CHARGER_POWER_OPTIONS.length
-          }
-        >
-          Add Charger Type
-        </Button>
+      <div className="text-lg font-medium text-gray-800">
+        Charger Configurations
       </div>
+
       {chargerErrors?.message && (
         <div className="mt-4">
           <ErrorMessage message={chargerErrors.message} />
         </div>
       )}
 
-      {chargerConfigurations.length === 0 && (
-        <div className="py-8 text-center text-gray-500">
-          No charger configurations added yet. Click "Add Charger Type" to get
-          started.
-        </div>
-      )}
-
       <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
         {chargerConfigurations.map((config) => (
-          <div
+          <ChargerConfigurationCard
             key={config.id}
-            className="rounded-lg border border-gray-300 bg-white p-4 shadow-sm"
-          >
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <SelectInput
-                id={`power-${config.id}`}
-                label="Charger Power (kW)"
-                name={`power-${config.id}`}
-                value={config.powerInkW}
-                options={AVAILABLE_CHARGER_POWER_OPTIONS}
-                onChange={(e) =>
-                  updateChargerConfiguration(
-                    config.id,
-                    "powerInkW",
-                    Number(e.target.value)
-                  )
-                }
-              />
-
-              <SelectInput
-                id="numberOfChargers"
-                label="Number of Chargers"
-                name="numberOfChargers"
-                value={config.quantity}
-                options={Array.from({ length: 30 }, (_, i) => ({
-                  value: i + 1,
-                  label: `${i + 1} Charger${i + 1 === 1 ? "" : "s"}`,
-                }))}
-                onChange={(e) =>
-                  updateChargerConfiguration(
-                    config.id,
-                    "quantity",
-                    Number(e.target.value)
-                  )
-                }
-              />
-
-              <Button
-                variant="danger"
-                onClick={() => removeChargerConfiguration(config.id)}
-                className="col-start-2"
-              >
-                Remove
-              </Button>
-            </div>
-          </div>
+            config={config}
+            onUpdate={(field, value) =>
+              updateChargerConfiguration(config.id, field, value)
+            }
+            onRemove={() => removeChargerConfiguration(config.id)}
+          />
         ))}
+        {showAddChargerButton && (
+          <AddNewConfigurationCard onAdd={addChargerConfiguration} />
+        )}
       </div>
+    </div>
+  )
+}
+
+interface ChargerConfigurationCardProps {
+  config: ChargerConfiguration
+  onUpdate: (field: keyof ChargerConfiguration, value: string | number) => void
+  onRemove: () => void
+}
+
+const ChargerConfigurationCard: React.FC<ChargerConfigurationCardProps> = ({
+  config,
+  onUpdate,
+  onRemove,
+}) => {
+  return (
+    <div className="rounded-lg border border-gray-300 bg-white p-4 shadow-sm">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <SelectInput
+          id={`power-${config.id}`}
+          label="Charger Power (kW)"
+          name={`power-${config.id}`}
+          value={config.powerInkW}
+          options={AVAILABLE_CHARGER_POWER_OPTIONS}
+          onChange={(e) => onUpdate("powerInkW", Number(e.target.value))}
+        />
+
+        <SelectInput
+          id="numberOfChargers"
+          label="Number of Chargers"
+          name="numberOfChargers"
+          value={config.quantity}
+          options={Array.from({ length: 30 }, (_, i) => ({
+            value: i + 1,
+            label: `${i + 1} Charger${i + 1 === 1 ? "" : "s"}`,
+          }))}
+          onChange={(e) => onUpdate("quantity", Number(e.target.value))}
+        />
+
+        <Button
+          variant="danger"
+          onClick={onRemove}
+          className="col-start-2 min-w-[0px]"
+        >
+          Remove
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+interface AddNewConfigurationCardProps {
+  onAdd: () => void
+}
+
+const AddNewConfigurationCard: React.FC<AddNewConfigurationCardProps> = ({
+  onAdd,
+}) => {
+  return (
+    <div className="flex h-[154px] items-center justify-center rounded-lg border-2 border-dashed">
+      <Button variant="secondary" onClick={onAdd}>
+        + Add Charger Type
+      </Button>
     </div>
   )
 }

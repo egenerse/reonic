@@ -1,14 +1,14 @@
-import React, { useState } from "react"
+import React from "react"
 import { InputField, RangeInput } from "./inputs"
 import {
-  parkingLotCountSchema,
   type ChargerConfiguration,
   type SimulationOptions,
 } from "../utils/types"
-import { calculateNumberOfChargers } from "../utils/charger"
 import { Button } from "./buttons/Button"
 import { type ZodError } from "zod"
 import { ErrorMessage } from "./ErrorMessage"
+import { ParkingLotForm } from "./ParkingLotForm"
+import { ChargerSummary } from "./ChargerSummary"
 
 interface Props {
   simulationOptions: SimulationOptions
@@ -20,6 +20,7 @@ interface Props {
   handleUpdateParkingLots: (value: number) => void
   onRunSimulation: () => void
   initialParkingLotCount: number
+  isLoading?: boolean
 }
 
 export const GraphicSimulationForm: React.FC<Props> = ({
@@ -30,18 +31,8 @@ export const GraphicSimulationForm: React.FC<Props> = ({
   onOptionsChange,
   onRunSimulation,
   initialParkingLotCount,
+  isLoading,
 }) => {
-  const [parkingDataInputError, setParkingDataInputError] =
-    useState<ZodError<number>>()
-
-  const [parkingLotCount, setParkingLotCount] = useState(initialParkingLotCount)
-  const totalChargers = calculateNumberOfChargers(chargerConfigurations)
-
-  const theoreticalMaxPowerDemand = chargerConfigurations.reduce(
-    (previous, current) => previous + current.powerInkW * current.quantity,
-    0
-  )
-
   const numberOfSimulationDaysError = error?.issues.find(
     (issue) => issue.path[0] === "numberOfSimulationDays"
   )
@@ -52,70 +43,16 @@ export const GraphicSimulationForm: React.FC<Props> = ({
     (issue) => issue.path[0] === "carArrivalProbabilityMultiplier"
   )
 
-  const submitNewParkingLotNumber = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const { data, error, success } =
-      parkingLotCountSchema.safeParse(parkingLotCount)
-    setParkingDataInputError(error)
-
-    if (success) {
-      handleUpdateParkingLots(data)
-    }
-  }
-
   return (
-    <div className="flex h-full max-w-[320px] flex-col gap-4 rounded-xl bg-amber-200 p-4">
+    <div className="flex h-full max-w-[320px] flex-1 flex-col gap-4 rounded-xl bg-amber-200 p-4">
       <div className="text-semibold text-2xl">Simulation Options</div>
 
-      <form
-        className="flex flex-col gap-2"
-        onSubmit={submitNewParkingLotNumber}
-      >
-        <InputField
-          name="numberOfParkingLot"
-          id="numberOfParkingLot"
-          label="Number of Parking Lots"
-          value={parkingLotCount}
-          onChange={(e) => {
-            const newValue = Number(e.target.value)
-            if (!isNaN(newValue)) {
-              setParkingLotCount(newValue)
-            }
-          }}
-        />
-        {parkingDataInputError?.message && (
-          <ErrorMessage message={parkingDataInputError.issues[0].message} />
-        )}
-        <div className="text-sm text-gray-400">Maximum Parkinglot: 300</div>
-        <Button type="submit">Set Max Lots</Button>
-      </form>
+      <ParkingLotForm
+        initialParkingLotCount={initialParkingLotCount}
+        handleUpdateParkingLots={handleUpdateParkingLots}
+      />
 
-      <div className="flex flex-col gap-2">
-        <label className="text-lg font-semibold">Parking Lots:</label>
-        {totalChargers > 0 && (
-          <div className="font-bold">
-            {totalChargers} total chargers available
-          </div>
-        )}
-        <div>
-          {chargerConfigurations
-            .filter((chargerConfig) => chargerConfig.quantity > 0)
-            .map((config) => (
-              <div key={config.id}>
-                {config.name} x {config.quantity} ={" "}
-                {config.powerInkW * config.quantity} kW
-              </div>
-            ))}
-        </div>
-        {theoreticalMaxPowerDemand > 0 ? (
-          <div>
-            Theoretical Max Power Demand:{" "}
-            <span className="font-bold">{theoreticalMaxPowerDemand} kW</span>
-          </div>
-        ) : (
-          <div className="text-gray-500">No chargers available</div>
-        )}
-      </div>
+      <ChargerSummary chargerConfigurations={chargerConfigurations} />
 
       <div>
         <InputField
@@ -165,7 +102,9 @@ export const GraphicSimulationForm: React.FC<Props> = ({
         )}
       </div>
 
-      <Button onClick={onRunSimulation}>Run</Button>
+      <Button onClick={onRunSimulation} isLoading={isLoading}>
+        Run
+      </Button>
     </div>
   )
 }
