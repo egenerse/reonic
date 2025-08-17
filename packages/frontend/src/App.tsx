@@ -16,9 +16,7 @@ function App() {
       <WelcomeScreen onGetStarted={goToSingleSimulation} />
       <SingleSimulation containerRef={singleSimulationRef} />
       <MultipleSimulation />
-      <hr />
       <MockedCharts />
-      <hr />
     </div>
   )
 }

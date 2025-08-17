@@ -71,77 +71,75 @@ export const MultipleSimulation = () => {
   }
 
   return (
-    <section className="mt-40 flex flex-col items-center bg-blue-100">
-      <div className="flex flex-col items-center p-4">
-        <h1 className="mb-8 text-center text-4xl font-bold text-gray-900">
-          Run Multiple Simulations
-        </h1>
+    <section className="flex flex-col items-center bg-blue-100 p-4">
+      <h1 className="mb-8 text-center text-4xl font-bold text-gray-900">
+        Run Multiple Simulations
+      </h1>
 
-        <div className="mb-8 rounded-lg border-gray-200 bg-white p-6">
-          <h2 className="mb-6 text-center text-2xl font-semibold text-gray-800">
-            Simulation Parameters
-          </h2>
+      <div className="mb-8 rounded-lg border-gray-200 bg-white p-6">
+        <h2 className="mb-6 text-center text-2xl font-semibold text-gray-800">
+          Simulation Parameters
+        </h2>
 
-          <div className="flex flex-1 flex-col gap-3 px-10 md:px-20 lg:px-40">
-            <ChargerConfigurationForm
-              chargerConfigurations={simulationOptions.chargerConfigurations}
-              onChargerConfigurationsChange={handleChargerConfigurationsChange}
+        <div className="flex flex-1 flex-col gap-3 px-10 md:px-20 lg:px-40">
+          <ChargerConfigurationForm
+            chargerConfigurations={simulationOptions.chargerConfigurations}
+            onChargerConfigurationsChange={handleChargerConfigurationsChange}
+          />
+          <div className="flex flex-wrap justify-between gap-3">
+            <InputField
+              id="carNeedskWhPer100kms"
+              name="carNeedskWhPer100kms"
+              label="Car Efficiency (kWh/100km)"
+              type="number"
+              min={1}
+              step={0.1}
+              value={simulationOptions.carNeedskWhPer100kms}
+              onChange={handleOptionsChange}
             />
-            <div className="flex flex-wrap justify-between gap-3">
-              <InputField
-                id="carNeedskWhPer100kms"
-                name="carNeedskWhPer100kms"
-                label="Car Efficiency (kWh/100km)"
-                type="number"
-                min={1}
-                step={0.1}
-                value={simulationOptions.carNeedskWhPer100kms}
-                onChange={handleOptionsChange}
-              />
 
-              <InputField
-                id="numberOfSimulationDays"
-                name="numberOfSimulationDays"
-                label="Simulation Days"
-                type="number"
-                min={1}
-                value={simulationOptions.numberOfSimulationDays}
-                onChange={handleOptionsChange}
-              />
+            <InputField
+              id="numberOfSimulationDays"
+              name="numberOfSimulationDays"
+              label="Simulation Days"
+              type="number"
+              min={1}
+              value={simulationOptions.numberOfSimulationDays}
+              onChange={handleOptionsChange}
+            />
 
-              <RangeInput
-                id="carArrivalProbabilityMultiplier"
-                name="carArrivalProbabilityMultiplier"
-                label="Car Arrival Probability Multiplier"
-                min={20}
-                max={220}
-                step={10}
-                value={simulationOptions.carArrivalProbabilityMultiplier}
-                onChange={handleOptionsChange}
-                percentage
-              />
-            </div>
-
-            <Button onClick={runAllSimulations} disabled={isRunning}>
-              {isRunning
-                ? `Running... (${results.length}/30)`
-                : "Run Simulations (1-30 Chargers)"}
-            </Button>
+            <RangeInput
+              id="carArrivalProbabilityMultiplier"
+              name="carArrivalProbabilityMultiplier"
+              label="Car Arrival Probability Multiplier"
+              min={20}
+              max={220}
+              step={10}
+              value={simulationOptions.carArrivalProbabilityMultiplier}
+              onChange={handleOptionsChange}
+              percentage
+            />
           </div>
+
+          <Button onClick={runAllSimulations} disabled={isRunning}>
+            {isRunning
+              ? `Running... (${results.length}/30)`
+              : "Run Simulations (1-30 Chargers)"}
+          </Button>
         </div>
-
-        {results.length > 0 && (
-          <div className="mx-auto mt-8 max-w-7xl">
-            <h2 className="mb-6 text-3xl font-bold text-gray-900">
-              Charging Station Analysis
-            </h2>
-            <ResultsTable
-              simulationResults={results}
-              simulationOptions={resultSimulationOptions}
-            />
-          </div>
-        )}
       </div>
+
+      {results.length > 0 && (
+        <div className="mx-auto mt-8 max-w-7xl">
+          <h2 className="mb-6 text-3xl font-bold text-gray-900">
+            Charging Station Analysis
+          </h2>
+          <ResultsTable
+            simulationResults={results}
+            simulationOptions={resultSimulationOptions}
+          />
+        </div>
+      )}
     </section>
   )
 }

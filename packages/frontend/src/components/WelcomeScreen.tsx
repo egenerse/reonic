@@ -6,7 +6,7 @@ interface Props {
 
 export const WelcomeScreen: React.FC<Props> = ({ onGetStarted }) => {
   return (
-    <div className="mb-40 flex min-h-screen flex-col items-center justify-center bg-blue-50 text-center">
+    <section className="mb-40 flex min-h-screen flex-col items-center justify-center bg-blue-50 text-center">
       <div className="max-w-4xl p-8">
         <h1 className="mb-6 text-5xl font-bold text-gray-800">
           EV Charging Station Simulator
@@ -23,6 +23,6 @@ export const WelcomeScreen: React.FC<Props> = ({ onGetStarted }) => {
       </div>
 
       <Button onClick={onGetStarted}>Start Simulating</Button>
-    </div>
+    </section>
   )
 }

@@ -37,7 +37,7 @@ export const MockedCharts = () => {
   )
 
   return (
-    <div className="my-8 flex min-h-screen flex-1 flex-col items-center gap-2">
+    <section className="my-8 flex min-h-screen flex-1 flex-col items-center gap-2">
       <h1 className="text-4xl font-bold text-gray-900">Mocked Charts</h1>
       <h3 className="text-2xl font-semibold text-gray-500">
         Select charts to display.
@@ -52,6 +52,6 @@ export const MockedCharts = () => {
         {shownChart === "daySummary" && <DaySummary />}
         {shownChart === "energyConsumption" && <EnergyConsumption />}
       </div>
-    </div>
+    </section>
   )
 }
