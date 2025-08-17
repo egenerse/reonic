@@ -6,18 +6,42 @@ import type {
   ChargingStation,
 } from "./types"
 
-const getNeededKmForCar = (percentage: number) => {
-  if (percentage < 34.31) return 0
-  if (percentage < 34.31 + 4.9) return 5
-  if (percentage < 34.31 + 4.9 + 9.8) return 10
-  if (percentage < 34.31 + 4.9 + 9.8 + 11.76) return 20
-  if (percentage < 34.31 + 4.9 + 9.8 + 11.76 + 8.82) return 30
-  if (percentage < 34.31 + 4.9 + 9.8 + 11.76 + 8.82 + 11.76) return 50
-  if (percentage < 34.31 + 4.9 + 9.8 + 11.76 + 8.82 + 11.76 + 10.78) return 100
-  if (percentage < 34.31 + 4.9 + 9.8 + 11.76 + 8.82 + 11.76 + 10.78 + 4.9)
-    return 200
+const KM_DISTRIBUTION = [
+  { threshold: 34.31, km: 0 },
+  { threshold: 4.9, km: 5 },
+  { threshold: 9.8, km: 10 },
+  { threshold: 11.76, km: 20 },
+  { threshold: 8.82, km: 30 },
+  { threshold: 11.76, km: 50 },
+  { threshold: 10.78, km: 100 },
+  { threshold: 4.9, km: 200 },
+  { threshold: Infinity, km: 300 },
+]
 
-  return 300
+const generateLookupTableForKmDistribution = () => {
+  const lookup = []
+  let cumulativeThreshold = 0
+
+  for (const { threshold, km } of KM_DISTRIBUTION) {
+    cumulativeThreshold += threshold
+    lookup.push({ maxPercentage: cumulativeThreshold, km })
+  }
+
+  return lookup
+}
+
+const KM_LOOKUP_TABLE_FOR_CAR_KM_NEEDS = generateLookupTableForKmDistribution()
+
+export const getNeededKmForCar = () => {
+  const randomPercentage = Math.random() * 100
+  for (const { maxPercentage, km } of KM_LOOKUP_TABLE_FOR_CAR_KM_NEEDS) {
+    if (randomPercentage < maxPercentage) {
+      return km
+    }
+  }
+
+  console.error("Unreachable: getNeededKmForCar should never reach here")
+  return KM_DISTRIBUTION[KM_DISTRIBUTION.length - 1].km
 }
 
 export const runSimulation = ({
@@ -73,9 +97,7 @@ export const runSimulation = ({
         randomPercentageForCarArrive < probablityOfGettingCarInCharging
 
       if (carArrived) {
-        const randomPercentageForKM = Math.random() * 100
-
-        const kmChargeNeeded = getNeededKmForCar(randomPercentageForKM)
+        const kmChargeNeeded = getNeededKmForCar()
 
         if (kmChargeNeeded > 0) {
           const energyNeedInkWH = (kmChargeNeeded / 100) * carNeedskWhPer100kms
