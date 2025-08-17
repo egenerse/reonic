@@ -40,8 +40,17 @@ export const GraphicBasedSimulation = () => {
     }))
   }
 
+  const chargerConfigurationsError = error?.issues.find(
+    (issue) => issue.path[0] === "chargerConfigurations"
+  )
+
   return (
     <div className="min-h-screen">
+      {chargerConfigurationsError && (
+        <div className="text-center text-red-500">
+          {chargerConfigurationsError.message}
+        </div>
+      )}
       <div className="flex flex-col gap-2 p-5 sm:flex-row md:p-8 lg:p-10">
         <ParkingLotGrid
           parkingData={parkingData}

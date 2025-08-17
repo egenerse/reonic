@@ -38,6 +38,7 @@ export const SingleSimulationResult: React.FC<Props> = ({
 
         <div className="flex flex-col items-center gap-4 p-2">
           <div className="max-w-60 text-center">Demanded Power Ratio</div>
+          <div>{`${toDecimal(ratioOfActualToMaximumPowerDemand * 100)}%`}</div>
           <RatioPieChart percentage={ratioOfActualToMaximumPowerDemand * 100} />
         </div>
       </div>

@@ -13,7 +13,10 @@ const chargerConfigurationSchema = z.object({
 export const simulationOptionsSchema = z.object({
   chargerConfigurations: z
     .array(chargerConfigurationSchema)
-    .min(1, "Please add at least one charger configuration")
+    .min(
+      1,
+      "There should be at least one charger configuration for the simulation"
+    )
     .refine(
       (chargerConfigs) => {
         const totalQuantity = chargerConfigs.reduce(

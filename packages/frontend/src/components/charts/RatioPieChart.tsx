@@ -1,4 +1,5 @@
 import { Cell, Pie, PieChart, Tooltip } from "recharts"
+import { toDecimal } from "../../utils/text"
 
 interface CustomTooltipProps {
   active?: boolean
@@ -51,7 +52,6 @@ interface Props {
 }
 
 export const RatioPieChart: React.FC<Props> = ({ percentage }) => {
-  console.log("Rendering RatioPieChart with percentage:", percentage)
   const dataSet = [
     { name: "Max chargers used", value: percentage },
     { name: "Not used", value: 100 - percentage },
@@ -96,6 +96,7 @@ export const RatioPieChart: React.FC<Props> = ({ percentage }) => {
           />
         ))}
       </Pie>
+
       <Tooltip content={<CustomBarTooltip />} />
     </PieChart>
   )
@@ -129,10 +130,10 @@ const renderCustomizedLabel = ({
       x={x}
       y={y}
       fill="white"
-      textAnchor={x > cx ? "start" : "end"}
+      textAnchor="middle"
       dominantBaseline="central"
     >
-      {`${((percent ?? 1) * 100).toFixed(0)}%`}
+      {`${toDecimal((percent ?? 1) * 100)}%`}
     </text>
   )
 }
