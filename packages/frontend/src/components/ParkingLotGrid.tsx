@@ -4,16 +4,12 @@ import type { ParkingData } from "../utils/types"
 
 interface Props {
   parkingData: ParkingData[]
-  removeParkingLotPower: (id: number) => void
-  setParkingLotPower: (id: number) => void
-  showEdit: boolean
+  setParkingLotPower: (id: number, powerInkW?: number) => void
 }
 
 export const ParkingLotGrid: React.FC<Props> = ({
   parkingData,
-  removeParkingLotPower,
   setParkingLotPower,
-  showEdit,
 }) => {
   return (
     <div className="flex-1">
@@ -22,9 +18,7 @@ export const ParkingLotGrid: React.FC<Props> = ({
           <ParkingLot
             key={lot.id}
             {...lot}
-            removeParkingLotPower={removeParkingLotPower}
             setParkingLotPower={setParkingLotPower}
-            showEdit={showEdit}
           />
         ))}
         {parkingData.length === 0 && (

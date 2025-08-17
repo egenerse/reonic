@@ -1,9 +1,13 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { GraphicBasedSimulation } from "./GraphicBasedSimulation"
 import { FormBasedSimulation } from "./FormBasedSimulation"
 import { ButtonGroup, type ButtonInGroup } from "./buttons/ButtonGroup"
 
-export const SingleSimulation = () => {
+interface Props {
+  containerRef: React.RefObject<HTMLDivElement | null>
+}
+
+export const SingleSimulation: React.FC<Props> = ({ containerRef }) => {
   const [selectedSimulationId, setSelectedSimulationId] = useState("graphic")
 
   const buttons: ButtonInGroup[] = [
@@ -20,12 +24,12 @@ export const SingleSimulation = () => {
   ]
 
   return (
-    <div id="single-simulation" className="min-h-screen">
-      <ButtonGroup
-        buttons={buttons}
-        selectedId={selectedSimulationId}
-        className="py-10"
-      />
+    <div
+      id="single-simulation"
+      className="flex min-h-screen flex-col"
+      ref={containerRef}
+    >
+      <ButtonGroup buttons={buttons} selectedId={selectedSimulationId} />
 
       <div className={selectedSimulationId === "graphic" ? "block" : "hidden"}>
         <GraphicBasedSimulation />

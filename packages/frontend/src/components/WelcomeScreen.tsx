@@ -6,16 +6,23 @@ interface Props {
 
 export const WelcomeScreen: React.FC<Props> = ({ onGetStarted }) => {
   return (
-    <div className="mb-40 flex min-h-screen flex-col items-center justify-center text-center">
-      <div className="p-8">
-        <h1 className="mb-4 text-4xl font-bold">Reonic Parking Lot App</h1>
-        <p className="mt-6 text-lg">
-          Simulate EV charging scenarios with customizable parameters, and
-          explore results in a virtual diagram.
+    <div className="mb-40 flex min-h-screen flex-col items-center justify-center bg-blue-50 text-center">
+      <div className="max-w-4xl p-8">
+        <h1 className="mb-6 text-5xl font-bold text-gray-800">
+          EV Charging Station Simulator
+        </h1>
+        <p className="mb-8 text-xl leading-relaxed text-gray-600">
+          Design, optimize, and analyze electric vehicle charging infrastructure
+          with our comprehensive simulation platform
+        </p>
+
+        <p className="mb-8 text-base text-gray-500">
+          Perfect for shop owners, facility managers, and EV infrastructure
+          developers
         </p>
       </div>
 
-      <Button onClick={onGetStarted}>Get Started</Button>
+      <Button onClick={onGetStarted}>Start Simulating</Button>
     </div>
   )
 }

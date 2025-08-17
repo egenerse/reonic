@@ -1,5 +1,5 @@
-import clsx from "clsx"
 import React from "react"
+import { cn } from "../../utils/cn"
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "danger" | "outlined"
@@ -20,7 +20,7 @@ export const Button: React.FC<Props> = ({
     <button
       disabled={props.disabled || isLoading}
       type={type}
-      className={clsx(
+      className={cn(
         "min-w-40 rounded-lg px-5 py-2 font-medium active:scale-95",
         {
           "bg-blue-600 text-white shadow-lg hover:bg-blue-700":

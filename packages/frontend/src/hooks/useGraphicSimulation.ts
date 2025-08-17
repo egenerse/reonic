@@ -28,9 +28,6 @@ export const useGraphicSimulation = ({
   const [isLoading, setIsLoading] = useState(false)
   const [parkingData, setParkingData] =
     useState<ParkingData[]>(initialParkingData)
-  const [selectedChargerPower, setSelectedChargerPower] = useState<
-    number | undefined
-  >()
 
   const chargerConfigurations = useMemo(
     () => getChargerConfigurationFromParkingData(parkingData),
@@ -90,19 +87,10 @@ export const useGraphicSimulation = ({
     setParkingData(updatedParkingData)
   }
 
-  const setParkingLotPower = (id: number) => {
-    if (!selectedChargerPower) return
+  const setParkingLotPower = (id: number, powerInkW?: number) => {
     setParkingData((prevData) =>
       prevData.map((lot) =>
-        lot.id === id ? { ...lot, chargerPowerInKw: selectedChargerPower } : lot
-      )
-    )
-  }
-
-  const removeParkingLotPower = (id: number) => {
-    setParkingData((prevData) =>
-      prevData.map((lot) =>
-        lot.id === id ? { ...lot, chargerPowerInKw: undefined } : lot
+        lot.id === id ? { ...lot, chargerPowerInKw: powerInkW } : lot
       )
     )
   }
@@ -111,7 +99,6 @@ export const useGraphicSimulation = ({
     resultRef,
     simulationOptions,
     chargerConfigurations,
-    selectedChargerPower,
     simulationResult,
     resultSimulationOptions,
     error,
@@ -122,9 +109,7 @@ export const useGraphicSimulation = ({
     resetOptions,
     updateSimulationOption,
     setParkingData,
-    setSelectedChargerPower,
     updateParkingLotCount,
     setParkingLotPower,
-    removeParkingLotPower,
   }
 }

@@ -57,10 +57,10 @@ export const FormBasedSimulation = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <div className="mb-5 flex flex-col items-center justify-center">
         <form
-          className="mb-4 max-w-4xl min-w-2/5 rounded-2xl bg-blue-300 p-6"
+          className="mb-4 rounded-2xl bg-blue-300 p-6"
           onSubmit={onFormSubmit}
         >
           <ChargerConfigurationForm

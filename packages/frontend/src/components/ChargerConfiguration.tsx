@@ -155,7 +155,7 @@ const AddNewConfigurationCard: React.FC<AddNewConfigurationCardProps> = ({
   onAdd,
 }) => {
   return (
-    <div className="flex h-[154px] items-center justify-center rounded-lg border-2 border-dashed">
+    <div className="flex h-[154px] items-center justify-center rounded-lg border-2 border-dashed bg-blue-50">
       <Button variant="secondary" onClick={onAdd}>
         + Add Charger Type
       </Button>

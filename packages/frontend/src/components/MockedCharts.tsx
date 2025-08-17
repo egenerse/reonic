@@ -8,7 +8,7 @@ import {
 import { ButtonGroup, type ButtonInGroup } from "./buttons/ButtonGroup"
 
 export const MockedCharts = () => {
-  const [shownChart, setShownChart] = useState("")
+  const [shownChart, setShownChart] = useState("chargingEvents")
 
   const buttons: ButtonInGroup[] = useMemo(
     () => [

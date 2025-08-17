@@ -18,13 +18,15 @@ export const ButtonGroup: React.FC<Props> = ({
   className,
 }) => {
   return (
-    <div className={`group flex flex-wrap justify-center ${className}`}>
+    <div
+      className={`group flex flex-wrap justify-center bg-white p-2 ${className} `}
+    >
       {buttons.map((button, index) => (
         <Button
+          variant="secondary"
           key={index}
           onClick={button.onClick}
-          variant={button.id === selectedId ? "primary" : "secondary"}
-          className="rounded-none border-black first:rounded-l-lg last:rounded-r-lg md:not-first:border-l-2"
+          className={`rounded-none bg-transparent text-black hover:bg-blue-100 ${button.id === selectedId ? "border-b-4 border-b-blue-500" : "opacity-50"}`}
         >
           {button.label}
         </Button>

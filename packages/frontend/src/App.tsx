@@ -12,13 +12,9 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-50">
+    <div className="min-h-screen">
       <WelcomeScreen onGetStarted={goToSingleSimulation} />
-
-      <div ref={singleSimulationRef}>
-        <SingleSimulation />
-      </div>
-
+      <SingleSimulation containerRef={singleSimulationRef} />
       <MultipleSimulation />
       <hr />
       <MockedCharts />

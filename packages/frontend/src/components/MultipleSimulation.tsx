@@ -71,13 +71,13 @@ export const MultipleSimulation = () => {
   }
 
   return (
-    <div className="p-4">
-      <div className="mx-auto max-w-7xl">
+    <section className="mt-40 flex flex-col items-center bg-blue-100">
+      <div className="flex flex-col items-center p-4">
         <h1 className="mb-8 text-center text-4xl font-bold text-gray-900">
           Run Multiple Simulations
         </h1>
 
-        <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6 shadow-lg">
+        <div className="mb-8 rounded-lg border-gray-200 bg-white p-6">
           <h2 className="mb-6 text-center text-2xl font-semibold text-gray-800">
             Simulation Parameters
           </h2>
@@ -142,6 +142,6 @@ export const MultipleSimulation = () => {
           </div>
         )}
       </div>
-    </div>
+    </section>
   )
 }
