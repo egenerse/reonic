@@ -1,4 +1,3 @@
-import { AVAILABLE_CHARGER_POWER_OPTIONS } from "./constants"
 import type { ChargerConfiguration, ParkingData } from "./types"
 
 export const calculateNumberOfChargers = (
@@ -22,24 +21,29 @@ export const calculateTotalPowerDemand = (
 export const getChargerConfigurationFromParkingData = (
   parkingData: ParkingData[]
 ): ChargerConfiguration[] => {
-  const powerCounts = new Map<number, number>(
-    AVAILABLE_CHARGER_POWER_OPTIONS.map((option) => [option.value, 0])
-  )
+  const chargerConfigurations: ChargerConfiguration[] = []
+  const powerCounts = new Map<number, number>()
 
   parkingData.forEach((lot) => {
     if (lot.chargerPowerInKw === undefined) return
-    if (powerCounts.has(lot.chargerPowerInKw)) {
-      powerCounts.set(
-        lot.chargerPowerInKw,
-        powerCounts.get(lot.chargerPowerInKw)! + 1
-      )
+
+    const currentPowerCount = powerCounts.get(lot.chargerPowerInKw)
+    if (currentPowerCount) {
+      powerCounts.set(lot.chargerPowerInKw, currentPowerCount + 1)
+    } else {
+      powerCounts.set(lot.chargerPowerInKw, 1)
     }
   })
 
-  return AVAILABLE_CHARGER_POWER_OPTIONS.map((option, index) => ({
-    id: index.toString(),
-    name: option.label,
-    quantity: powerCounts.get(option.value) || 0,
-    powerInkW: option.value,
-  }))
+  powerCounts.forEach((value, key) => {
+    const newChargingConfig: ChargerConfiguration = {
+      id: chargerConfigurations.length.toString(),
+      name: `Charger ${key} kW`,
+      quantity: value,
+      powerInkW: key,
+    }
+    chargerConfigurations.push(newChargingConfig)
+  })
+
+  return chargerConfigurations
 }

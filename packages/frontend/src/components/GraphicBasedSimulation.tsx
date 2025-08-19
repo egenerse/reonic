@@ -1,72 +1,55 @@
-import React from "react"
-import {
-  defaultGraphicSimulationOptions,
-  initialParkingData_GRAPHIC_SIMULATION,
-} from "../utils/constants"
+import { initialParkingData_GRAPHIC_SIMULATION } from "../utils/constants"
 import { GraphicSimulationForm } from "./GraphicSimulationForm"
 import { ParkingLotGrid } from "./ParkingLotGrid"
-import { useGraphicSimulation } from "../hooks/useGraphicSimulation"
+import { ParkingLotForm } from "./ParkingLotForm"
 import { SingleSimulationResult } from "./SingleSimulationResult"
+import { useGraphicFormSimulation } from "../hooks/useGraphicFormSimulation"
+import { ErrorMessage } from "./ErrorMessage"
 
 export const GraphicBasedSimulation = () => {
   const {
-    simulationOptions,
-    setSimulationOptions,
+    resultRef,
     simulationResult,
     resultSimulationOptions,
-    error,
-    resultRef,
     parkingData,
     chargerConfigurations,
     isLoading,
-    runSimulation,
+    errors,
+    register,
+    watch,
+    onFormSubmit,
     updateParkingLotCount,
     setParkingLotPower,
-  } = useGraphicSimulation({
-    initialOptions: defaultGraphicSimulationOptions,
-    initialParkingData: initialParkingData_GRAPHIC_SIMULATION,
-  })
-
-  const handleOptionsChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target
-    const newValue = Number(value)
-    if (isNaN(newValue)) return
-
-    setSimulationOptions((prev) => ({
-      ...prev,
-      [name]: newValue,
-    }))
-  }
-
-  const chargerConfigurationsError = error?.issues.find(
-    (issue) => issue.path[0] === "chargerConfigurations"
-  )
+  } = useGraphicFormSimulation()
 
   return (
     <div className="min-h-screen">
-      {chargerConfigurationsError && (
-        <div className="text-center text-red-500">
-          {chargerConfigurationsError.message}
-        </div>
-      )}
-      <div className="flex flex-col items-center gap-2 p-5 sm:flex-row md:items-baseline md:p-8 lg:p-10">
+      <ErrorMessage
+        message={errors.chargerConfigurations?.message}
+        className="flex justify-center"
+      />
+      <div className="flex flex-col items-center gap-2 p-5 sm:flex-row md:items-start md:p-8 lg:p-10">
         <ParkingLotGrid
           parkingData={parkingData}
           setParkingLotPower={setParkingLotPower}
         />
 
-        <GraphicSimulationForm
-          initialParkingLotCount={initialParkingData_GRAPHIC_SIMULATION.length}
-          simulationOptions={simulationOptions}
-          chargerConfigurations={chargerConfigurations}
-          error={error}
-          onOptionsChange={handleOptionsChange}
-          handleUpdateParkingLots={updateParkingLotCount}
-          onRunSimulation={runSimulation}
-          isLoading={isLoading}
-        />
+        <div className="mx-4 flex w-full flex-col gap-4 md:w-80">
+          <ParkingLotForm
+            initialParkingLotCount={
+              initialParkingData_GRAPHIC_SIMULATION.length
+            }
+            handleUpdateParkingLots={updateParkingLotCount}
+          />
+          <GraphicSimulationForm
+            chargerConfigurations={chargerConfigurations}
+            isLoading={isLoading}
+            register={register}
+            watch={watch}
+            errors={errors}
+            onFormSubmit={onFormSubmit}
+          />
+        </div>
       </div>
 
       <div ref={resultRef}>

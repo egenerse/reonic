@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { runSimulation } from "../utils/simulation"
 import {
   simulationOptionsSchema,
@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 export const MultipleSimulation = () => {
+  const resultTableRef = useRef<HTMLDivElement>(null)
   const {
     register,
     handleSubmit,
@@ -42,6 +43,8 @@ export const MultipleSimulation = () => {
       const result = runSimulation(options)
       setResults((old) => [...old, result])
       setResultSimulationOptions((old) => [...old, options])
+      resultTableRef.current?.scrollIntoView({ behavior: "smooth" })
+
       await new Promise((resolve) => setTimeout(resolve, 10))
     }
   })
@@ -65,13 +68,13 @@ export const MultipleSimulation = () => {
         >
           <div className="flex flex-wrap justify-between gap-3">
             <InputField
-              {...register("carNeedskWhPer100kms")}
+              {...register("carNeedskWhPer100kms", { valueAsNumber: true })}
               label="Car Efficiency (kWh/100km)"
               error={errors.carNeedskWhPer100kms?.message}
             />
 
             <InputField
-              {...register("numberOfSimulationDays")}
+              {...register("numberOfSimulationDays", { valueAsNumber: true })}
               label="Simulation Days"
               error={errors.numberOfSimulationDays?.message}
             />
@@ -98,17 +101,22 @@ export const MultipleSimulation = () => {
         </form>
       </div>
 
-      {results.length > 0 && (
-        <div className="my-10 flex flex-col items-center md:mx-20">
-          <h2 className="mb-6 text-3xl font-bold text-gray-900">
-            Charging Station Analysis
-          </h2>
-          <ResultsTable
-            simulationResults={results}
-            simulationOptions={resultSimulationOptions}
-          />
-        </div>
-      )}
+      <div
+        ref={resultTableRef}
+        className="my-10 flex flex-col items-center md:mx-20"
+      >
+        {results.length > 0 && (
+          <>
+            <h2 className="mb-6 text-3xl font-bold text-gray-900">
+              Charging Station Analysis
+            </h2>
+            <ResultsTable
+              simulationResults={results}
+              simulationOptions={resultSimulationOptions}
+            />
+          </>
+        )}
+      </div>
     </section>
   )
 }

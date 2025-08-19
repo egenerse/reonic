@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React from "react"
 import { parkingLotCountSchema } from "../utils/types"
-import type { ZodError } from "zod"
 import { InputField } from "./inputs"
-import { ErrorMessage } from "./ErrorMessage"
 import { Button } from "./buttons/Button"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 interface Props {
   initialParkingLotCount: number
@@ -14,39 +14,31 @@ export const ParkingLotForm: React.FC<Props> = ({
   initialParkingLotCount,
   handleUpdateParkingLots,
 }) => {
-  const [parkingDataInputError, setParkingDataInputError] =
-    useState<ZodError<number>>()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(parkingLotCountSchema),
+    defaultValues: { numberOfParkingLot: initialParkingLotCount },
+  })
 
-  const [parkingLotCount, setParkingLotCount] = useState(initialParkingLotCount)
-
-  const submitNewParkingLotNumber = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const { data, error, success } =
-      parkingLotCountSchema.safeParse(parkingLotCount)
-    setParkingDataInputError(error)
-
-    if (success) {
-      handleUpdateParkingLots(data)
-    }
-  }
+  const submitNewParkingLotNumber = handleSubmit((data) => {
+    handleUpdateParkingLots(data.numberOfParkingLot)
+  })
 
   return (
-    <form className="flex flex-col gap-2" onSubmit={submitNewParkingLotNumber}>
+    <form
+      className="flex flex-col gap-2 rounded-xl bg-blue-200/50 p-4"
+      onSubmit={submitNewParkingLotNumber}
+    >
+      <h2 className="text-semibold text-2xl">Set Maximum Parking Lots</h2>
       <InputField
-        name="numberOfParkingLot"
-        id="numberOfParkingLot"
+        {...register("numberOfParkingLot", { valueAsNumber: true })}
         label="Number of Parking Lots"
-        value={parkingLotCount}
-        onChange={(e) => {
-          const newValue = Number(e.target.value)
-          if (!isNaN(newValue)) {
-            setParkingLotCount(newValue)
-          }
-        }}
+        error={errors.numberOfParkingLot?.message}
       />
-      {parkingDataInputError?.message && (
-        <ErrorMessage message={parkingDataInputError.issues[0].message} />
-      )}
+
       <div className="text-sm text-gray-400">Maximum Parkinglot: 200</div>
       <Button type="submit">Set Max Lots</Button>
     </form>

@@ -75,7 +75,7 @@ export const FormBasedSimulation = () => {
             </div>
             <div>
               <InputField
-                {...register("carNeedskWhPer100kms")}
+                {...register("carNeedskWhPer100kms", { valueAsNumber: true })}
                 label="Car Needs (kWh/100km)"
                 error={errors.carNeedskWhPer100kms?.message}
               />
