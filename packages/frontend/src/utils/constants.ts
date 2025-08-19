@@ -88,3 +88,5 @@ export const initialParkingData_GRAPHIC_SIMULATION: ParkingData[] = Array.from(
 )
 
 export const energyPricePerHourInEuro = 0.25
+export const maxCarArrivalProbabilityMultiplier = 200
+export const minCarArrivalProbabilityMultiplier = 20

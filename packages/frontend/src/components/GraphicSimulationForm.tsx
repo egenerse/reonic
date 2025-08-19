@@ -11,6 +11,10 @@ import type {
   UseFormWatch,
   FieldErrors,
 } from "react-hook-form"
+import {
+  maxCarArrivalProbabilityMultiplier,
+  minCarArrivalProbabilityMultiplier,
+} from "../utils/constants"
 
 interface Props {
   chargerConfigurations: ChargerConfiguration[]
@@ -68,8 +72,8 @@ export const GraphicSimulationForm: React.FC<Props> = ({
             valueAsNumber: true,
           })}
           label="Car Arrival Probability Multiplier"
-          min={20}
-          max={220}
+          min={minCarArrivalProbabilityMultiplier}
+          max={maxCarArrivalProbabilityMultiplier}
           step={10}
           value={rangeInputValue}
           showPercentage

@@ -8,7 +8,11 @@ import {
 import { ResultsTable } from "./ResultsTable"
 import { InputField } from "./inputs"
 import { RangeInput } from "./inputs"
-import { multipleSimulationsInitialState } from "../utils/constants"
+import {
+  maxCarArrivalProbabilityMultiplier,
+  minCarArrivalProbabilityMultiplier,
+  multipleSimulationsInitialState,
+} from "../utils/constants"
 import { Button } from "./buttons/Button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -84,8 +88,8 @@ export const MultipleSimulation = () => {
                 valueAsNumber: true,
               })}
               label="Car Arrival Probability Multiplier"
-              min={20}
-              max={220}
+              min={minCarArrivalProbabilityMultiplier}
+              max={maxCarArrivalProbabilityMultiplier}
               step={10}
               showPercentage
               value={rangeInputValue}

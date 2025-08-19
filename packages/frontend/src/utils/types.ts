@@ -1,4 +1,8 @@
 import { z } from "zod"
+import {
+  minCarArrivalProbabilityMultiplier,
+  maxCarArrivalProbabilityMultiplier,
+} from "./constants"
 
 export const chargerConfigurationSchema = z.object({
   id: z.string(),
@@ -39,8 +43,8 @@ export const simulationOptionsSchema = z.object({
     .min(0.00001, "Car needs must be greater than 0"),
   carArrivalProbabilityMultiplier: z
     .number("Car arrival probability multiplier must be a number")
-    .min(20)
-    .max(220),
+    .min(minCarArrivalProbabilityMultiplier)
+    .max(maxCarArrivalProbabilityMultiplier),
 })
 
 export const parkingLotCountSchema = z.object({

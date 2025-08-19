@@ -11,7 +11,11 @@ import { ChargerSummary } from "./ChargerSummary"
 import { InputField, RangeInput } from "./inputs"
 import { useForm } from "react-hook-form"
 import { runSimulation } from "../utils/simulation"
-import { defaultSimulationOptions } from "../utils/constants"
+import {
+  defaultSimulationOptions,
+  maxCarArrivalProbabilityMultiplier,
+  minCarArrivalProbabilityMultiplier,
+} from "../utils/constants"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 export const FormBasedSimulation = () => {
@@ -86,8 +90,8 @@ export const FormBasedSimulation = () => {
                   valueAsNumber: true,
                 })}
                 label="Car Arrival Probability Multiplier"
-                min={20}
-                max={220}
+                min={minCarArrivalProbabilityMultiplier}
+                max={maxCarArrivalProbabilityMultiplier}
                 step={5}
                 showPercentage
                 value={rangeInputValue}
