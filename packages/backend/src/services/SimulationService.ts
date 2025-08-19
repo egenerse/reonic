@@ -4,9 +4,10 @@ import {
   UpdateSimulationInputDto,
   RunSimulationDto,
 } from "../types/SimulationDtos";
-import { ChargerConfiguration } from "../utils/simulationTypes";
-import { runSimulation } from "../utils/simulation";
-import { SimulationInput } from "../types/SimulationTypes";
+import { fork } from "child_process";
+import path from "path";
+import { RunSimulationResult } from "../types/SimulationResult";
+import { SimulationOutput } from "../types/SimulationTypes";
 
 export class SimulationService {
   constructor(private prisma: PrismaClient) {}
@@ -117,7 +118,39 @@ export class SimulationService {
 
   async runSimulation(input: RunSimulationDto) {
     try {
-      const simulationResult = this.runSimulationLogic(input);
+      // Handle event based communication in a separate thread
+      const simulationResult = await new Promise<RunSimulationResult>(
+        (resolve, reject) => {
+          const subProcess = fork(
+            path.resolve(__dirname, "../heavyWork", "runSimulation.ts")
+          );
+
+          const timeout = setTimeout(() => {
+            subProcess.kill();
+            reject(new Error("Subprocess timed out after 30 seconds"));
+          }, 30000);
+
+          subProcess.send(input);
+
+          subProcess.once("message", (result: RunSimulationResult) => {
+            clearTimeout(timeout);
+            resolve(result);
+          });
+
+          subProcess.once("error", (error) => {
+            clearTimeout(timeout);
+            subProcess.kill();
+            reject(new Error(`Subprocess error: ${error.message}`));
+          });
+
+          subProcess.once("exit", (code) => {
+            clearTimeout(timeout);
+            if (code !== 0) {
+              reject(new Error(`Subprocess exited with code ${code}`));
+            }
+          });
+        }
+      );
 
       // Transaction to ensure data consistency
       const result = await this.prisma.$transaction(async (prisma) => {
@@ -151,60 +184,9 @@ export class SimulationService {
 
         return simulationOutput;
       });
-
       return result;
     } catch {
       throw new Error("Failed to run simulation");
     }
-  }
-
-  private runSimulationLogic(input: {
-    chargePoints: number;
-    arrivalMultiplier: number;
-    carConsumptionKwh: number;
-    chargingPowerKw: number;
-  }) {
-    // Create charger configuration based on input
-    const chargerConfigurations: ChargerConfiguration[] = [
-      {
-        id: "default",
-        name: "Default Charger",
-        powerInkW: input.chargingPowerKw,
-        quantity: input.chargePoints,
-      },
-    ];
-
-    // Run the actual simulation
-    const simulationResult = runSimulation({
-      chargerConfigurations,
-      numberOfSimulationDays: 365, // Simulate a full year
-      carNeedskWhPer100kms: input.carConsumptionKwh,
-      carArrivalProbabilityMultiplier: input.arrivalMultiplier,
-    });
-
-    // Calculate events for different time periods
-    const totalEvents = simulationResult.totalChargingEvents;
-    const eventsPerYear = totalEvents;
-    const eventsPerMonth = Math.floor(totalEvents / 12);
-    const eventsPerWeek = Math.floor(totalEvents / 52);
-    const eventsPerDay = Math.floor(totalEvents / 365);
-
-    // Create charging values summary
-    const chargingValues = {
-      totalChargers: input.chargePoints,
-      averagePowerDemand: simulationResult.actualMaximumPowerDemandInkW,
-      utilizationRatio: simulationResult.ratioOfActualToMaximumPowerDemand,
-      theoreticalMaxPower: simulationResult.theoreticalMaxPowerDemand,
-    };
-
-    return {
-      chargingValues,
-      exemplaryDay: simulationResult.exemplaryDay,
-      totalEnergyChargedKwh: simulationResult.totalEnergyConsumedInkWh,
-      chargingEventsYear: eventsPerYear,
-      chargingEventsMonth: eventsPerMonth,
-      chargingEventsWeek: eventsPerWeek,
-      chargingEventsDay: eventsPerDay,
-    };
   }
 }
