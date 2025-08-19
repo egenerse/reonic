@@ -25,7 +25,7 @@ async function main() {
   // Build GraphQL schema
   const schema = await buildSchema({
     resolvers: [SimulationResolver],
-    validate: false,
+    validate: true, // Enable validation
   });
 
   // Create Apollo Server

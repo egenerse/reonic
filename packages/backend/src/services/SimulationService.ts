@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import {
   CreateSimulationInputDto,
   UpdateSimulationInputDto,
+  RunSimulationDto,
 } from "../types/SimulationDtos";
 import { ChargerConfiguration } from "../utils/simulationTypes";
 import { runSimulation } from "../utils/simulation";
@@ -76,7 +77,9 @@ export class SimulationService {
     return !!input;
   }
 
-  async getSimulationInputByParameters(query: CreateSimulationInputDto) {
+  async getSimulationInputByParameters(
+    query: RunSimulationDto | CreateSimulationInputDto
+  ) {
     return await this.prisma.simulationInput.findFirst({
       where: {
         carConsumptionKwh: query.carConsumptionKwh,
@@ -97,7 +100,7 @@ export class SimulationService {
     return result?.simulationOutputs || null;
   }
 
-  async getSimulationOutputBySimulationInputs(query: CreateSimulationInputDto) {
+  async getSimulationOutputBySimulationInputs(query: RunSimulationDto) {
     const result = await this.prisma.simulationInput.findFirst({
       where: {
         carConsumptionKwh: query.carConsumptionKwh,
@@ -112,7 +115,7 @@ export class SimulationService {
     return result?.simulationOutputs || null;
   }
 
-  async runSimulation(input: CreateSimulationInputDto) {
+  async runSimulation(input: RunSimulationDto) {
     try {
       const simulationResult = this.runSimulationLogic(input);
 

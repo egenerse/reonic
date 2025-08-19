@@ -3,6 +3,7 @@ import { SimulationInput, SimulationOutput } from "../types/SimulationTypes";
 import {
   CreateSimulationInputDto,
   UpdateSimulationInputDto,
+  RunSimulationDto,
 } from "../types/SimulationDtos";
 import { Context } from "../index";
 
@@ -69,8 +70,8 @@ export class SimulationResolver {
 
   @Query(() => [SimulationOutput])
   async getSimulationOutputBySimulationInputs(
-    @Arg("query", () => CreateSimulationInputDto)
-    query: CreateSimulationInputDto,
+    @Arg("query", () => RunSimulationDto)
+    query: RunSimulationDto,
     @Ctx() ctx: Context
   ): Promise<SimulationOutput[] | null> {
     return await ctx.simulationService.getSimulationOutputBySimulationInputs(
@@ -80,8 +81,8 @@ export class SimulationResolver {
 
   @Mutation(() => SimulationOutput)
   async runSimulation(
-    @Arg("query", () => CreateSimulationInputDto)
-    query: CreateSimulationInputDto,
+    @Arg("query", () => RunSimulationDto)
+    query: RunSimulationDto,
     @Ctx() ctx: Context
   ): Promise<SimulationOutput> {
     return await ctx.simulationService.runSimulation(query);
