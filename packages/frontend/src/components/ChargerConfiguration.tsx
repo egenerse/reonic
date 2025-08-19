@@ -1,9 +1,8 @@
 import React from "react"
-import type { ChargerConfiguration, SimulationOptions } from "../utils/types"
+import type { ChargerConfiguration } from "../utils/types"
 import { SelectInput } from "./inputs"
 import { AVAILABLE_CHARGER_POWER_OPTIONS } from "../utils/constants"
 import { Button } from "./buttons/Button"
-import type { ZodError } from "zod"
 import { ErrorMessage } from "./ErrorMessage"
 
 interface Props {
@@ -11,7 +10,7 @@ interface Props {
   onChargerConfigurationsChange: (
     configurations: ChargerConfiguration[]
   ) => void
-  error?: ZodError<SimulationOptions>
+  error?: string
 }
 
 export const ChargerConfigurationForm: React.FC<Props> = ({
@@ -62,10 +61,6 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
     onChargerConfigurationsChange(updatedConfigurations)
   }
 
-  const chargerErrors = error?.issues.find(
-    (issue) => issue.path[0] === "chargerConfigurations"
-  )
-
   const showAddChargerButton =
     chargerConfigurations.length < AVAILABLE_CHARGER_POWER_OPTIONS.length
 
@@ -75,11 +70,7 @@ export const ChargerConfigurationForm: React.FC<Props> = ({
         Charger Configurations
       </div>
 
-      {chargerErrors?.message && (
-        <div className="mt-4">
-          <ErrorMessage message={chargerErrors.message} />
-        </div>
-      )}
+      <ErrorMessage message={error} className="mt-4" />
 
       <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
         {chargerConfigurations.map((config) => (

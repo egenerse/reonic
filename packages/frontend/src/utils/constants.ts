@@ -56,6 +56,20 @@ export const defaultGraphicSimulationOptions: SimulationOptions = {
   carArrivalProbabilityMultiplier: 100,
 }
 
+export const multipleSimulationsInitialState: SimulationOptions = {
+  chargerConfigurations: [
+    {
+      id: "default-charger-1",
+      powerInkW: 11,
+      quantity: 1,
+      name: "11 kW Chargers",
+    },
+  ],
+  numberOfSimulationDays: 365,
+  carNeedskWhPer100kms: 18,
+  carArrivalProbabilityMultiplier: 100,
+}
+
 export const AVAILABLE_CHARGER_POWER_OPTIONS = [
   { value: 2.75, label: "2.75 kW" },
   { value: 5.5, label: "5.5 kW" },
@@ -72,3 +86,5 @@ export const initialParkingData_GRAPHIC_SIMULATION: ParkingData[] = Array.from(
     chargerPowerInKw: i === 0 ? 11 : undefined,
   })
 )
+
+export const energyPricePerHourInEuro = 0.25

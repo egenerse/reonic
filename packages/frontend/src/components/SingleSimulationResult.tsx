@@ -1,3 +1,4 @@
+import { energyPricePerHourInEuro } from "../utils/constants"
 import { toDecimal } from "../utils/text"
 import type { SimulationOptions, SimulationResult } from "../utils/types"
 import { RatioPieChart } from "./charts/RatioPieChart"
@@ -51,8 +52,8 @@ export const SingleSimulationResult: React.FC<Props> = ({
         <Card name="Total Charging Events" value={`${totalChargingEvents}`} />
         <Card
           name="Predicted Electricity Cost"
-          value={`${toDecimal(totalEnergyConsumedInkWh * 0.25)}€`}
-          description="Based on current energy prices 0.25€/kWh"
+          value={`${toDecimal(totalEnergyConsumedInkWh * energyPricePerHourInEuro)}€`}
+          description={`Based on current energy prices ${energyPricePerHourInEuro}€/kWh`}
         />
       </div>
     </div>

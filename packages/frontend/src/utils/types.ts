@@ -30,12 +30,15 @@ export const simulationOptionsSchema = z.object({
         error: "Total number of chargers must not exceed 30",
       }
     ),
-  numberOfSimulationDays: z
-    .number()
+  numberOfSimulationDays: z.coerce
+    .number("Number of simulation days must be a number")
     .min(1, "Number of simulation days must be at least 1")
     .max(365, "Number of simulation days must be between 1 and 365"),
-  carNeedskWhPer100kms: z.number().min(0),
-  carArrivalProbabilityMultiplier: z.number().min(20).max(220),
+  carNeedskWhPer100kms: z.coerce.number("Car needs must be a number").min(0),
+  carArrivalProbabilityMultiplier: z.coerce
+    .number("Car arrival probability multiplier must be a number")
+    .min(20)
+    .max(220),
 })
 
 export const parkingLotCountSchema = z

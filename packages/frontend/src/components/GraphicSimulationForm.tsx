@@ -92,7 +92,7 @@ export const GraphicSimulationForm: React.FC<Props> = ({
           step={10}
           value={simulationOptions.carArrivalProbabilityMultiplier}
           onChange={onOptionsChange}
-          percentage
+          showPercentage
         />
 
         {carArrivalProbabilityMultiplierError && (
