@@ -59,6 +59,9 @@ async function main() {
   app.listen(port, () => {
     console.log(`🚀 Server ready at http://localhost:${port}/graphql`);
     console.log(`📊 Health check at http://localhost:${port}/health`);
+    console.log(
+      `🔗 Database Admin password:password http://localhost:8080/?pgsql=postgres&username=postgres&db=reonic_simulation&ns=public`
+    );
   });
 
   // Graceful shutdown

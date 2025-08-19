@@ -18,7 +18,7 @@ model SimulationOutput {
   chargingEventsWeek    Int
   chargingEventsDay     Int
   createdAt             DateTime        @default(now())
-  input                 SimulationInput @relation(fields: [inputId], references: [id])
+  input                 SimulationInput @relation(fields: [inputId], references: [id], onDelete: Cascade)
 }
 
 model SimulationInput {

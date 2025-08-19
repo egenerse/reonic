@@ -24,8 +24,8 @@ export class SimulationInput {
   @Field(() => Date)
   updatedAt!: Date;
 
-  @Field(() => [SimulationOutput], { nullable: false })
-  simulationOutputs!: SimulationOutput[];
+  @Field(() => [SimulationOutput], { nullable: true })
+  simulationOutputs?: SimulationOutput[];
 }
 
 @ObjectType()
@@ -60,6 +60,6 @@ export class SimulationOutput {
   @Field(() => Date)
   createdAt!: Date;
 
-  @Field(() => SimulationInput)
-  input!: SimulationInput;
+  @Field(() => SimulationInput, { nullable: true })
+  input?: SimulationInput;
 }

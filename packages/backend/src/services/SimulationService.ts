@@ -1,77 +1,158 @@
 import { PrismaClient } from "@prisma/client";
+import {
+  CreateSimulationInputDto,
+  UpdateSimulationInputDto,
+} from "../types/SimulationDtos";
+import { ChargerConfiguration } from "../utils/simulationTypes";
 import { runSimulation } from "../utils/simulation";
-import type { ChargerConfiguration } from "../utils/simulationTypes";
+import { SimulationInput } from "../types/SimulationTypes";
 
 export class SimulationService {
   constructor(private prisma: PrismaClient) {}
 
-  async getSimulationByParameters(params: {
-    chargePoints: number;
-    arrivalMultiplier: number;
-    carConsumptionKwh: number;
-    chargingPowerKw: number;
-  }) {
-    // First, try to find existing simulation with these exact parameters
-    const existingSimulation = await this.prisma.simulationInput.findFirst({
-      where: {
-        chargePoints: params.chargePoints,
-        arrivalMultiplier: params.arrivalMultiplier,
-        carConsumptionKwh: params.carConsumptionKwh,
-        chargingPowerKw: params.chargingPowerKw,
-      },
-      include: {
-        simulationOutputs: {
-          include: {
-            input: true,
-          },
-        },
+  async createSimulationInput(data: CreateSimulationInputDto) {
+    return await this.prisma.simulationInput.create({
+      data: {
+        chargePoints: data.chargePoints,
+        arrivalMultiplier: data.arrivalMultiplier,
+        carConsumptionKwh: data.carConsumptionKwh,
+        chargingPowerKw: data.chargingPowerKw,
       },
     });
-
-    // If simulation exists and has outputs, return it
-    if (existingSimulation && existingSimulation.simulationOutputs.length > 0) {
-      return existingSimulation;
-    }
-
-    // If no simulation exists or no outputs, create and run new simulation
-    return await this.createAndRunSimulation(params);
   }
 
-  async createAndRunSimulation(data: {
-    chargePoints: number;
-    arrivalMultiplier: number;
-    carConsumptionKwh: number;
-    chargingPowerKw: number;
-  }) {
-    // Create the simulation input first
-    const simulationInput = await this.prisma.simulationInput.create({
-      data,
-    });
-
-    // Run the simulation using the clean simulation logic
-    const simulationData = this.runSimulationLogic(data);
-
-    // Create the simulation output
-    const outputData = {
-      inputId: simulationInput.id,
-      ...simulationData,
-    };
-
-    await this.prisma.simulationOutput.create({
-      data: outputData,
-    });
-
-    // Return the input with its output
-    return await this.prisma.simulationInput.findUnique({
-      where: { id: simulationInput.id },
-      include: {
-        simulationOutputs: {
-          include: {
-            input: true,
-          },
-        },
+  async getAllSimulationInputs() {
+    return await this.prisma.simulationInput.findMany({
+      orderBy: {
+        createdAt: "desc",
       },
     });
+  }
+
+  async getSimulationInputById(id: number) {
+    return await this.prisma.simulationInput.findUnique({
+      where: { id },
+    });
+  }
+
+  async updateSimulationInput(id: number, data: UpdateSimulationInputDto) {
+    const updateData: Partial<{
+      chargePoints: number;
+      arrivalMultiplier: number;
+      carConsumptionKwh: number;
+      chargingPowerKw: number;
+    }> = {};
+
+    if (data.chargePoints !== undefined) {
+      updateData.chargePoints = data.chargePoints;
+    }
+    if (data.arrivalMultiplier !== undefined) {
+      updateData.arrivalMultiplier = data.arrivalMultiplier;
+    }
+    if (data.carConsumptionKwh !== undefined) {
+      updateData.carConsumptionKwh = data.carConsumptionKwh;
+    }
+    if (data.chargingPowerKw !== undefined) {
+      updateData.chargingPowerKw = data.chargingPowerKw;
+    }
+
+    return await this.prisma.simulationInput.update({
+      where: { id },
+      data: updateData,
+    });
+  }
+
+  async deleteSimulationInput(id: number) {
+    return await this.prisma.simulationInput.delete({
+      where: { id },
+    });
+  }
+
+  async simulationInputExists(id: number): Promise<boolean> {
+    const input = await this.prisma.simulationInput.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+    return !!input;
+  }
+
+  async getSimulationInputByParameters(query: CreateSimulationInputDto) {
+    return await this.prisma.simulationInput.findFirst({
+      where: {
+        carConsumptionKwh: query.carConsumptionKwh,
+        chargingPowerKw: query.chargingPowerKw,
+        arrivalMultiplier: query.arrivalMultiplier,
+        chargePoints: query.chargePoints,
+      },
+    });
+  }
+
+  async getSimulationOutputByInputId(id: number) {
+    const result = await this.prisma.simulationInput.findUnique({
+      where: { id },
+      include: {
+        simulationOutputs: true,
+      },
+    });
+    return result?.simulationOutputs || null;
+  }
+
+  async getSimulationOutputBySimulationInputs(query: CreateSimulationInputDto) {
+    const result = await this.prisma.simulationInput.findFirst({
+      where: {
+        carConsumptionKwh: query.carConsumptionKwh,
+        chargingPowerKw: query.chargingPowerKw,
+        arrivalMultiplier: query.arrivalMultiplier,
+        chargePoints: query.chargePoints,
+      },
+      include: {
+        simulationOutputs: true,
+      },
+    });
+    return result?.simulationOutputs || null;
+  }
+
+  async runSimulation(input: CreateSimulationInputDto) {
+    try {
+      const simulationResult = this.runSimulationLogic(input);
+
+      // Transaction to ensure data consistency
+      const result = await this.prisma.$transaction(async (prisma) => {
+        let simulationInput = await this.getSimulationInputByParameters(input);
+
+        // If no matching SimulationInput, create a new one
+        if (!simulationInput) {
+          simulationInput = await prisma.simulationInput.create({
+            data: {
+              chargePoints: input.chargePoints,
+              arrivalMultiplier: input.arrivalMultiplier,
+              carConsumptionKwh: input.carConsumptionKwh,
+              chargingPowerKw: input.chargingPowerKw,
+            },
+          });
+        }
+
+        // Create SimulationOutput linked to SimulationInput
+        const simulationOutput = await prisma.simulationOutput.create({
+          data: {
+            inputId: simulationInput.id,
+            chargingValues: simulationResult.chargingValues,
+            exemplaryDay: simulationResult.exemplaryDay,
+            totalEnergyChargedKwh: simulationResult.totalEnergyChargedKwh,
+            chargingEventsYear: simulationResult.chargingEventsYear,
+            chargingEventsMonth: simulationResult.chargingEventsMonth,
+            chargingEventsWeek: simulationResult.chargingEventsWeek,
+            chargingEventsDay: simulationResult.chargingEventsDay,
+          },
+        });
+
+        return simulationOutput;
+      });
+
+      return result;
+    } catch {
+      throw new Error("Failed to run simulation");
+    }
   }
 
   private runSimulationLogic(input: {
@@ -122,66 +203,5 @@ export class SimulationService {
       chargingEventsWeek: eventsPerWeek,
       chargingEventsDay: eventsPerDay,
     };
-  }
-
-  async getAllSimulations() {
-    return await this.prisma.simulationInput.findMany({
-      include: {
-        simulationOutputs: {
-          include: {
-            input: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  }
-
-  async getSimulationById(id: number) {
-    return await this.prisma.simulationInput.findUnique({
-      where: { id },
-      include: {
-        simulationOutputs: {
-          include: {
-            input: true,
-          },
-        },
-      },
-    });
-  }
-
-  async updateSimulation(
-    id: number,
-    data: {
-      chargePoints?: number;
-      arrivalMultiplier?: number;
-      carConsumptionKwh?: number;
-      chargingPowerKw?: number;
-    }
-  ) {
-    return await this.prisma.simulationInput.update({
-      where: { id },
-      data,
-      include: {
-        simulationOutputs: {
-          include: {
-            input: true,
-          },
-        },
-      },
-    });
-  }
-
-  async deleteSimulation(id: number) {
-    // Delete related outputs first (if not using cascade)
-    await this.prisma.simulationOutput.deleteMany({
-      where: { inputId: id },
-    });
-
-    return await this.prisma.simulationInput.delete({
-      where: { id },
-    });
   }
 }
