@@ -11,6 +11,7 @@ import {
   Cell,
 } from "recharts"
 import { chargerConfig, powerCategoryColors } from "./mockedData"
+import { toDecimal } from "../../utils/text"
 
 interface TooltipPayload {
   value: number
@@ -78,7 +79,7 @@ export const ChargerPowerDistribution = () => {
   const pieData = distributionData.map((item) => ({
     name: item.powerLabel,
     value: item.count,
-    percentage: ((item.count / chargerConfig.length) * 100).toFixed(1),
+    percentage: toDecimal((item.count / chargerConfig.length) * 100),
     color:
       powerCategoryColors[item.powerLabel as keyof typeof powerCategoryColors],
   }))
@@ -93,10 +94,9 @@ export const ChargerPowerDistribution = () => {
             <p className="font-semibold">{`${label} Chargers`}</p>
             <p className="font-medium text-blue-600">{`Count: ${data.count} chargers`}</p>
             <p className="text-green-600">{`Total Capacity: ${data.totalCapacity}kW`}</p>
-            <p className="text-sm text-gray-600">{`${(
-              (data.count / chargerConfig.length) *
-              100
-            ).toFixed(1)}% of all chargers`}</p>
+            <p className="text-sm text-gray-600">{`${toDecimal(
+              (data.count / chargerConfig.length) * 100
+            )}% of all chargers`}</p>
             <div className="mt-2 text-xs text-gray-500">
               <p>Charger IDs: {data.chargerIds.join(", ")}</p>
             </div>
@@ -251,7 +251,7 @@ export const ChargerPowerDistribution = () => {
                   </td>
                   <td className="px-3 py-2 text-right">{item.totalCapacity}</td>
                   <td className="px-3 py-2 text-right">
-                    {((item.count / totalChargers) * 100).toFixed(1)}%
+                    {toDecimal((item.count / totalChargers) * 100)}%
                   </td>
                   <td className="px-3 py-2 text-xs text-gray-600">
                     {item.chargerIds.join(", ")}

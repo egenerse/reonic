@@ -18,6 +18,7 @@ import {
 } from "./mockedData"
 import { useState } from "react"
 import { ButtonGroup } from "../buttons/ButtonGroup"
+import { toDecimal } from "../../utils/text"
 
 interface TooltipPayload {
   value: number
@@ -55,16 +56,10 @@ export const EnergyConsumption = () => {
         return (
           <div className="max-w-xs rounded border border-gray-300 bg-white p-3 shadow-lg">
             <p className="font-semibold">{`${label} Chargers`}</p>
-            <p className="font-medium text-green-600">{`Total Energy: ${data.totalEnergy.toFixed(
-              2
-            )} kWh`}</p>
+            <p className="font-medium text-green-600">{`Total Energy: ${toDecimal(data.totalEnergy)} kWh`}</p>
             <p className="text-blue-600">{`${data.chargerCount} chargers`}</p>
-            <p className="text-sm text-gray-600">{`Avg per charger: ${data.avgEnergyPerCharger.toFixed(
-              2
-            )} kWh`}</p>
-            <p className="text-sm text-gray-600">{`Total operating hours: ${data.totalHours.toFixed(
-              2
-            )}h`}</p>
+            <p className="text-sm text-gray-600">{`Avg per charger: ${toDecimal(data.avgEnergyPerCharger)} kWh`}</p>
+            <p className="text-sm text-gray-600">{`Total operating hours: ${toDecimal(data.totalHours)} h`}</p>
           </div>
         )
       }
@@ -333,17 +328,17 @@ export const EnergyConsumption = () => {
                     {item.chargerCount}
                   </td>
                   <td className="px-3 py-2 text-right font-medium">
-                    {item.totalEnergy.toFixed(2)}
+                    {toDecimal(item.totalEnergy)}
                   </td>
                   <td className="px-3 py-2 text-right">
-                    {item.avgEnergyPerCharger}
+                    {toDecimal(item.avgEnergyPerCharger)}
                   </td>
                   <td className="px-3 py-2 text-right">
                     {Math.round(item.totalHours)}
                   </td>
 
                   <td className="px-3 py-2 text-right">
-                    {((item.totalEnergy / totalSystemEnergy) * 100).toFixed(1)}%
+                    {toDecimal((item.totalEnergy / totalSystemEnergy) * 100)}%
                   </td>
                 </tr>
               ))}

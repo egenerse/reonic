@@ -4,3 +4,7 @@ export function toDecimal(number: number) {
     maximumFractionDigits: 2,
   })
 }
+
+export function toGermanNumber(number: number) {
+  return number.toLocaleString("de-DE")
+}

@@ -69,7 +69,7 @@ export const RatioPieChart: React.FC<Props> = ({ percentage }) => {
             <div>
               <p className="text-sm font-medium text-gray-800">{data.name}</p>
               <p className="text-lg font-bold text-blue-600">
-                {data.value.toFixed(2)}%
+                {toDecimal(data.value)}%
               </p>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import {
   Area,
   AreaChart,
+  Brush,
   CartesianGrid,
   Legend,
   ResponsiveContainer,
@@ -14,6 +15,7 @@ import {
   numberOfCharger,
   powerCategoryColors,
 } from "./mockedData"
+import { toDecimal } from "../../utils/text"
 
 interface TooltipPayload {
   value: number
@@ -55,8 +57,8 @@ export const DaySummary = () => {
           onMouseMove={(e) => e.stopPropagation()}
         >
           <p className="font-semibold">{`Time: ${label}`}</p>
-          <p className="font-medium text-blue-600">{`Total Power: ${totalPower.toFixed(
-            2
+          <p className="font-medium text-blue-600">{`Total Power: ${toDecimal(
+            totalPower
           )} kW`}</p>
           <p className="mb-2 text-sm text-gray-600">{`Active: ${activeChargersCount}/${numberOfCharger} ${
             activeChargersCount > 1 ? "chargers" : "charger"
@@ -90,7 +92,7 @@ export const DaySummary = () => {
                       {chargersInCategory > 1 ? "chargers" : "charger"})
                     </span>
                     <span className="text-gray-700">
-                      {entry.value.toFixed(2)} kW
+                      {toDecimal(entry.value)} kW
                     </span>
                   </div>
                 )
@@ -186,6 +188,13 @@ export const DaySummary = () => {
                 />
               )
             )}
+            <Brush
+              dataKey="time"
+              height={30}
+              stroke="#8884d8"
+              travellerWidth={10}
+              gap={5}
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -211,12 +220,12 @@ export const DaySummary = () => {
 
         <div className="rounded bg-green-50 p-3">
           <div className="text-2xl font-bold text-green-600">
-            {chargingData
-              .reduce((max, interval) => {
+            {toDecimal(
+              chargingData.reduce((max, interval) => {
                 const intervalTotal = getIntervalTotal(interval)
                 return Math.max(max, intervalTotal)
               }, 0)
-              .toFixed(2)}
+            )}
           </div>
           <div className="text-sm text-gray-600">Peak Actual Power (kW)</div>
           <div className="text-xs text-gray-500">
@@ -226,12 +235,11 @@ export const DaySummary = () => {
 
         <div className="rounded bg-purple-50 p-3">
           <div className="text-2xl font-bold text-purple-600">
-            {(
+            {toDecimal(
               chargingData.reduce((total, interval) => {
                 return total + getIntervalTotal(interval)
               }, 0) * 0.25
-            ) // Convert 15-min intervals to hours (15/60 = 0.25)
-              .toFixed(2)}
+            )}
           </div>
           <div className="text-sm text-gray-600">Total Energy (kWh)</div>
           <div className="text-xs text-gray-500">24-hour consumption</div>
@@ -239,7 +247,7 @@ export const DaySummary = () => {
         <div className="gap-4 text-center">
           <div className="rounded bg-orange-50 p-3">
             <div className="text-2xl font-bold text-orange-600">
-              {(
+              {toDecimal(
                 (chargingData.reduce((max, interval) => {
                   const intervalTotal = getIntervalTotal(interval)
                   return Math.max(max, intervalTotal)
@@ -248,8 +256,8 @@ export const DaySummary = () => {
                     (total, charger) => total + charger.power,
                     0
                   )) *
-                100
-              ).toFixed(1)}
+                  100
+              )}
               %
             </div>
             <div className="text-sm text-gray-600">Concurrency Factor</div>

@@ -13,6 +13,7 @@ import {
 } from "recharts"
 import { chargingEventsData, powerCategoryColors } from "./mockedData"
 import { ButtonGroup, type ButtonInGroup } from "../buttons/ButtonGroup"
+import { toDecimal, toGermanNumber } from "../../utils/text"
 
 interface TooltipPayload {
   value: number
@@ -184,7 +185,7 @@ export const ChargingEvents = () => {
         <div className="mb-6 grid grid-cols-2 gap-4 text-center lg:grid-cols-4">
           <div className="rounded bg-blue-50 p-3">
             <div className="text-2xl font-bold text-blue-600">
-              {totalEvents.toLocaleString()}
+              {toGermanNumber(totalEvents)}
             </div>
             <div className="text-sm text-gray-600">Total Events</div>
             <div className="text-xs text-gray-500">
@@ -217,7 +218,7 @@ export const ChargingEvents = () => {
             </div>
             <div className="text-sm text-gray-600">Most Active</div>
             <div className="text-xs text-gray-500">
-              {mostActiveCategory[1]} events
+              {toGermanNumber(mostActiveCategory[1])} events
             </div>
           </div>
 
@@ -268,7 +269,7 @@ export const ChargingEvents = () => {
                         }}
                         title={`${dayData.day} ${hourData.hour}:00 - ${hourData.events} events`}
                       >
-                        {hourData.events > 0 ? hourData.events.toFixed(1) : ""}
+                        {hourData.events > 0 ? toDecimal(hourData.events) : ""}
                       </div>
                     ))}
                   </React.Fragment>
@@ -280,7 +281,7 @@ export const ChargingEvents = () => {
                 Color intensity represents number of charging events. Hover for
                 details.
               </p>
-              <p>Peak activity: {maxHeatmapEvents.toFixed(1)} events</p>
+              <p>Peak activity: {toDecimal(maxHeatmapEvents)} events</p>
             </div>
           </>
         ) : (
@@ -400,7 +401,7 @@ export const ChargingEvents = () => {
                   .sort(([, a], [, b]) => b - a)
                   .map(([category, total], index) => {
                     const avgPerPeriod = Math.round(total / currentData.length)
-                    const percentage = ((total / totalEvents) * 100).toFixed(1)
+                    const percentage = toDecimal((total / totalEvents) * 100)
                     const peakEvents = Math.max(
                       ...currentData.map(
                         (item: unknown) =>
